@@ -18,6 +18,10 @@ public class Board {
         return gameBoard;
     }
 
+    public void actionAt(Point point) {
+        gameBoard.replace(point, "-");
+    }
+
     private void fillBoard(Dimension boardDimensions) {
         for (int i = 0; i < boardDimensions.getHeight(); i++) {
             for (int j = 0; j < boardDimensions.getWidth(); j++) {
