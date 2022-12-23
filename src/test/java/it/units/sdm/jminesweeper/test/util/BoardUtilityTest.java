@@ -1,3 +1,5 @@
+package it.units.sdm.jminesweeper.test.util;
+
 import it.units.sdm.jminesweeper.BoardUtil;
 import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.TileValue;
@@ -10,10 +12,10 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class BoardUtilTest {
+class BoardUtilityTest {
 
     @ParameterizedTest
-    @CsvSource({"1,1", "9,9", "16,16", "30,16", "50, 50", "4,29"})
+    @CsvSource({"9,9", "16,16", "30,16", "23,11", "50, 50", "4,29"})
     void givenABoardReturnsItsDimensions(int width, int height) {
         Map<Point, TileValue> board = new LinkedHashMap<>();
         for (int i = 0; i < width; i++) {

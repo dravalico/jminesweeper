@@ -1,3 +1,5 @@
+package it.units.sdm.jminesweeper.test.generation;
+
 import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.MinesPlacerUtil;
 import it.units.sdm.jminesweeper.TileValue;
@@ -22,7 +24,23 @@ public class MinesPlacementTest {
                 board.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
             }
         }
-        MinesPlacerUtil.placeMine(board);
+        MinesPlacerUtil.placeMine(board, new Point(0, 0));
+        int minesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
+        assertEquals(1, minesNumber);
+    }
+
+    @ParameterizedTest
+    @CsvSource({"0,0"})
+    void placeAMineOnTheBeginnerBoardAvoidingAPoint(int x, int y) {
+        Map<Point, TileValue> board = new LinkedHashMap<>();
+        int width = 9;
+        int height = 9;
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                board.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
+            }
+        }
+        MinesPlacerUtil.placeMine(board, new Point(0, 0));
         int minesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
         assertEquals(1, minesNumber);
     }
