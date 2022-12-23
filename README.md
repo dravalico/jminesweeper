@@ -1,3 +1,5 @@
+![CircleCI](https://img.shields.io/circleci/build/github/damianoravalico/jminesweeper)
+![GitHub](https://img.shields.io/github/license/damianoravalico/jminesweeper)
 # JMinesweeper
 Implementation of the famous game "[Minesweeper](https://en.wikipedia.org/wiki/Minesweeper_(video_game))" for the course "Software Development Methods" @ University of Trieste.
 The entire project has been developed within IntelliJ IDEA IDE using Java SDK 17. Test Driven Development carried out with JUnit 5.9.1. Gradle has been used as build automation tool.
