@@ -10,7 +10,7 @@ public class BoardUtil {
     private BoardUtil() {
     }
 
-    public static Dimension computeBoardDimension(Map<Point, String> board) {
+    public static Dimension computeBoardDimension(Map<Point, TileValue> board) {
         Optional<Point> furthestPoint = board.keySet().stream()
                 .max(Comparator.comparingDouble(p -> p.distance(new Point(0, 0))));
         return new Dimension(furthestPoint.get().x + 1, furthestPoint.get().y + 1);

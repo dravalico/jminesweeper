@@ -1,5 +1,7 @@
 import it.units.sdm.jminesweeper.Board;
 import it.units.sdm.jminesweeper.GameConfiguration;
+import it.units.sdm.jminesweeper.GameSymbol;
+import it.units.sdm.jminesweeper.TileValue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ExpertModeBoardTest {
     private Board board;
-    private Map<Point, String> expected;
+    private Map<Point, TileValue> expectedBoard;
     private Dimension boardDimension;
     private int minesNumber;
 
@@ -22,17 +24,17 @@ class ExpertModeBoardTest {
         boardDimension = new Dimension(30, 16);
         minesNumber = 99;
         board = new Board(new GameConfiguration(boardDimension, minesNumber));
-        expected = new LinkedHashMap<>();
+        expectedBoard = new LinkedHashMap<>();
     }
 
     @Test
     void givenBoardSizeGenerateBoardWithCoveredSymbol() {
         for (int i = 0; i < boardDimension.height; i++) {
             for (int j = 0; j < boardDimension.width; j++) {
-                expected.put(new Point(i, j), "o");
+                expectedBoard.put(new Point(i, j), new TileValue(GameSymbol.COVERED));
             }
         }
-        assertEquals(expected, board.getGameBoard());
+        assertEquals(expectedBoard, board.getGameBoard());
     }
 
     @ParameterizedTest
@@ -41,14 +43,14 @@ class ExpertModeBoardTest {
         for (int i = 0; i < boardDimension.height; i++) {
             for (int j = 0; j < boardDimension.width; j++) {
                 if ((i == x) && (j == y)) {
-                    expected.put(new Point(i, j), "-");
+                    expectedBoard.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
                     continue;
                 }
-                expected.put(new Point(i, j), "o");
+                expectedBoard.put(new Point(i, j), new TileValue(GameSymbol.COVERED));
             }
         }
         board.actionAt(new Point(x, y));
-        assertEquals(expected, board.getGameBoard());
+        assertEquals(expectedBoard, board.getGameBoard());
     }
 
 }

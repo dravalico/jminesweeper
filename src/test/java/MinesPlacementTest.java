@@ -1,4 +1,6 @@
+import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.MinesPlacerUtil;
+import it.units.sdm.jminesweeper.TileValue;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -14,14 +16,14 @@ public class MinesPlacementTest {
     @ParameterizedTest
     @CsvSource({"9,9", "16,16", "30,16"})
     void placeAMineOnTheBoard(int width, int height) {
-        Map<Point, String> board = new LinkedHashMap<>();
+        Map<Point, TileValue> board = new LinkedHashMap<>();
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                board.put(new Point(i, j), "-");
+                board.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
             }
         }
         MinesPlacerUtil.placeMine(board);
-        int minesNumber = Collections.frequency(board.values(), "*");
+        int minesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
         assertEquals(1, minesNumber);
     }
 

@@ -9,11 +9,11 @@ public class MinesPlacerUtil {
     private MinesPlacerUtil() {
     }
 
-    public static void placeMine(Map<Point, String> board) {
+    public static void placeMine(Map<Point, TileValue> board) {
         Dimension dimension = BoardUtil.computeBoardDimension(board);
         Random random = new Random();
         Point minePosition = new Point(random.nextInt(dimension.width), random.nextInt(dimension.height));
-        board.replace(minePosition, "*");
+        board.replace(minePosition, new TileValue(GameSymbol.MINE));
     }
 
 }
