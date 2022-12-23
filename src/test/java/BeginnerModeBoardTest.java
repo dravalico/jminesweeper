@@ -32,7 +32,7 @@ class BeginnerModeBoardTest {
                 expected.put(new Point(i, j), "o");
             }
         }
-        assertEquals(board.getGameBoard(), expected);
+        assertEquals(expected, board.getGameBoard());
     }
 
     @ParameterizedTest
@@ -48,7 +48,7 @@ class BeginnerModeBoardTest {
             }
         }
         board.actionAt(new Point(x, y));
-        assertEquals(board.getGameBoard(), expected);
+        assertEquals(expected, board.getGameBoard());
     }
 
 }
