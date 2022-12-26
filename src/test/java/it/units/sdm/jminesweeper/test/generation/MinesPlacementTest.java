@@ -59,7 +59,7 @@ class MinesPlacementTest {
         for (int i = iStart; i <= iStop; i++) {
             for (int j = jStart; j <= jStop; j++) {
                 Point temp = new Point(point.x + i, point.y + j);
-                if (board.get(temp).getValue().equals(GameSymbol.MINE)) {
+                if (board.get(temp).isAMine()) {
                     return false;
                 }
             }

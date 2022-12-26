@@ -30,4 +30,8 @@ public class TileValue {
         return Objects.hash(value);
     }
 
+    public boolean isAMine() {
+        return value.equals(GameSymbol.MINE);
+    }
+
 }
