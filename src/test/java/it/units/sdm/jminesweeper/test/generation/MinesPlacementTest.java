@@ -68,6 +68,23 @@ class MinesPlacementTest {
         assertTrue(notMineInPointAndNeighborhood(board, point, width, height));
     }
 
+    @ParameterizedTest
+    @MethodSource
+    void placeAMineOnTheExpertBoardAvoidingAPointAndItsNeighborhood(Point point) {
+        Map<Point, TileValue> board = new LinkedHashMap<>();
+        int width = 30;
+        int height = 16;
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                board.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
+            }
+        }
+        MinesPlacerUtil.placeMine(board, point);
+        int minesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
+        assertEquals(1, minesNumber);
+        assertTrue(notMineInPointAndNeighborhood(board, point, width, height));
+    }
+
     private boolean notMineInPointAndNeighborhood(Map<Point, TileValue> board, Point point, int width, int height) {
         int iStart = (point.x == 0 ? 0 : -1);
         int iStop = (point.x == width - 1 ? 0 : 1);
@@ -99,6 +116,17 @@ class MinesPlacementTest {
         java.util.List<Point> points = new ArrayList<>();
         IntStream.range(0, boardDimension)
                 .forEach(i -> IntStream.range(0, boardDimension)
+                        .forEach(j -> points.add(new Point(i, j)))
+                );
+        return points.stream();
+    }
+
+    private static Stream<Point> placeAMineOnTheExpertBoardAvoidingAPointAndItsNeighborhood() {
+        int width = 30;
+        int height = 16;
+        java.util.List<Point> points = new ArrayList<>();
+        IntStream.range(0, width)
+                .forEach(i -> IntStream.range(0, height)
                         .forEach(j -> points.add(new Point(i, j)))
                 );
         return points.stream();
