@@ -29,48 +29,15 @@ class MinesPlacementTest {
                 board.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
             }
         }
-        MinesPlacerUtil.placeMine(board, new Point(0, 0));
-        int minesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
-        assertEquals(1, minesNumber);
+        int expectedMinesNumber = 1;
+        MinesPlacerUtil.placeMines(board, expectedMinesNumber, new Point(0, 0));
+        int actualMinesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
+        assertEquals(expectedMinesNumber, actualMinesNumber);
     }
 
     @ParameterizedTest
     @MethodSource
-    void placeAMineOnTheBeginnerBoardAvoidingAPointAndItsNeighborhood(Point point) {
-        Map<Point, TileValue> board = new LinkedHashMap<>();
-        int width = 9;
-        int height = 9;
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                board.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
-            }
-        }
-        MinesPlacerUtil.placeMine(board, point);
-        int minesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
-        assertEquals(1, minesNumber);
-        assertTrue(notMineInPointAndNeighborhood(board, point, width, height));
-    }
-
-    @ParameterizedTest
-    @MethodSource
-    void placeAMineOnTheIntermediateBoardAvoidingAPointAndItsNeighborhood(Point point) {
-        Map<Point, TileValue> board = new LinkedHashMap<>();
-        int width = 16;
-        int height = 16;
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                board.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
-            }
-        }
-        MinesPlacerUtil.placeMine(board, point);
-        int minesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
-        assertEquals(1, minesNumber);
-        assertTrue(notMineInPointAndNeighborhood(board, point, width, height));
-    }
-
-    @ParameterizedTest
-    @MethodSource
-    void placeAMineOnTheExpertBoardAvoidingAPointAndItsNeighborhood(Point point) {
+    void placeAMineOnTheBoardAvoidingAPointAndItsNeighborhood(Point point) {
         Map<Point, TileValue> board = new LinkedHashMap<>();
         int width = 30;
         int height = 16;
@@ -79,9 +46,10 @@ class MinesPlacementTest {
                 board.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
             }
         }
-        MinesPlacerUtil.placeMine(board, point);
-        int minesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
-        assertEquals(1, minesNumber);
+        int expectedMinesNumber = 1;
+        MinesPlacerUtil.placeMines(board, expectedMinesNumber, point);
+        int actualMinesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
+        assertEquals(expectedMinesNumber, actualMinesNumber);
         assertTrue(notMineInPointAndNeighborhood(board, point, width, height));
     }
 
@@ -101,27 +69,7 @@ class MinesPlacementTest {
         return true;
     }
 
-    private static Stream<Point> placeAMineOnTheBeginnerBoardAvoidingAPointAndItsNeighborhood() {
-        int boardDimension = 9;
-        java.util.List<Point> points = new ArrayList<>();
-        IntStream.range(0, boardDimension)
-                .forEach(i -> IntStream.range(0, boardDimension)
-                        .forEach(j -> points.add(new Point(i, j)))
-                );
-        return points.stream();
-    }
-
-    private static Stream<Point> placeAMineOnTheIntermediateBoardAvoidingAPointAndItsNeighborhood() {
-        int boardDimension = 16;
-        java.util.List<Point> points = new ArrayList<>();
-        IntStream.range(0, boardDimension)
-                .forEach(i -> IntStream.range(0, boardDimension)
-                        .forEach(j -> points.add(new Point(i, j)))
-                );
-        return points.stream();
-    }
-
-    private static Stream<Point> placeAMineOnTheExpertBoardAvoidingAPointAndItsNeighborhood() {
+    private static Stream<Point> placeAMineOnTheBoardAvoidingAPointAndItsNeighborhood() {
         int width = 30;
         int height = 16;
         java.util.List<Point> points = new ArrayList<>();

@@ -9,18 +9,18 @@ public class MinesPlacerUtil {
     private MinesPlacerUtil() {
     }
 
-    public static void placeMine(Map<Point, TileValue> board, Point firstClickPosition) {
+    public static void placeMines(Map<Point, TileValue> board, int minesNumber, Point firstClickPosition) {
         Dimension dimension = BoardUtil.computeBoardDimension(board);
         Random random = new Random();
-        Point minePosition = new Point(random.nextInt(dimension.width), random.nextInt(dimension.height));
-        double distance = firstClickPosition.distance(minePosition);
-        while (distance <= Math.sqrt(2)) {
-            minePosition = new Point(random.nextInt(dimension.width), random.nextInt(dimension.height));
-            distance = firstClickPosition.distance(minePosition);
+        for (int i = 0; i < minesNumber; i++) {
+            Point minePosition = new Point(random.nextInt(dimension.width), random.nextInt(dimension.height));
+            double distance = firstClickPosition.distance(minePosition);
+            while (distance <= Math.sqrt(2)) {
+                minePosition = new Point(random.nextInt(dimension.width), random.nextInt(dimension.height));
+                distance = firstClickPosition.distance(minePosition);
+            }
+            board.replace(minePosition, new TileValue(GameSymbol.MINE));
         }
-        board.replace(minePosition, new TileValue(GameSymbol.MINE));
     }
-
-
 
 }
