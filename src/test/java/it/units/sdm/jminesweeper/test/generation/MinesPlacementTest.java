@@ -1,7 +1,7 @@
 package it.units.sdm.jminesweeper.test.generation;
 
 import it.units.sdm.jminesweeper.GameSymbol;
-import it.units.sdm.jminesweeper.MinesPlacerUtil;
+import it.units.sdm.jminesweeper.MinesPlacer;
 import it.units.sdm.jminesweeper.TileValue;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -32,7 +32,7 @@ class MinesPlacementTest {
             }
         }
         int expectedMinesNumber = 1;
-        MinesPlacerUtil.placeMines(board, expectedMinesNumber, new Point(0, 0));
+        MinesPlacer.place(board, expectedMinesNumber, new Point(0, 0));
         int actualMinesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
         assertEquals(expectedMinesNumber, actualMinesNumber);
     }
@@ -47,7 +47,7 @@ class MinesPlacementTest {
             }
         }
         int expectedMinesNumber = 1;
-        MinesPlacerUtil.placeMines(board, expectedMinesNumber, point);
+        MinesPlacer.place(board, expectedMinesNumber, point);
         int actualMinesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
         assertEquals(expectedMinesNumber, actualMinesNumber);
         assertTrue(notMineInPointAndNeighborhood(board, point));
@@ -63,7 +63,7 @@ class MinesPlacementTest {
             }
         }
         int expectedMinesNumber = 1;
-        MinesPlacerUtil.placeMines(board, expectedMinesNumber, point);
+        MinesPlacer.place(board, expectedMinesNumber, point);
         int actualMinesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
         assertEquals(expectedMinesNumber, actualMinesNumber);
         assertTrue(notMineInPointAndNeighborhood(board, point));
@@ -79,7 +79,7 @@ class MinesPlacementTest {
             }
         }
         int expectedMinesNumber = 1;
-        MinesPlacerUtil.placeMines(board, expectedMinesNumber, point);
+        MinesPlacer.place(board, expectedMinesNumber, point);
         int actualMinesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
         assertEquals(expectedMinesNumber, actualMinesNumber);
         assertTrue(notMineInPointAndNeighborhood(board, point));
