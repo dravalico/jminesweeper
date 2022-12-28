@@ -16,4 +16,7 @@ public class BoardUtil {
         return new Dimension(furthestPoint.get().x + 1, furthestPoint.get().y + 1);
     }
 
+    public static void computeNumberForCells(Map<Point, TileValue> board) {
+        board.put(new Point(0, 0), new TileValue(GameSymbol.ONE));
+    }
 }
