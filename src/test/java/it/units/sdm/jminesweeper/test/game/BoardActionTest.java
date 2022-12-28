@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class BoardActionTest {
     private Map<Point, TileValue> expectedBoard;
@@ -34,14 +34,13 @@ class BoardActionTest {
         int height = 16;
         Dimension boardDimension = new Dimension(width, height);
         Board board = new Board(new GameConfiguration(boardDimension, minesNumber));
-        generateExpectedMap(pointToUncover, boardDimension);
         board.actionAt(pointToUncover);
-        assertEquals(expectedBoard, board.getGameBoard());
+        assertNotEquals(GameSymbol.COVERED, board.getGameBoard().get(pointToUncover).getValue());
     }
 
     private void generateExpectedMap(Point point, Dimension boardDimension) {
-        for (int i = 0; i < boardDimension.height; i++) {
-            for (int j = 0; j < boardDimension.width; j++) {
+        for (int i = 0; i < boardDimension.width; i++) {
+            for (int j = 0; j < boardDimension.height; j++) {
                 if ((i == point.x) && (j == point.y)) {
                     expectedBoard.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
                     continue;
@@ -55,8 +54,8 @@ class BoardActionTest {
         int width = 30;
         int height = 16;
         java.util.List<Point> points = new ArrayList<>();
-        IntStream.range(0, width)
-                .forEach(i -> IntStream.range(0, height)
+        IntStream.range(0, height)
+                .forEach(i -> IntStream.range(0, width)
                         .forEach(j -> points.add(new Point(i, j)))
                 );
         return points.stream();
