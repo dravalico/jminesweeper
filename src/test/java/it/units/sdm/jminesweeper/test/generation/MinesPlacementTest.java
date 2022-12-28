@@ -19,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MinesPlacementTest {
+    private final static int BOARD_WIDTH = 30;
+    private final static int BOARD_HEIGHT = 16;
 
     @ParameterizedTest
     @CsvSource({"9,9", "16,16", "30,16"})
@@ -36,13 +38,11 @@ class MinesPlacementTest {
     }
 
     @ParameterizedTest
-    @MethodSource
-    void placeAMineOnTheBoardAvoidingAPointAndItsNeighborhood(Point point) {
+    @MethodSource("generateEveryPointOnTheBoard")
+    void place10MinesOnTheBoardAvoidingAPointAndItsNeighborhood(Point point) {
         Map<Point, TileValue> board = new LinkedHashMap<>();
-        int width = 30;
-        int height = 16;
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
+        for (int i = 0; i < BOARD_WIDTH; i++) {
+            for (int j = 0; j < BOARD_HEIGHT; j++) {
                 board.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
             }
         }
@@ -50,14 +50,46 @@ class MinesPlacementTest {
         MinesPlacerUtil.placeMines(board, expectedMinesNumber, point);
         int actualMinesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
         assertEquals(expectedMinesNumber, actualMinesNumber);
-        assertTrue(notMineInPointAndNeighborhood(board, point, width, height));
+        assertTrue(notMineInPointAndNeighborhood(board, point));
     }
 
-    private boolean notMineInPointAndNeighborhood(Map<Point, TileValue> board, Point point, int width, int height) {
+    @ParameterizedTest
+    @MethodSource("generateEveryPointOnTheBoard")
+    void place32MinesOnTheBoardAvoidingAPointAndItsNeighborhood(Point point) {
+        Map<Point, TileValue> board = new LinkedHashMap<>();
+        for (int i = 0; i < BOARD_WIDTH; i++) {
+            for (int j = 0; j < BOARD_HEIGHT; j++) {
+                board.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
+            }
+        }
+        int expectedMinesNumber = 1;
+        MinesPlacerUtil.placeMines(board, expectedMinesNumber, point);
+        int actualMinesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
+        assertEquals(expectedMinesNumber, actualMinesNumber);
+        assertTrue(notMineInPointAndNeighborhood(board, point));
+    }
+
+    @ParameterizedTest
+    @MethodSource("generateEveryPointOnTheBoard")
+    void place99MinesOnTheBoardAvoidingAPointAndItsNeighborhood(Point point) {
+        Map<Point, TileValue> board = new LinkedHashMap<>();
+        for (int i = 0; i < BOARD_WIDTH; i++) {
+            for (int j = 0; j < BOARD_HEIGHT; j++) {
+                board.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
+            }
+        }
+        int expectedMinesNumber = 1;
+        MinesPlacerUtil.placeMines(board, expectedMinesNumber, point);
+        int actualMinesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
+        assertEquals(expectedMinesNumber, actualMinesNumber);
+        assertTrue(notMineInPointAndNeighborhood(board, point));
+    }
+
+    private boolean notMineInPointAndNeighborhood(Map<Point, TileValue> board, Point point) {
         int iStart = (point.x == 0 ? 0 : -1);
-        int iStop = (point.x == width - 1 ? 0 : 1);
+        int iStop = (point.x == BOARD_WIDTH - 1 ? 0 : 1);
         int jStart = (point.y == 0 ? 0 : -1);
-        int jStop = (point.y == height - 1 ? 0 : 1);
+        int jStop = (point.y == BOARD_HEIGHT - 1 ? 0 : 1);
         for (int i = iStart; i <= iStop; i++) {
             for (int j = jStart; j <= jStop; j++) {
                 Point temp = new Point(point.x + i, point.y + j);
@@ -69,12 +101,10 @@ class MinesPlacementTest {
         return true;
     }
 
-    private static Stream<Point> placeAMineOnTheBoardAvoidingAPointAndItsNeighborhood() {
-        int width = 30;
-        int height = 16;
+    private static Stream<Point> generateEveryPointOnTheBoard() {
         java.util.List<Point> points = new ArrayList<>();
-        IntStream.range(0, width)
-                .forEach(i -> IntStream.range(0, height)
+        IntStream.range(0, BOARD_WIDTH)
+                .forEach(i -> IntStream.range(0, BOARD_HEIGHT)
                         .forEach(j -> points.add(new Point(i, j)))
                 );
         return points.stream();
