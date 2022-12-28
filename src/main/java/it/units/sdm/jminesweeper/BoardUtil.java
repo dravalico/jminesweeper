@@ -17,6 +17,9 @@ public class BoardUtil {
     }
 
     public static void computeNumberForCells(Map<Point, TileValue> board) {
-        board.put(new Point(0, 0), new TileValue(GameSymbol.ONE));
+        Point point = new Point(0, 1);
+        if (board.get(point).isAMine()) {
+            board.put(new Point(0, 0), new TileValue(GameSymbol.ONE));
+        }
     }
 }

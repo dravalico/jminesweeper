@@ -22,5 +22,15 @@ class NumberComputationTest {
         BoardUtil.computeNumberForCells(actualMapBoard);
         assertEquals(expectedMapBoard, actualMapBoard);
     }
-    
+
+    @Test
+    void computeNoChangeIn2x1BoardWithNoMine() {
+        Map<Point, TileValue> expectedMapBoard = Map.of(new Point(0, 0), new TileValue(GameSymbol.EMPTY),
+                new Point(0, 1), new TileValue(GameSymbol.EMPTY));
+        Map<Point, TileValue> actualMapBoard = new LinkedHashMap<>(Map.of(new Point(0, 0), new TileValue(GameSymbol.EMPTY),
+                new Point(0, 1), new TileValue(GameSymbol.EMPTY)));
+        BoardUtil.computeNumberForCells(actualMapBoard);
+        assertEquals(expectedMapBoard, actualMapBoard);
+    }
+
 }
