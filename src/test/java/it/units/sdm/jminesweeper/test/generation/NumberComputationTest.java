@@ -6,8 +6,12 @@ import it.units.sdm.jminesweeper.TileValue;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -31,6 +35,45 @@ class NumberComputationTest {
                 new Point(0, 1), new TileValue(GameSymbol.EMPTY)));
         BoardUtil.computeNumberForCells(actualMapBoard);
         assertEquals(expectedMapBoard, actualMapBoard);
+    }
+
+    @Test
+    void placeNumbersIn3x3BoardWithOneCentralMine() throws FileNotFoundException {
+        Map<Point, TileValue> expectedMapBoard = csvParser("3x3_board_with_central_mine/expected.csv");
+        Map<Point, TileValue> actualMapBoard = csvParser("3x3_board_with_central_mine/actual_before_computation.csv");
+        BoardUtil.computeNumberForCells(actualMapBoard);
+        assertEquals(expectedMapBoard, actualMapBoard);
+    }
+
+    private Map<Point, TileValue> csvParser(String resourceName) throws FileNotFoundException {
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(Objects.requireNonNull(classLoader.getResource(resourceName)).getFile());
+        String absolutePath = file.getAbsolutePath();
+        Scanner scanner = new Scanner(new File(absolutePath));
+        Map<Point, TileValue> mapBoard = new LinkedHashMap<>();
+        int rowCounter = 0;
+        while (scanner.hasNext()) {
+            String[] row = scanner.next().split(",");
+            for (int i = 0; i < row.length; i++) {
+                GameSymbol gameSymbol = null;
+                switch (row[i]) {
+                    case "1" -> gameSymbol = GameSymbol.ONE;
+                    case "2" -> gameSymbol = GameSymbol.TWO;
+                    case "3" -> gameSymbol = GameSymbol.THREE;
+                    case "4" -> gameSymbol = GameSymbol.FOUR;
+                    case "5" -> gameSymbol = GameSymbol.FIVE;
+                    case "6" -> gameSymbol = GameSymbol.SIX;
+                    case "7" -> gameSymbol = GameSymbol.SEVEN;
+                    case "8" -> gameSymbol = GameSymbol.EIGHT;
+                    case "*" -> gameSymbol = GameSymbol.MINE;
+                    case "-" -> gameSymbol = GameSymbol.EMPTY;
+                }
+                mapBoard.put(new Point(rowCounter, i), new TileValue(gameSymbol));
+            }
+            rowCounter = rowCounter + 1;
+        }
+        scanner.close();
+        return mapBoard;
     }
 
 }
