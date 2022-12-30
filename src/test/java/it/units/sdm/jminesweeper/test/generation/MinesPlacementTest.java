@@ -3,6 +3,7 @@ package it.units.sdm.jminesweeper.test.generation;
 import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.MinesPlacer;
 import it.units.sdm.jminesweeper.TileValue;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -21,11 +22,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class MinesPlacementTest {
     private final static int BOARD_WIDTH = 30;
     private final static int BOARD_HEIGHT = 16;
+    private Map<Point, TileValue> board;
+
+    @BeforeEach
+    void init() {
+        board = null;
+    }
 
     @ParameterizedTest
     @CsvSource({"9,9", "16,16", "30,16"})
     void placeAMineOnTheBoard(int width, int height) {
-        Map<Point, TileValue> board = new LinkedHashMap<>();
+        board = new LinkedHashMap<>();
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 board.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
@@ -40,13 +47,13 @@ class MinesPlacementTest {
     @ParameterizedTest
     @MethodSource("generateEveryPointOnTheBoard")
     void place10MinesOnTheBoardAvoidingAPointAndItsNeighborhood(Point point) {
-        Map<Point, TileValue> board = new LinkedHashMap<>();
+        board = new LinkedHashMap<>();
         for (int i = 0; i < BOARD_WIDTH; i++) {
             for (int j = 0; j < BOARD_HEIGHT; j++) {
                 board.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
             }
         }
-        int expectedMinesNumber = 1;
+        int expectedMinesNumber = 10;
         MinesPlacer.place(board, expectedMinesNumber, point);
         int actualMinesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
         assertEquals(expectedMinesNumber, actualMinesNumber);
@@ -56,13 +63,13 @@ class MinesPlacementTest {
     @ParameterizedTest
     @MethodSource("generateEveryPointOnTheBoard")
     void place32MinesOnTheBoardAvoidingAPointAndItsNeighborhood(Point point) {
-        Map<Point, TileValue> board = new LinkedHashMap<>();
+        board = new LinkedHashMap<>();
         for (int i = 0; i < BOARD_WIDTH; i++) {
             for (int j = 0; j < BOARD_HEIGHT; j++) {
                 board.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
             }
         }
-        int expectedMinesNumber = 1;
+        int expectedMinesNumber = 32;
         MinesPlacer.place(board, expectedMinesNumber, point);
         int actualMinesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
         assertEquals(expectedMinesNumber, actualMinesNumber);
@@ -72,13 +79,13 @@ class MinesPlacementTest {
     @ParameterizedTest
     @MethodSource("generateEveryPointOnTheBoard")
     void place99MinesOnTheBoardAvoidingAPointAndItsNeighborhood(Point point) {
-        Map<Point, TileValue> board = new LinkedHashMap<>();
+        board = new LinkedHashMap<>();
         for (int i = 0; i < BOARD_WIDTH; i++) {
             for (int j = 0; j < BOARD_HEIGHT; j++) {
                 board.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
             }
         }
-        int expectedMinesNumber = 1;
+        int expectedMinesNumber = 99;
         MinesPlacer.place(board, expectedMinesNumber, point);
         int actualMinesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
         assertEquals(expectedMinesNumber, actualMinesNumber);

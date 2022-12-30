@@ -30,19 +30,19 @@ public class MinesPlacer {
     private MinesPlacer() {
     }
 
-    public static void place(Map<Point, TileValue> board, int minesNumber, Point firstClickPosition) {
+    public static void place(Map<Point, TileValue> mapBoard, int minesNumber, Point firstClickPosition) {
         for (int i = 0; i < minesNumber; i++) {
-            Point minePosition = computeMineablePosition(board, firstClickPosition);
-            board.put(minePosition, new TileValue(GameSymbol.MINE));
+            Point minePosition = computeMineablePosition(mapBoard, firstClickPosition);
+            mapBoard.put(minePosition, new TileValue(GameSymbol.MINE));
         }
     }
 
-    private static Point computeMineablePosition(Map<Point, TileValue> board, Point firstClickPosition) {
-        Dimension dimension = BoardUtil.computeBoardDimension(board);
+    private static Point computeMineablePosition(Map<Point, TileValue> mapBoard, Point firstClickPosition) {
+        Dimension dimension = BoardUtil.computeBoardDimension(mapBoard);
         int standardDeviation = 1;
         Point startingPoint = generateRandomPointWithin(dimension);
         Point minePosition = new Point(startingPoint.x, startingPoint.y);
-        while (board.get(minePosition).isAMine() || isInNeighborhood(minePosition, firstClickPosition)) {
+        while (mapBoard.get(minePosition).isAMine() || isInNeighborhood(minePosition, firstClickPosition)) {
             standardDeviation = standardDeviation * 2;
             Pair<Integer, Integer> shifts = computeRandomShifts(standardDeviation, dimension);
             minePosition.x = shiftCoordinateFromStartingPoint(shifts.first, startingPoint.x, dimension.width);

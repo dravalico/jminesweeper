@@ -3,6 +3,7 @@ package it.units.sdm.jminesweeper.test.generation;
 import it.units.sdm.jminesweeper.BoardUtil;
 import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.TileValue;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -21,12 +22,20 @@ class NumberComputationTest {
     private static final String ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS = "3x3boards";
     private static final String FILENAME_FOR_EXPECTED = "expected.csv";
     private static final String FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION = "actual_before_computation.csv";
+    private Map<Point, TileValue> expectedMapBoard;
+    private Map<Point, TileValue> actualMapBoard;
+
+    @BeforeEach
+    void init() {
+        expectedMapBoard = null;
+        actualMapBoard = null;
+    }
 
     @Test
     void placeAOneIn2x1BoardWithOneMine() {
-        Map<Point, TileValue> expectedMapBoard = Map.of(new Point(0, 0), new TileValue(GameSymbol.ONE),
+        expectedMapBoard = Map.of(new Point(0, 0), new TileValue(GameSymbol.ONE),
                 new Point(0, 1), new TileValue(GameSymbol.MINE));
-        Map<Point, TileValue> actualMapBoard = new LinkedHashMap<>(Map.of(new Point(0, 0), new TileValue(GameSymbol.EMPTY),
+        actualMapBoard = new LinkedHashMap<>(Map.of(new Point(0, 0), new TileValue(GameSymbol.EMPTY),
                 new Point(0, 1), new TileValue(GameSymbol.MINE)));
         BoardUtil.computeNumberForCells(actualMapBoard);
         assertEquals(expectedMapBoard, actualMapBoard);
@@ -34,9 +43,9 @@ class NumberComputationTest {
 
     @Test
     void computeNoChangeIn2x1BoardWithNoMine() {
-        Map<Point, TileValue> expectedMapBoard = Map.of(new Point(0, 0), new TileValue(GameSymbol.EMPTY),
+        expectedMapBoard = Map.of(new Point(0, 0), new TileValue(GameSymbol.EMPTY),
                 new Point(0, 1), new TileValue(GameSymbol.EMPTY));
-        Map<Point, TileValue> actualMapBoard = new LinkedHashMap<>(Map.of(new Point(0, 0), new TileValue(GameSymbol.EMPTY),
+        actualMapBoard = new LinkedHashMap<>(Map.of(new Point(0, 0), new TileValue(GameSymbol.EMPTY),
                 new Point(0, 1), new TileValue(GameSymbol.EMPTY)));
         BoardUtil.computeNumberForCells(actualMapBoard);
         assertEquals(expectedMapBoard, actualMapBoard);
@@ -44,9 +53,9 @@ class NumberComputationTest {
 
     @Test
     void placeNumbersIn3x3BoardWithOneCentralMine() throws FileNotFoundException {
-        Map<Point, TileValue> expectedMapBoard = csvParser(ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS
+        expectedMapBoard = csvParser(ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS
                 + "/one_mine_central/" + FILENAME_FOR_EXPECTED);
-        Map<Point, TileValue> actualMapBoard = csvParser(ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS
+        actualMapBoard = csvParser(ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS
                 + "/one_mine_central/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION);
         BoardUtil.computeNumberForCells(actualMapBoard);
         assertEquals(expectedMapBoard, actualMapBoard);
@@ -58,9 +67,9 @@ class NumberComputationTest {
             "seven_mines", "eight_mines"})
     void placeNumbersIn3x3BoardWithIncrementalMinesNumber(String folderName) throws FileNotFoundException {
         String rootFolderName = ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS + "/incremental_pattern/" + folderName;
-        Map<Point, TileValue> expectedMapBoard = csvParser(rootFolderName
+        expectedMapBoard = csvParser(rootFolderName
                 + "/" + FILENAME_FOR_EXPECTED);
-        Map<Point, TileValue> actualMapBoard = csvParser(rootFolderName
+        actualMapBoard = csvParser(rootFolderName
                 + "/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION);
         BoardUtil.computeNumberForCells(actualMapBoard);
         assertEquals(expectedMapBoard, actualMapBoard);
@@ -70,9 +79,9 @@ class NumberComputationTest {
     @ValueSource(strings = {"pattern1", "pattern2", "pattern3", "pattern4"})
     void placeNumbersIn3x3BoardWithParticularPattern(String folderName) throws FileNotFoundException {
         String rootFolderName = ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS + "/particular_pattern/" + folderName;
-        Map<Point, TileValue> expectedMapBoard = csvParser(rootFolderName
+        expectedMapBoard = csvParser(rootFolderName
                 + "/" + FILENAME_FOR_EXPECTED);
-        Map<Point, TileValue> actualMapBoard = csvParser(rootFolderName
+        actualMapBoard = csvParser(rootFolderName
                 + "/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION);
         BoardUtil.computeNumberForCells(actualMapBoard);
         assertEquals(expectedMapBoard, actualMapBoard);

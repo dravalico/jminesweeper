@@ -35,7 +35,7 @@ class BoardActionTest {
         Dimension boardDimension = new Dimension(width, height);
         Board board = new Board(new GameConfiguration(boardDimension, minesNumber));
         board.actionAt(pointToUncover);
-        assertNotEquals(GameSymbol.COVERED, board.getGameBoard().get(pointToUncover).getValue());
+        assertNotEquals(GameSymbol.COVERED, board.getMapBoard().get(pointToUncover).getValue());
     }
 
     private void generateExpectedMap(Point point, Dimension boardDimension) {

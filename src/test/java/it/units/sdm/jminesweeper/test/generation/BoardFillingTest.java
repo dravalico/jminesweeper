@@ -34,7 +34,7 @@ class BoardFillingTest {
                 expectedBoard.put(new Point(i, j), new TileValue(GameSymbol.COVERED));
             }
         }
-        assertEquals(expectedBoard, board.getGameBoard());
+        assertEquals(expectedBoard, board.getMapBoard());
     }
 
 }
