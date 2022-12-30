@@ -3,14 +3,22 @@ package it.units.sdm.jminesweeper;
 import java.util.Objects;
 
 public class TileValue {
-    private final GameSymbol value;
+    private GameSymbol value;
 
     public TileValue(GameSymbol value) {
         this.value = value;
     }
 
+    public boolean isAMine() {
+        return value.equals(GameSymbol.MINE);
+    }
+
     public GameSymbol getValue() {
         return value;
+    }
+
+    public void setValue(GameSymbol value) {
+        this.value = value;
     }
 
     @Override
@@ -28,10 +36,6 @@ public class TileValue {
     @Override
     public int hashCode() {
         return Objects.hash(value);
-    }
-
-    public boolean isAMine() {
-        return value.equals(GameSymbol.MINE);
     }
 
 }
