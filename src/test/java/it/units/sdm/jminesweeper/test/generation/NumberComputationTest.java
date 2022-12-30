@@ -18,6 +18,9 @@ import java.util.Scanner;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class NumberComputationTest {
+    private static final String ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS = "3x3boards";
+    private static final String FILENAME_FOR_EXPECTED = "expected.csv";
+    private static final String FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION = "actual_before_computation.csv";
 
     @Test
     void placeAOneIn2x1BoardWithOneMine() {
@@ -41,18 +44,36 @@ class NumberComputationTest {
 
     @Test
     void placeNumbersIn3x3BoardWithOneCentralMine() throws FileNotFoundException {
-        Map<Point, TileValue> expectedMapBoard = csvParser("3x3boards/central_mine/expected.csv");
-        Map<Point, TileValue> actualMapBoard = csvParser("3x3boards/central_mine/actual_before_computation.csv");
+        Map<Point, TileValue> expectedMapBoard = csvParser(ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS
+                + "/one_mine_central/" + FILENAME_FOR_EXPECTED);
+        Map<Point, TileValue> actualMapBoard = csvParser(ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS
+                + "/one_mine_central/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION);
         BoardUtil.computeNumberForCells(actualMapBoard);
         assertEquals(expectedMapBoard, actualMapBoard);
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"one_mines", "two_mines", "three_mines", "four_mines", "five_mines", "six_mines", "seven_mines", "eight_mines"})
-    void placeNumbersIn3x3Board(String folderName) throws FileNotFoundException {
-        String rootFolderName = "3x3boards/" + folderName;
-        Map<Point, TileValue> expectedMapBoard = csvParser(rootFolderName + "/expected.csv");
-        Map<Point, TileValue> actualMapBoard = csvParser(rootFolderName + "/actual_before_computation.csv");
+    @ValueSource(strings = {"one_mines", "two_mines", "three_mines",
+            "four_mines", "five_mines", "six_mines",
+            "seven_mines", "eight_mines"})
+    void placeNumbersIn3x3BoardWithIncrementalMinesNumber(String folderName) throws FileNotFoundException {
+        String rootFolderName = ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS + "/incremental_pattern/" + folderName;
+        Map<Point, TileValue> expectedMapBoard = csvParser(rootFolderName
+                + "/" + FILENAME_FOR_EXPECTED);
+        Map<Point, TileValue> actualMapBoard = csvParser(rootFolderName
+                + "/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION);
+        BoardUtil.computeNumberForCells(actualMapBoard);
+        assertEquals(expectedMapBoard, actualMapBoard);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"pattern1", "pattern2", "pattern3", "pattern4"})
+    void placeNumbersIn3x3BoardWithParticularPattern(String folderName) throws FileNotFoundException {
+        String rootFolderName = ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS + "/particular_pattern/" + folderName;
+        Map<Point, TileValue> expectedMapBoard = csvParser(rootFolderName
+                + "/" + FILENAME_FOR_EXPECTED);
+        Map<Point, TileValue> actualMapBoard = csvParser(rootFolderName
+                + "/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION);
         BoardUtil.computeNumberForCells(actualMapBoard);
         assertEquals(expectedMapBoard, actualMapBoard);
     }
