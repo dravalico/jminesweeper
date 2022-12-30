@@ -54,8 +54,8 @@ class BoardActionTest {
         int width = 30;
         int height = 16;
         java.util.List<Point> points = new ArrayList<>();
-        IntStream.range(0, height)
-                .forEach(i -> IntStream.range(0, width)
+        IntStream.range(0, width)
+                .forEach(i -> IntStream.range(0, height)
                         .forEach(j -> points.add(new Point(i, j)))
                 );
         return points.stream();
