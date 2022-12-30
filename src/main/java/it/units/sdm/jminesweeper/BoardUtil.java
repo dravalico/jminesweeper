@@ -10,6 +10,14 @@ public class BoardUtil {
     private BoardUtil() {
     }
 
+    public static void fillBoard(Map<Point, TileValue> mapBoard, Dimension boardDimension) {
+        for (int i = 0; i < boardDimension.width; i++) {
+            for (int j = 0; j < boardDimension.height; j++) {
+                mapBoard.put(new Point(i, j), new TileValue(GameSymbol.COVERED));
+            }
+        }
+    }
+
     public static Dimension computeBoardDimension(Map<Point, TileValue> mapBoard) {
         Optional<Point> furthestPoint = mapBoard.keySet().stream()
                 .max(Comparator.comparingDouble(p -> p.distance(new Point(0, 0))));

@@ -29,8 +29,8 @@ class BoardFillingTest {
     void givenBoardSizeGenerateBoardWithCoveredSymbol(int width, int height) {
         Dimension boardDimension = new Dimension(width, height);
         Board board = new Board(new GameConfiguration(boardDimension, minesNumber));
-        for (int i = 0; i < boardDimension.height; i++) {
-            for (int j = 0; j < boardDimension.width; j++) {
+        for (int i = 0; i < boardDimension.width; i++) {
+            for (int j = 0; j < boardDimension.height; j++) {
                 expectedBoard.put(new Point(i, j), new TileValue(GameSymbol.COVERED));
             }
         }
