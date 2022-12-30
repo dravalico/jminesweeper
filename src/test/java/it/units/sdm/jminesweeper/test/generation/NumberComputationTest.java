@@ -4,6 +4,8 @@ import it.units.sdm.jminesweeper.BoardUtil;
 import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.TileValue;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.awt.*;
 import java.io.File;
@@ -39,8 +41,18 @@ class NumberComputationTest {
 
     @Test
     void placeNumbersIn3x3BoardWithOneCentralMine() throws FileNotFoundException {
-        Map<Point, TileValue> expectedMapBoard = csvParser("3x3_board_with_central_mine/expected.csv");
-        Map<Point, TileValue> actualMapBoard = csvParser("3x3_board_with_central_mine/actual_before_computation.csv");
+        Map<Point, TileValue> expectedMapBoard = csvParser("3x3boards/central_mine/expected.csv");
+        Map<Point, TileValue> actualMapBoard = csvParser("3x3boards/central_mine/actual_before_computation.csv");
+        BoardUtil.computeNumberForCells(actualMapBoard);
+        assertEquals(expectedMapBoard, actualMapBoard);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"one_mines", "two_mines", "three_mines", "four_mines", "five_mines", "six_mines", "seven_mines", "eight_mines"})
+    void placeNumbersIn3x3Board(String folderName) throws FileNotFoundException {
+        String rootFolderName = "3x3boards/" + folderName;
+        Map<Point, TileValue> expectedMapBoard = csvParser(rootFolderName + "/expected.csv");
+        Map<Point, TileValue> actualMapBoard = csvParser(rootFolderName + "/actual_before_computation.csv");
         BoardUtil.computeNumberForCells(actualMapBoard);
         assertEquals(expectedMapBoard, actualMapBoard);
     }
