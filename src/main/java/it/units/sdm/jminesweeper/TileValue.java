@@ -4,9 +4,11 @@ import java.util.Objects;
 
 public class TileValue {
     private GameSymbol value;
+    private boolean isCovered;
 
     public TileValue(GameSymbol value) {
         this.value = value;
+        isCovered = true;
     }
 
     public boolean isAMine() {
@@ -19,6 +21,14 @@ public class TileValue {
 
     public void setValue(GameSymbol value) {
         this.value = value;
+    }
+
+    public void uncover() {
+        isCovered = false;
+    }
+
+    public boolean isCovered() {
+        return isCovered;
     }
 
     @Override

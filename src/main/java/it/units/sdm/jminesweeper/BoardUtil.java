@@ -13,7 +13,7 @@ public class BoardUtil {
     public static void fillBoard(Map<Point, TileValue> mapBoard, Dimension boardDimension) {
         for (int i = 0; i < boardDimension.width; i++) {
             for (int j = 0; j < boardDimension.height; j++) {
-                mapBoard.put(new Point(i, j), new TileValue(GameSymbol.COVERED));
+                mapBoard.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
             }
         }
     }

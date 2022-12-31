@@ -5,18 +5,19 @@ import it.units.sdm.jminesweeper.GameConfiguration;
 import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.TileValue;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BoardActionTest {
     private Map<Point, TileValue> expectedBoard;
@@ -31,12 +32,22 @@ class BoardActionTest {
     }
 
     @ParameterizedTest
-    @MethodSource
+    @MethodSource("generatePointsRepresentingActionAt")
     void givenPointUncoverTile(Point pointToUncover) {
         Dimension boardDimension = new Dimension(WIDTH, HEIGHT);
         Board board = new Board(new GameConfiguration(boardDimension, minesNumber));
         board.actionAt(pointToUncover);
         assertNotEquals(GameSymbol.COVERED, board.getMapBoard().get(pointToUncover));
+    }
+
+    @ParameterizedTest
+    @MethodSource("generatePointsRepresentingActionAt")
+    void onFirstClickUncoverAtLeastNineSpots(Point pointOfAction) {
+        Dimension boardDimension = new Dimension(WIDTH, HEIGHT);
+        Board board = new Board(new GameConfiguration(boardDimension, minesNumber));
+        board.actionAt(pointOfAction);
+        int uncoveredTiles = WIDTH * HEIGHT - Collections.frequency(board.getMapBoard().values(), GameSymbol.COVERED);
+        assertTrue(uncoveredTiles >= 9);
     }
 
     private void generateExpectedMap(Point point, Dimension boardDimension) {
@@ -51,7 +62,7 @@ class BoardActionTest {
         }
     }
 
-    private static Stream<Point> givenPointUncoverTile() {
+    private static Stream<Point> generatePointsRepresentingActionAt() {
         java.util.List<Point> points = new ArrayList<>();
         IntStream.range(0, WIDTH)
                 .forEach(i -> IntStream.range(0, HEIGHT)
