@@ -15,7 +15,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BoardFillingTest {
-    private Map<Point, TileValue> expectedBoard;
+    private Map<Point, GameSymbol> expectedBoard;
     private int minesNumber;
 
     @BeforeEach
@@ -31,7 +31,7 @@ class BoardFillingTest {
         Board board = new Board(new GameConfiguration(boardDimension, minesNumber));
         for (int i = 0; i < boardDimension.width; i++) {
             for (int j = 0; j < boardDimension.height; j++) {
-                expectedBoard.put(new Point(i, j), new TileValue(GameSymbol.COVERED));
+                expectedBoard.put(new Point(i, j), GameSymbol.COVERED);
             }
         }
         assertEquals(expectedBoard, board.getMapBoard());

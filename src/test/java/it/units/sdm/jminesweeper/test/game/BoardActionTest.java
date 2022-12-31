@@ -5,6 +5,7 @@ import it.units.sdm.jminesweeper.GameConfiguration;
 import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.TileValue;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -20,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 class BoardActionTest {
     private Map<Point, TileValue> expectedBoard;
     private int minesNumber;
+    private static final int WIDTH = 30;
+    private static final int HEIGHT = 16;
 
     @BeforeEach
     void init() {
@@ -30,12 +33,10 @@ class BoardActionTest {
     @ParameterizedTest
     @MethodSource
     void givenPointUncoverTile(Point pointToUncover) {
-        int width = 30;
-        int height = 16;
-        Dimension boardDimension = new Dimension(width, height);
+        Dimension boardDimension = new Dimension(WIDTH, HEIGHT);
         Board board = new Board(new GameConfiguration(boardDimension, minesNumber));
         board.actionAt(pointToUncover);
-        assertNotEquals(GameSymbol.COVERED, board.getMapBoard().get(pointToUncover).getValue());
+        assertNotEquals(GameSymbol.COVERED, board.getMapBoard().get(pointToUncover));
     }
 
     private void generateExpectedMap(Point point, Dimension boardDimension) {
@@ -51,11 +52,9 @@ class BoardActionTest {
     }
 
     private static Stream<Point> givenPointUncoverTile() {
-        int width = 30;
-        int height = 16;
         java.util.List<Point> points = new ArrayList<>();
-        IntStream.range(0, width)
-                .forEach(i -> IntStream.range(0, height)
+        IntStream.range(0, WIDTH)
+                .forEach(i -> IntStream.range(0, HEIGHT)
                         .forEach(j -> points.add(new Point(i, j)))
                 );
         return points.stream();
