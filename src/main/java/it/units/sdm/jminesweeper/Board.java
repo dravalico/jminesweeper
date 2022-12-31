@@ -8,10 +8,12 @@ import java.util.stream.Collectors;
 public class Board {
     private final Map<Point, TileValue> mapBoard;
     private final GameConfiguration gameConfiguration;
+    private int uncoveredTiles;
 
     public Board(GameConfiguration gameConfiguration) {
         mapBoard = new LinkedHashMap<>();
         this.gameConfiguration = gameConfiguration;
+        uncoveredTiles = 0;
         BoardUtil.fillBoard(mapBoard, this.gameConfiguration.dimension());
     }
 
@@ -23,11 +25,19 @@ public class Board {
     }
 
     public void actionAt(Point point) {
+        if (uncoveredTiles == 0) {
+            init(point);
+        }
         uncoverFreeSpotRecursively(point);
     }
 
+    private void init(Point point) {
+        MinesPlacer.place(mapBoard, gameConfiguration.minesNumber(), point);
+        BoardUtil.computeNumberForCells(mapBoard);
+    }
+
     private void uncoverFreeSpotRecursively(Point point) {
-        mapBoard.get(point).uncover();
+        uncoverTile(point);
         Dimension dimension = BoardUtil.computeBoardDimension(mapBoard);
         int iStart = (point.x == 0 ? 0 : -1);
         int iStop = (point.x == dimension.width - 1 ? 0 : 1);
@@ -37,10 +47,19 @@ public class Board {
             for (int j = jStart; j <= jStop; j++) {
                 Point temp = new Point(point.x + i, point.y + j);
                 if (mapBoard.get(temp).isCovered()) {
-                    uncoverFreeSpotRecursively(temp);
+                    if (mapBoard.get(temp).isValueANumber()) {
+                        uncoverTile(temp);
+                    } else {
+                        uncoverFreeSpotRecursively(temp);
+                    }
                 }
             }
         }
+    }
+
+    private void uncoverTile(Point point) {
+        uncoveredTiles = uncoveredTiles + 1;
+        mapBoard.get(point).uncover();
     }
 
 }

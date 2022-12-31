@@ -15,6 +15,10 @@ public class TileValue {
         return value.equals(GameSymbol.MINE);
     }
 
+    public boolean isValueANumber() {
+        return !(value.equals(GameSymbol.MINE) || value.equals(GameSymbol.EMPTY) || value.equals(GameSymbol.COVERED));
+    }
+
     public GameSymbol getValue() {
         return value;
     }

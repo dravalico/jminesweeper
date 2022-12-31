@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BoardActionTest {
+    private Board board;
     private Map<Point, TileValue> expectedBoard;
     private int minesNumber;
     private static final int WIDTH = 30;
@@ -28,38 +29,39 @@ class BoardActionTest {
     @BeforeEach
     void init() {
         expectedBoard = new LinkedHashMap<>();
-        minesNumber = 0;
+        minesNumber = 99;
+        board = new Board(new GameConfiguration(new Dimension(WIDTH, HEIGHT), minesNumber));
     }
 
     @ParameterizedTest
     @MethodSource("generatePointsRepresentingActionAt")
     void givenPointUncoverTile(Point pointToUncover) {
-        Dimension boardDimension = new Dimension(WIDTH, HEIGHT);
-        Board board = new Board(new GameConfiguration(boardDimension, minesNumber));
         board.actionAt(pointToUncover);
         assertNotEquals(GameSymbol.COVERED, board.getMapBoard().get(pointToUncover));
     }
 
     @ParameterizedTest
-    @MethodSource("generatePointsRepresentingActionAt")
-    void onFirstClickUncoverAtLeastNineSpots(Point pointOfAction) {
-        Dimension boardDimension = new Dimension(WIDTH, HEIGHT);
-        Board board = new Board(new GameConfiguration(boardDimension, minesNumber));
+    @MethodSource
+    void onFirstClickNotOnEdgeUncoverAtLeastNineSpots(Point pointOfAction) {
         board.actionAt(pointOfAction);
         int uncoveredTiles = WIDTH * HEIGHT - Collections.frequency(board.getMapBoard().values(), GameSymbol.COVERED);
         assertTrue(uncoveredTiles >= 9);
     }
 
-    private void generateExpectedMap(Point point, Dimension boardDimension) {
-        for (int i = 0; i < boardDimension.width; i++) {
-            for (int j = 0; j < boardDimension.height; j++) {
-                if ((i == point.x) && (j == point.y)) {
-                    expectedBoard.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
-                    continue;
-                }
-                expectedBoard.put(new Point(i, j), new TileValue(GameSymbol.COVERED));
-            }
-        }
+    @ParameterizedTest
+    @MethodSource
+    void onFirstClickOnEdgeUncoverAtLeastFourSpots(Point pointOfAction) {
+        board.actionAt(pointOfAction);
+        int uncoveredTiles = WIDTH * HEIGHT - Collections.frequency(board.getMapBoard().values(), GameSymbol.COVERED);
+        assertTrue(uncoveredTiles >= 4);
+    }
+
+    @ParameterizedTest
+    @MethodSource("generatePointsRepresentingActionAt")
+    void onFirstClickUncoverAtLeastNineSpotsButMines(Point pointOfAction) {
+        board.actionAt(pointOfAction);
+        int coveredTiles = Collections.frequency(board.getMapBoard().values(), GameSymbol.COVERED);
+        assertTrue(coveredTiles >= minesNumber);
     }
 
     private static Stream<Point> generatePointsRepresentingActionAt() {
@@ -67,6 +69,32 @@ class BoardActionTest {
         IntStream.range(0, WIDTH)
                 .forEach(i -> IntStream.range(0, HEIGHT)
                         .forEach(j -> points.add(new Point(i, j)))
+                );
+        return points.stream();
+    }
+
+    private static Stream<Point> onFirstClickNotOnEdgeUncoverAtLeastNineSpots() {
+        java.util.List<Point> points = new ArrayList<>();
+        IntStream.range(1, WIDTH - 1)
+                .forEach(i -> IntStream.range(1, HEIGHT - 1)
+                        .forEach(j -> points.add(new Point(i, j)))
+                );
+        return points.stream();
+    }
+
+    private static Stream<Point> onFirstClickOnEdgeUncoverAtLeastFourSpots() {
+        java.util.List<Point> points = new ArrayList<>();
+        IntStream.range(0, WIDTH)
+                .forEach(i -> points.add(new Point(i, 0))
+                );
+        IntStream.range(0, HEIGHT)
+                .forEach(j -> points.add(new Point(0, j))
+                );
+        IntStream.range(0, WIDTH)
+                .forEach(i -> points.add(new Point(i, HEIGHT - 1))
+                );
+        IntStream.range(0, HEIGHT)
+                .forEach(j -> points.add(new Point(WIDTH - 1, j))
                 );
         return points.stream();
     }
