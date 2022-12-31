@@ -30,14 +30,14 @@ public class MinesPlacer {
     private MinesPlacer() {
     }
 
-    public static void place(Map<Point, TileValue> mapBoard, int minesNumber, Point firstClickPosition) {
+    public static void place(Map<Point, Tile> mapBoard, int minesNumber, Point firstClickPosition) {
         for (int i = 0; i < minesNumber; i++) {
             Point minePosition = computeMineablePosition(mapBoard, firstClickPosition);
-            mapBoard.put(minePosition, new TileValue(GameSymbol.MINE));
+            mapBoard.put(minePosition, new Tile(GameSymbol.MINE));
         }
     }
 
-    private static Point computeMineablePosition(Map<Point, TileValue> mapBoard, Point firstClickPosition) {
+    private static Point computeMineablePosition(Map<Point, Tile> mapBoard, Point firstClickPosition) {
         Dimension dimension = BoardUtil.computeBoardDimension(mapBoard);
         int standardDeviation = 1;
         Point startingPoint = generateRandomPointWithin(dimension);

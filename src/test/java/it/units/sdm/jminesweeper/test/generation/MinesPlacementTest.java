@@ -2,7 +2,7 @@ package it.units.sdm.jminesweeper.test.generation;
 
 import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.MinesPlacer;
-import it.units.sdm.jminesweeper.TileValue;
+import it.units.sdm.jminesweeper.Tile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class MinesPlacementTest {
     private final static int BOARD_WIDTH = 30;
     private final static int BOARD_HEIGHT = 16;
-    private Map<Point, TileValue> board;
+    private Map<Point, Tile> board;
 
     @BeforeEach
     void init() {
@@ -35,12 +35,12 @@ class MinesPlacementTest {
         board = new LinkedHashMap<>();
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                board.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
+                board.put(new Point(i, j), new Tile(GameSymbol.EMPTY));
             }
         }
         int expectedMinesNumber = 1;
         MinesPlacer.place(board, expectedMinesNumber, new Point(0, 0));
-        int actualMinesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
+        int actualMinesNumber = Collections.frequency(board.values(), new Tile(GameSymbol.MINE));
         assertEquals(expectedMinesNumber, actualMinesNumber);
     }
 
@@ -50,12 +50,12 @@ class MinesPlacementTest {
         board = new LinkedHashMap<>();
         for (int i = 0; i < BOARD_WIDTH; i++) {
             for (int j = 0; j < BOARD_HEIGHT; j++) {
-                board.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
+                board.put(new Point(i, j), new Tile(GameSymbol.EMPTY));
             }
         }
         int expectedMinesNumber = 10;
         MinesPlacer.place(board, expectedMinesNumber, point);
-        int actualMinesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
+        int actualMinesNumber = Collections.frequency(board.values(), new Tile(GameSymbol.MINE));
         assertEquals(expectedMinesNumber, actualMinesNumber);
         assertTrue(notMineInPointAndNeighborhood(board, point));
     }
@@ -66,12 +66,12 @@ class MinesPlacementTest {
         board = new LinkedHashMap<>();
         for (int i = 0; i < BOARD_WIDTH; i++) {
             for (int j = 0; j < BOARD_HEIGHT; j++) {
-                board.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
+                board.put(new Point(i, j), new Tile(GameSymbol.EMPTY));
             }
         }
         int expectedMinesNumber = 32;
         MinesPlacer.place(board, expectedMinesNumber, point);
-        int actualMinesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
+        int actualMinesNumber = Collections.frequency(board.values(), new Tile(GameSymbol.MINE));
         assertEquals(expectedMinesNumber, actualMinesNumber);
         assertTrue(notMineInPointAndNeighborhood(board, point));
     }
@@ -82,17 +82,17 @@ class MinesPlacementTest {
         board = new LinkedHashMap<>();
         for (int i = 0; i < BOARD_WIDTH; i++) {
             for (int j = 0; j < BOARD_HEIGHT; j++) {
-                board.put(new Point(i, j), new TileValue(GameSymbol.EMPTY));
+                board.put(new Point(i, j), new Tile(GameSymbol.EMPTY));
             }
         }
         int expectedMinesNumber = 99;
         MinesPlacer.place(board, expectedMinesNumber, point);
-        int actualMinesNumber = Collections.frequency(board.values(), new TileValue(GameSymbol.MINE));
+        int actualMinesNumber = Collections.frequency(board.values(), new Tile(GameSymbol.MINE));
         assertEquals(expectedMinesNumber, actualMinesNumber);
         assertTrue(notMineInPointAndNeighborhood(board, point));
     }
 
-    private boolean notMineInPointAndNeighborhood(Map<Point, TileValue> board, Point point) {
+    private boolean notMineInPointAndNeighborhood(Map<Point, Tile> board, Point point) {
         int iStart = (point.x == 0 ? 0 : -1);
         int iStop = (point.x == BOARD_WIDTH - 1 ? 0 : 1);
         int jStart = (point.y == 0 ? 0 : -1);

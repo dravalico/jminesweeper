@@ -2,7 +2,7 @@ package it.units.sdm.jminesweeper.test.generation;
 
 import it.units.sdm.jminesweeper.BoardUtil;
 import it.units.sdm.jminesweeper.GameSymbol;
-import it.units.sdm.jminesweeper.TileValue;
+import it.units.sdm.jminesweeper.Tile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,8 +22,8 @@ class NumberComputationTest {
     private static final String ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS = "3x3boards";
     private static final String FILENAME_FOR_EXPECTED = "expected.csv";
     private static final String FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION = "actual_before_computation.csv";
-    private Map<Point, TileValue> expectedMapBoard;
-    private Map<Point, TileValue> actualMapBoard;
+    private Map<Point, Tile> expectedMapBoard;
+    private Map<Point, Tile> actualMapBoard;
 
     @BeforeEach
     void init() {
@@ -33,20 +33,20 @@ class NumberComputationTest {
 
     @Test
     void placeAOneIn2x1BoardWithOneMine() {
-        expectedMapBoard = Map.of(new Point(0, 0), new TileValue(GameSymbol.ONE),
-                new Point(0, 1), new TileValue(GameSymbol.MINE));
-        actualMapBoard = new LinkedHashMap<>(Map.of(new Point(0, 0), new TileValue(GameSymbol.EMPTY),
-                new Point(0, 1), new TileValue(GameSymbol.MINE)));
+        expectedMapBoard = Map.of(new Point(0, 0), new Tile(GameSymbol.ONE),
+                new Point(0, 1), new Tile(GameSymbol.MINE));
+        actualMapBoard = new LinkedHashMap<>(Map.of(new Point(0, 0), new Tile(GameSymbol.EMPTY),
+                new Point(0, 1), new Tile(GameSymbol.MINE)));
         BoardUtil.computeNumberForCells(actualMapBoard);
         assertEquals(expectedMapBoard, actualMapBoard);
     }
 
     @Test
     void computeNoChangeIn2x1BoardWithNoMine() {
-        expectedMapBoard = Map.of(new Point(0, 0), new TileValue(GameSymbol.EMPTY),
-                new Point(0, 1), new TileValue(GameSymbol.EMPTY));
-        actualMapBoard = new LinkedHashMap<>(Map.of(new Point(0, 0), new TileValue(GameSymbol.EMPTY),
-                new Point(0, 1), new TileValue(GameSymbol.EMPTY)));
+        expectedMapBoard = Map.of(new Point(0, 0), new Tile(GameSymbol.EMPTY),
+                new Point(0, 1), new Tile(GameSymbol.EMPTY));
+        actualMapBoard = new LinkedHashMap<>(Map.of(new Point(0, 0), new Tile(GameSymbol.EMPTY),
+                new Point(0, 1), new Tile(GameSymbol.EMPTY)));
         BoardUtil.computeNumberForCells(actualMapBoard);
         assertEquals(expectedMapBoard, actualMapBoard);
     }
@@ -87,12 +87,12 @@ class NumberComputationTest {
         assertEquals(expectedMapBoard, actualMapBoard);
     }
 
-    private Map<Point, TileValue> csvParser(String resourceName) throws FileNotFoundException {
+    private Map<Point, Tile> csvParser(String resourceName) throws FileNotFoundException {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(Objects.requireNonNull(classLoader.getResource(resourceName)).getFile());
         String absolutePath = file.getAbsolutePath();
         Scanner scanner = new Scanner(new File(absolutePath));
-        Map<Point, TileValue> mapBoard = new LinkedHashMap<>();
+        Map<Point, Tile> mapBoard = new LinkedHashMap<>();
         int rowCounter = 0;
         while (scanner.hasNext()) {
             String[] row = scanner.next().split(",");
@@ -110,7 +110,7 @@ class NumberComputationTest {
                     case "*" -> gameSymbol = GameSymbol.MINE;
                     case "-" -> gameSymbol = GameSymbol.EMPTY;
                 }
-                mapBoard.put(new Point(rowCounter, i), new TileValue(gameSymbol));
+                mapBoard.put(new Point(rowCounter, i), new Tile(gameSymbol));
             }
             rowCounter = rowCounter + 1;
         }

@@ -2,11 +2,11 @@ package it.units.sdm.jminesweeper;
 
 import java.util.Objects;
 
-public class TileValue {
+public class Tile {
     private GameSymbol value;
     private boolean isCovered;
 
-    public TileValue(GameSymbol value) {
+    public Tile(GameSymbol value) {
         this.value = value;
         isCovered = true;
     }
@@ -15,8 +15,8 @@ public class TileValue {
         return value.equals(GameSymbol.MINE);
     }
 
-    public boolean isValueANumber() {
-        return !(value.equals(GameSymbol.MINE) || value.equals(GameSymbol.EMPTY) || value.equals(GameSymbol.COVERED));
+    public boolean isANumber() {
+        return !(value.equals(GameSymbol.MINE) || value.equals(GameSymbol.EMPTY));
     }
 
     public GameSymbol getValue() {
@@ -43,8 +43,8 @@ public class TileValue {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        TileValue tileValue = (TileValue) o;
-        return value == tileValue.value;
+        Tile tile = (Tile) o;
+        return value == tile.value;
     }
 
     @Override

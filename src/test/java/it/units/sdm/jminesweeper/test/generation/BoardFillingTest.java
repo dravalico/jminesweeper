@@ -1,6 +1,6 @@
 package it.units.sdm.jminesweeper.test.generation;
 
-import it.units.sdm.jminesweeper.Board;
+import it.units.sdm.jminesweeper.BoardManager;
 import it.units.sdm.jminesweeper.GameConfiguration;
 import it.units.sdm.jminesweeper.GameSymbol;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,13 +27,13 @@ class BoardFillingTest {
     @CsvSource({"9,9", "16,16", "30,16"})
     void givenBoardSizeGenerateBoardWithCoveredSymbol(int width, int height) {
         Dimension boardDimension = new Dimension(width, height);
-        Board board = new Board(new GameConfiguration(boardDimension, minesNumber));
+        BoardManager boardManager = new BoardManager(new GameConfiguration(boardDimension, minesNumber));
         for (int i = 0; i < boardDimension.width; i++) {
             for (int j = 0; j < boardDimension.height; j++) {
                 expectedBoard.put(new Point(i, j), GameSymbol.COVERED);
             }
         }
-        assertEquals(expectedBoard, board.getMapBoard());
+        assertEquals(expectedBoard, boardManager.getMapBoard());
     }
 
 }

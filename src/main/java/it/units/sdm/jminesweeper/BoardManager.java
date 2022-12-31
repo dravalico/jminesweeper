@@ -5,12 +5,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Board {
-    private final Map<Point, TileValue> mapBoard;
+public class BoardManager {
+    private final Map<Point, Tile> mapBoard;
     private final GameConfiguration gameConfiguration;
     private int uncoveredTiles;
 
-    public Board(GameConfiguration gameConfiguration) {
+    public BoardManager(GameConfiguration gameConfiguration) {
         mapBoard = new LinkedHashMap<>();
         this.gameConfiguration = gameConfiguration;
         uncoveredTiles = 0;
@@ -47,7 +47,7 @@ public class Board {
             for (int j = jStart; j <= jStop; j++) {
                 Point temp = new Point(point.x + i, point.y + j);
                 if (mapBoard.get(temp).isCovered()) {
-                    if (mapBoard.get(temp).isValueANumber()) {
+                    if (mapBoard.get(temp).isANumber()) {
                         uncoverTile(temp);
                     } else {
                         uncoverFreeSpotRecursively(temp);
