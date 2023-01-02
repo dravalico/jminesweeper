@@ -33,10 +33,21 @@ public class MinesPlacer {
     }
 
     public static void place(Map<Point, Tile> mapBoard, int minesNumber, Point firstClickPosition) {
+        int neighborsOfFirstClick = countNeighborsOf(mapBoard, firstClickPosition);
+        if (mapBoard.size() - minesNumber < neighborsOfFirstClick) {
+            throw new IllegalArgumentException("Too many mines!");
+        }
         for (int i = 0; i < minesNumber; i++) {
             Point minePosition = computeMineablePosition(mapBoard, firstClickPosition);
             mapBoard.put(minePosition, new Tile(GameSymbol.MINE));
         }
+    }
+
+    private static int countNeighborsOf(Map<Point, Tile> mapBoard, Point point) {
+        return (int) mapBoard.keySet()
+                .stream()
+                .filter(k -> k.distance(point) <= Math.sqrt(2))
+                .count();
     }
 
     private static Point computeMineablePosition(Map<Point, Tile> mapBoard, Point firstClickPosition) {

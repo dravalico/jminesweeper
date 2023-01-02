@@ -4,7 +4,6 @@ import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.MinesPlacer;
 import it.units.sdm.jminesweeper.Tile;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -17,8 +16,7 @@ import java.util.Map;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class MinesPlacementTest {
     private final static int BOARD_WIDTH = 30;
@@ -89,9 +87,16 @@ class MinesPlacementTest {
         assertTrue(notMineInPointAndNeighborhood(board, point));
     }
 
-    @Test
-    void throwExceptionIfNumberOfMinesIsGreaterThanMineableSpots() {
-        
+    @ParameterizedTest
+    @MethodSource("generateEveryPointOnTheBoard")
+    void throwExceptionIfNumberOfMinesIsGreaterThanMineableSpots(Point point) {
+        for (int i = 0; i < BOARD_WIDTH; i++) {
+            for (int j = 0; j < BOARD_HEIGHT; j++) {
+                board.put(new Point(i, j), new Tile(GameSymbol.EMPTY));
+            }
+        }
+        int minesNumber = 480;
+        assertThrows(IllegalArgumentException.class, () -> MinesPlacer.place(board, minesNumber, point));
     }
 
     private boolean notMineInPointAndNeighborhood(Map<Point, Tile> board, Point point) {
