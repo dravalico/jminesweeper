@@ -25,10 +25,18 @@ public class BoardManager {
     }
 
     public void actionAt(Point point) {
+        verifyPointWithinBoardDimension(point);
         if (uncoveredTiles == 0) {
             init(point);
         }
         uncoverFreeSpotRecursively(point);
+    }
+
+    private void verifyPointWithinBoardDimension(Point point) {
+        Dimension boardDimension = gameConfiguration.dimension();
+        if (((point.x < 0) || (point.x >= boardDimension.width)) || ((point.y < 0) || (point.y >= boardDimension.height))) {
+            throw new IllegalArgumentException("Coordinates not allowed!");
+        }
     }
 
     private void init(Point point) {

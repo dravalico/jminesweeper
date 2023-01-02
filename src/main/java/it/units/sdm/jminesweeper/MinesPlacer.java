@@ -32,7 +32,7 @@ public class MinesPlacer {
     private MinesPlacer() {
     }
 
-    public static void place(Map<Point, Tile> mapBoard, int minesNumber, Point firstClickPosition) {
+    public static void place(Map<Point, Tile> mapBoard, int minesNumber, Point firstClickPosition) throws IllegalArgumentException {
         int neighborsOfFirstClick = countNeighborsOf(mapBoard, firstClickPosition);
         if (mapBoard.size() - minesNumber < neighborsOfFirstClick) {
             throw new IllegalArgumentException("Too many mines!");

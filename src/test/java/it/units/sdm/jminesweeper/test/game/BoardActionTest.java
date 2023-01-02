@@ -5,6 +5,7 @@ import it.units.sdm.jminesweeper.GameConfiguration;
 import it.units.sdm.jminesweeper.GameSymbol;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.awt.*;
@@ -13,8 +14,7 @@ import java.util.Collections;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class BoardActionTest {
     private BoardManager boardManager;
@@ -26,6 +26,13 @@ class BoardActionTest {
     void init() {
         minesNumber = 99;
         boardManager = new BoardManager(new GameConfiguration(new Dimension(WIDTH, HEIGHT), minesNumber));
+    }
+
+    @ParameterizedTest
+    @CsvSource({"0,-1", "-1,0", "0,0", "1, 1", "2, 3", "100, -100", "20,4", "-5,2", "-4,13"})
+    void givenAPointOutOfTheBoardThrowAnException(int xShift, int yShift) {
+        Point point = new Point(WIDTH + xShift, HEIGHT + yShift);
+        assertThrows(IllegalArgumentException.class, () -> boardManager.actionAt(point));
     }
 
     @ParameterizedTest
