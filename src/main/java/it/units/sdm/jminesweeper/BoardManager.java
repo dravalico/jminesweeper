@@ -14,7 +14,7 @@ public class BoardManager {
         mapBoard = new LinkedHashMap<>();
         this.gameConfiguration = gameConfiguration;
         uncoveredTiles = 0;
-        BoardUtil.fillBoard(mapBoard, this.gameConfiguration.dimension());
+        BoardBuilder.fillBoard(mapBoard, this.gameConfiguration.dimension());
     }
 
     public Map<Point, GameSymbol> getMapBoard() {
@@ -33,12 +33,12 @@ public class BoardManager {
 
     private void init(Point point) {
         MinesPlacer.place(mapBoard, gameConfiguration.minesNumber(), point);
-        BoardUtil.computeNumberForCells(mapBoard);
+        BoardBuilder.computeNumberForCells(mapBoard);
     }
 
     private void uncoverFreeSpotRecursively(Point point) {
         uncoverTile(point);
-        Dimension dimension = BoardUtil.computeBoardDimension(mapBoard);
+        Dimension dimension = gameConfiguration.dimension();
         int iStart = (point.x == 0 ? 0 : -1);
         int iStop = (point.x == dimension.width - 1 ? 0 : 1);
         int jStart = (point.y == 0 ? 0 : -1);

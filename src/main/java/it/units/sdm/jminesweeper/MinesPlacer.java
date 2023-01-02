@@ -1,7 +1,9 @@
 package it.units.sdm.jminesweeper;
 
 import java.awt.*;
+import java.util.Comparator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 
 public class MinesPlacer {
@@ -38,7 +40,7 @@ public class MinesPlacer {
     }
 
     private static Point computeMineablePosition(Map<Point, Tile> mapBoard, Point firstClickPosition) {
-        Dimension dimension = BoardUtil.computeBoardDimension(mapBoard);
+        Dimension dimension = computeBoardDimension(mapBoard);
         int standardDeviation = 1;
         Point startingPoint = generateRandomPointWithin(dimension);
         Point minePosition = new Point(startingPoint.x, startingPoint.y);
@@ -49,6 +51,13 @@ public class MinesPlacer {
             minePosition.y = shiftCoordinateFromStartingPoint(shifts.second, startingPoint.y, dimension.height);
         }
         return minePosition;
+    }
+
+    private static Dimension computeBoardDimension(Map<Point, Tile> mapBoard) {
+        Optional<Point> furthestPoint = mapBoard.keySet()
+                .stream()
+                .max(Comparator.comparingDouble(p -> p.distance(new Point(0, 0))));
+        return new Dimension(furthestPoint.get().x + 1, furthestPoint.get().y + 1);
     }
 
     private static Point generateRandomPointWithin(Dimension dimensionLimit) {

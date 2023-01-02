@@ -1,6 +1,6 @@
 package it.units.sdm.jminesweeper.test.generation;
 
-import it.units.sdm.jminesweeper.BoardUtil;
+import it.units.sdm.jminesweeper.BoardBuilder;
 import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.Tile;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +37,7 @@ class NumberComputationTest {
                 new Point(0, 1), new Tile(GameSymbol.MINE));
         actualMapBoard = new LinkedHashMap<>(Map.of(new Point(0, 0), new Tile(GameSymbol.EMPTY),
                 new Point(0, 1), new Tile(GameSymbol.MINE)));
-        BoardUtil.computeNumberForCells(actualMapBoard);
+        BoardBuilder.computeNumberForCells(actualMapBoard);
         assertEquals(expectedMapBoard, actualMapBoard);
     }
 
@@ -47,7 +47,7 @@ class NumberComputationTest {
                 new Point(0, 1), new Tile(GameSymbol.EMPTY));
         actualMapBoard = new LinkedHashMap<>(Map.of(new Point(0, 0), new Tile(GameSymbol.EMPTY),
                 new Point(0, 1), new Tile(GameSymbol.EMPTY)));
-        BoardUtil.computeNumberForCells(actualMapBoard);
+        BoardBuilder.computeNumberForCells(actualMapBoard);
         assertEquals(expectedMapBoard, actualMapBoard);
     }
 
@@ -57,7 +57,7 @@ class NumberComputationTest {
                 + "/one_mine_central/" + FILENAME_FOR_EXPECTED);
         actualMapBoard = csvParser(ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS
                 + "/one_mine_central/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION);
-        BoardUtil.computeNumberForCells(actualMapBoard);
+        BoardBuilder.computeNumberForCells(actualMapBoard);
         assertEquals(expectedMapBoard, actualMapBoard);
     }
 
@@ -71,7 +71,7 @@ class NumberComputationTest {
                 + "/" + FILENAME_FOR_EXPECTED);
         actualMapBoard = csvParser(rootFolderName
                 + "/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION);
-        BoardUtil.computeNumberForCells(actualMapBoard);
+        BoardBuilder.computeNumberForCells(actualMapBoard);
         assertEquals(expectedMapBoard, actualMapBoard);
     }
 
@@ -83,7 +83,7 @@ class NumberComputationTest {
                 + "/" + FILENAME_FOR_EXPECTED);
         actualMapBoard = csvParser(rootFolderName
                 + "/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION);
-        BoardUtil.computeNumberForCells(actualMapBoard);
+        BoardBuilder.computeNumberForCells(actualMapBoard);
         assertEquals(expectedMapBoard, actualMapBoard);
     }
 

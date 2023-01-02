@@ -1,13 +1,11 @@
 package it.units.sdm.jminesweeper;
 
 import java.awt.*;
-import java.util.Comparator;
 import java.util.Map;
-import java.util.Optional;
 
-public class BoardUtil {
+public class BoardBuilder {
 
-    private BoardUtil() {
+    private BoardBuilder() {
     }
 
     public static void fillBoard(Map<Point, Tile> mapBoard, Dimension boardDimension) {
@@ -16,13 +14,6 @@ public class BoardUtil {
                 mapBoard.put(new Point(i, j), new Tile(GameSymbol.EMPTY));
             }
         }
-    }
-
-    public static Dimension computeBoardDimension(Map<Point, Tile> mapBoard) {
-        Optional<Point> furthestPoint = mapBoard.keySet()
-                .stream()
-                .max(Comparator.comparingDouble(p -> p.distance(new Point(0, 0))));
-        return new Dimension(furthestPoint.get().x + 1, furthestPoint.get().y + 1);
     }
 
     public static void computeNumberForCells(Map<Point, Tile> mapBoard) {
