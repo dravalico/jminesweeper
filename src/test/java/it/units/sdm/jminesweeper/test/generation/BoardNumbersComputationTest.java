@@ -142,7 +142,7 @@ class BoardNumbersComputationTest {
                 rowCounter = rowCounter + 1;
             }
             return mapBoard;
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException ignored) {
         }
         return null;
     }

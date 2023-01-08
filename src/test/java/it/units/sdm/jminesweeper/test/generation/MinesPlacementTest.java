@@ -3,6 +3,7 @@ package it.units.sdm.jminesweeper.test.generation;
 import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.Tile;
 import it.units.sdm.jminesweeper.generation.GuassianMinesPlacer;
+import it.units.sdm.jminesweeper.generation.MinesPlacer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -22,7 +23,7 @@ class MinesPlacementTest {
     private final static int BOARD_WIDTH = 30;
     private final static int BOARD_HEIGHT = 16;
     private Map<Point, Tile> board;
-    private it.units.sdm.jminesweeper.generation.MinesPlacer<Map<Point, Tile>, Point> minesPlacer;
+    private MinesPlacer<Map<Point, Tile>, Point> minesPlacer;
 
     @BeforeEach
     void init() {
