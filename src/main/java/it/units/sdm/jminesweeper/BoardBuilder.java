@@ -21,8 +21,7 @@ public class BoardBuilder {
             if (!v.isAMine()) {
                 v.setValue(GameSymbol.fromInt((int) mapBoard.entrySet()
                         .stream()
-                        .filter(e ->
-                                e.getKey().distance(k) <= Math.sqrt(2) && e.getValue().isAMine())
+                        .filter(e -> e.getKey().distance(k) <= Math.sqrt(2) && e.getValue().isAMine())
                         .count()));
             }
         });

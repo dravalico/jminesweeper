@@ -1,9 +1,12 @@
 package it.units.sdm.jminesweeper.test.game;
 
+import it.units.sdm.jminesweeper.ActionOutcome;
 import it.units.sdm.jminesweeper.BoardManager;
 import it.units.sdm.jminesweeper.GameConfiguration;
 import it.units.sdm.jminesweeper.GameSymbol;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -64,6 +67,14 @@ class BoardActionTest {
         boardManager.actionAt(pointOfAction);
         int coveredTiles = Collections.frequency(boardManager.getMapBoard().values(), GameSymbol.COVERED);
         assertTrue(coveredTiles >= minesNumber);
+    }
+
+    @Disabled
+    @Test
+    void whenClickOnAMineDeclareDefeat() {
+        BoardManager boardManager = new BoardManager(new GameConfiguration(new Dimension(3, 3), 5));
+        boardManager.actionAt(new Point(0, 0));
+        assertEquals(ActionOutcome.DEFEAT, boardManager.actionAt(new Point(2, 2)));
     }
 
     private static Stream<Point> generatePointsRepresentingActionAt() {

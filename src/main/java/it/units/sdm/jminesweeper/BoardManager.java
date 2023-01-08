@@ -24,12 +24,16 @@ public class BoardManager {
                         e -> e.getValue().isCovered() ? GameSymbol.COVERED : e.getValue().getValue()));
     }
 
-    public void actionAt(Point point) {
+    public ActionOutcome actionAt(Point point) {
         verifyPointWithinBoardDimension(point);
+        if (mapBoard.get(point).isAMine()) {
+            return ActionOutcome.DEFEAT;
+        }
         if (uncoveredTiles == 0) {
             init(point);
         }
         uncoverFreeSpotRecursively(point);
+        return ActionOutcome.PROGRESS;
     }
 
     private void verifyPointWithinBoardDimension(Point point) {

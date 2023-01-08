@@ -3,6 +3,7 @@ package it.units.sdm.jminesweeper.test.generation;
 import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.MinesPlacer;
 import it.units.sdm.jminesweeper.Tile;
+import it.units.sdm.jminesweeper.generation.GuassianMinesPlacer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -22,10 +23,12 @@ class MinesPlacementTest {
     private final static int BOARD_WIDTH = 30;
     private final static int BOARD_HEIGHT = 16;
     private Map<Point, Tile> board;
+    private it.units.sdm.jminesweeper.generation.MinesPlacer<Map<Point, Tile>, Point> minesPlacer;
 
     @BeforeEach
     void init() {
         board = new LinkedHashMap<>();
+        minesPlacer = new GuassianMinesPlacer();
     }
 
     @ParameterizedTest
@@ -37,7 +40,7 @@ class MinesPlacementTest {
             }
         }
         int expectedMinesNumber = 1;
-        MinesPlacer.place(board, expectedMinesNumber, new Point(0, 0));
+        minesPlacer.place(board, expectedMinesNumber, new Point(0, 0));
         int actualMinesNumber = Collections.frequency(board.values(), new Tile(GameSymbol.MINE));
         assertEquals(expectedMinesNumber, actualMinesNumber);
     }
@@ -47,7 +50,7 @@ class MinesPlacementTest {
     void place10MinesOnTheBoardAvoidingAPointAndItsNeighborhood(Point point) {
         fillBoard();
         int expectedMinesNumber = 10;
-        MinesPlacer.place(board, expectedMinesNumber, point);
+        minesPlacer.place(board, expectedMinesNumber, point);
         int actualMinesNumber = Collections.frequency(board.values(), new Tile(GameSymbol.MINE));
         assertEquals(expectedMinesNumber, actualMinesNumber);
         assertTrue(notMineInPointAndNeighborhood(board, point));
@@ -58,7 +61,7 @@ class MinesPlacementTest {
     void place32MinesOnTheBoardAvoidingAPointAndItsNeighborhood(Point point) {
         fillBoard();
         int expectedMinesNumber = 32;
-        MinesPlacer.place(board, expectedMinesNumber, point);
+        minesPlacer.place(board, expectedMinesNumber, point);
         int actualMinesNumber = Collections.frequency(board.values(), new Tile(GameSymbol.MINE));
         assertEquals(expectedMinesNumber, actualMinesNumber);
         assertTrue(notMineInPointAndNeighborhood(board, point));
@@ -69,7 +72,7 @@ class MinesPlacementTest {
     void place99MinesOnTheBoardAvoidingAPointAndItsNeighborhood(Point point) {
         fillBoard();
         int expectedMinesNumber = 99;
-        MinesPlacer.place(board, expectedMinesNumber, point);
+        minesPlacer.place(board, expectedMinesNumber, point);
         int actualMinesNumber = Collections.frequency(board.values(), new Tile(GameSymbol.MINE));
         assertEquals(expectedMinesNumber, actualMinesNumber);
         assertTrue(notMineInPointAndNeighborhood(board, point));
@@ -80,7 +83,7 @@ class MinesPlacementTest {
     void throwExceptionIfNumberOfMinesIsGreaterThanMineableSpots(Point point) {
         fillBoard();
         int minesNumber = 480;
-        assertThrows(IllegalArgumentException.class, () -> MinesPlacer.place(board, minesNumber, point));
+        assertThrows(IllegalArgumentException.class, () -> minesPlacer.place(board, minesNumber, point));
     }
 
     private void fillBoard() {
