@@ -67,18 +67,13 @@ class BoardNumbersComputationTest {
         expectedMapBoard = csvParser(ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS
                 + "/one_mine_central/" + FILENAME_FOR_EXPECTED);
 
+        String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS
+                + "/one_mine_central/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
         it.units.sdm.jminesweeper.generation.MinesPlacer<Map<Point, Tile>, Point> minesPlacer
-                = (board, minesNumber, firstClick) -> {
-            var actualBeforeComputation = csvParser(ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS
-                    + "/one_mine_central/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION);
-            board.keySet()
-                    .forEach(k -> {
-                        assert actualBeforeComputation != null;
-                        board.replace(k, actualBeforeComputation.get(k));
-                    });
-        };
+                = (board, minesNumber, firstClick) -> Objects.requireNonNull(csvParser(actualBeforeComputationPath))
+                .forEach(board::replace);
 
-        boardInitializer = new BoardInitializer(new GameConfiguration(dimension, 0), minesPlacer);
+        boardInitializer = new BoardInitializer(new GameConfiguration(dimension, 1), minesPlacer);
 
         assertEquals(expectedMapBoard, boardInitializer.init(new Point(0, 0)));
     }
@@ -88,23 +83,26 @@ class BoardNumbersComputationTest {
             "four_mines", "five_mines", "six_mines",
             "seven_mines", "eight_mines"})
     void placeNumbersIn3x3BoardWithIncrementalMinesNumber(String folderName) {
+        Dimension dimension = new Dimension(3, 3);
         String rootFolderName = ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS + "/incremental_pattern/" + folderName;
-        expectedMapBoard = csvParser(rootFolderName
-                + "/" + FILENAME_FOR_EXPECTED);
-        actualMapBoard = csvParser(rootFolderName
-                + "/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION);
-        BoardBuilder.computeNumberForCells(actualMapBoard);
-        assertEquals(expectedMapBoard, actualMapBoard);
+        expectedMapBoard = csvParser(rootFolderName + "/" + FILENAME_FOR_EXPECTED);
+
+        String actualBeforeComputationPath = rootFolderName + "/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
+        it.units.sdm.jminesweeper.generation.MinesPlacer<Map<Point, Tile>, Point> minesPlacer
+                = (board, minesNumber, firstClick) -> Objects.requireNonNull(csvParser(actualBeforeComputationPath))
+                .forEach(board::replace);
+
+        boardInitializer = new BoardInitializer(new GameConfiguration(dimension, 1), minesPlacer);
+
+        assertEquals(expectedMapBoard, boardInitializer.init(new Point(0, 0)));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"pattern1", "pattern2", "pattern3", "pattern4"})
     void placeNumbersIn3x3BoardWithParticularPattern(String folderName) {
         String rootFolderName = ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS + "/particular_pattern/" + folderName;
-        expectedMapBoard = csvParser(rootFolderName
-                + "/" + FILENAME_FOR_EXPECTED);
-        actualMapBoard = csvParser(rootFolderName
-                + "/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION);
+        expectedMapBoard = csvParser(rootFolderName + "/" + FILENAME_FOR_EXPECTED);
+        actualMapBoard = csvParser(rootFolderName + "/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION);
         BoardBuilder.computeNumberForCells(actualMapBoard);
         assertEquals(expectedMapBoard, actualMapBoard);
     }
