@@ -49,10 +49,10 @@ class BoardNumbersComputationTest {
     void computeNoChangeIn2x1BoardWithNoMine() {
         expectedMapBoard = Map.of(new Point(0, 0), new Tile(GameSymbol.EMPTY),
                 new Point(0, 1), new Tile(GameSymbol.EMPTY));
-        actualMapBoard = new LinkedHashMap<>(Map.of(new Point(0, 0), new Tile(GameSymbol.EMPTY),
-                new Point(0, 1), new Tile(GameSymbol.EMPTY)));
-        BoardBuilder.computeNumberForCells(actualMapBoard);
-        assertEquals(expectedMapBoard, actualMapBoard);
+        boardInitializer = new BoardInitializer(new GameConfiguration(new Dimension(2, 1), 0),
+                (board, minesNumber, firstClick) -> {
+                });
+        assertEquals(expectedMapBoard, boardInitializer.init(new Point(0, 0)));
     }
 
     @Test
