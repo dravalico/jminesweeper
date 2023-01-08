@@ -1,7 +1,6 @@
 package it.units.sdm.jminesweeper.test.generation;
 
 import it.units.sdm.jminesweeper.GameSymbol;
-import it.units.sdm.jminesweeper.MinesPlacer;
 import it.units.sdm.jminesweeper.Tile;
 import it.units.sdm.jminesweeper.generation.GuassianMinesPlacer;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,8 +33,8 @@ class MinesPlacementTest {
     @ParameterizedTest
     @CsvSource({"9,9", "16,16", "30,16"})
     void placeAMineOnTheBoard(int width, int height) {
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
                 board.put(new Point(i, j), new Tile(GameSymbol.EMPTY));
             }
         }
@@ -87,8 +86,8 @@ class MinesPlacementTest {
     }
 
     private void fillBoard() {
-        for (int i = 0; i < BOARD_WIDTH; i++) {
-            for (int j = 0; j < BOARD_HEIGHT; j++) {
+        for (int i = 0; i < BOARD_HEIGHT; i++) {
+            for (int j = 0; j < BOARD_WIDTH; j++) {
                 board.put(new Point(i, j), new Tile(GameSymbol.EMPTY));
             }
         }
@@ -96,9 +95,9 @@ class MinesPlacementTest {
 
     private boolean notMineInPointAndNeighborhood(Map<Point, Tile> board, Point point) {
         int iStart = (point.x == 0 ? 0 : -1);
-        int iStop = (point.x == BOARD_WIDTH - 1 ? 0 : 1);
+        int iStop = (point.x == BOARD_HEIGHT - 1 ? 0 : 1);
         int jStart = (point.y == 0 ? 0 : -1);
-        int jStop = (point.y == BOARD_HEIGHT - 1 ? 0 : 1);
+        int jStop = (point.y == BOARD_WIDTH - 1 ? 0 : 1);
         for (int i = iStart; i <= iStop; i++) {
             for (int j = jStart; j <= jStop; j++) {
                 Point temp = new Point(point.x + i, point.y + j);
@@ -112,8 +111,8 @@ class MinesPlacementTest {
 
     private static Stream<Point> generateEveryPointOnTheBoard() {
         java.util.List<Point> points = new ArrayList<>();
-        IntStream.range(0, BOARD_WIDTH)
-                .forEach(i -> IntStream.range(0, BOARD_HEIGHT)
+        IntStream.range(0, BOARD_HEIGHT)
+                .forEach(i -> IntStream.range(0, BOARD_WIDTH)
                         .forEach(j -> points.add(new Point(i, j)))
                 );
         return points.stream();

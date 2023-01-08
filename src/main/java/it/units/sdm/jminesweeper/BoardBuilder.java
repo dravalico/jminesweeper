@@ -9,8 +9,8 @@ public class BoardBuilder {
     }
 
     public static void fillBoard(Map<Point, Tile> mapBoard, Dimension boardDimension) {
-        for (int i = 0; i < boardDimension.width; i++) {
-            for (int j = 0; j < boardDimension.height; j++) {
+        for (int i = 0; i < boardDimension.height; i++) {
+            for (int j = 0; j < boardDimension.width; j++) {
                 mapBoard.put(new Point(i, j), new Tile(GameSymbol.EMPTY));
             }
         }

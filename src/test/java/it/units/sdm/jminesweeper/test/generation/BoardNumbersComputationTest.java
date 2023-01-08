@@ -1,8 +1,10 @@
 package it.units.sdm.jminesweeper.test.generation;
 
 import it.units.sdm.jminesweeper.BoardBuilder;
+import it.units.sdm.jminesweeper.GameConfiguration;
 import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.Tile;
+import it.units.sdm.jminesweeper.generation.BoardInitializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,27 +20,29 @@ import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class NumberComputationTest {
+class BoardNumbersComputationTest {
     private static final String ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS = "3x3boards";
     private static final String FILENAME_FOR_EXPECTED = "expected.csv";
     private static final String FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION = "actual_before_computation.csv";
     private Map<Point, Tile> expectedMapBoard;
     private Map<Point, Tile> actualMapBoard;
+    private BoardInitializer boardInitializer;
 
     @BeforeEach
     void init() {
         expectedMapBoard = null;
         actualMapBoard = null;
+        boardInitializer = null;
     }
 
     @Test
     void placeAOneIn2x1BoardWithOneMine() {
-        expectedMapBoard = Map.of(new Point(0, 0), new Tile(GameSymbol.ONE),
-                new Point(0, 1), new Tile(GameSymbol.MINE));
-        actualMapBoard = new LinkedHashMap<>(Map.of(new Point(0, 0), new Tile(GameSymbol.EMPTY),
+        expectedMapBoard = new LinkedHashMap<>(Map.of(new Point(0, 0), new Tile(GameSymbol.ONE),
                 new Point(0, 1), new Tile(GameSymbol.MINE)));
-        BoardBuilder.computeNumberForCells(actualMapBoard);
-        assertEquals(expectedMapBoard, actualMapBoard);
+        boardInitializer = new BoardInitializer(new GameConfiguration(new Dimension(2, 1), 1),
+                (board, minesNumber, firstClick) -> board.replace(new Point(0, 1), new Tile(GameSymbol.MINE))
+        );
+        assertEquals(expectedMapBoard, boardInitializer.init(new Point(0, 0)));
     }
 
     @Test

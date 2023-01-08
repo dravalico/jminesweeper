@@ -38,7 +38,7 @@ public class BoardManager {
 
     private void verifyPointWithinBoardDimension(Point point) {
         Dimension boardDimension = gameConfiguration.dimension();
-        if (((point.x < 0) || (point.x >= boardDimension.width)) || ((point.y < 0) || (point.y >= boardDimension.height))) {
+        if (((point.x < 0) || (point.x >= boardDimension.height)) || ((point.y < 0) || (point.y >= boardDimension.width))) {
             throw new IllegalArgumentException("Coordinates not allowed!");
         }
     }
@@ -52,9 +52,9 @@ public class BoardManager {
         uncoverTile(point);
         Dimension dimension = gameConfiguration.dimension();
         int iStart = (point.x == 0 ? 0 : -1);
-        int iStop = (point.x == dimension.width - 1 ? 0 : 1);
+        int iStop = (point.x == dimension.height - 1 ? 0 : 1);
         int jStart = (point.y == 0 ? 0 : -1);
-        int jStop = (point.y == dimension.height - 1 ? 0 : 1);
+        int jStop = (point.y == dimension.width - 1 ? 0 : 1);
         for (int i = iStart; i <= iStop; i++) {
             for (int j = jStart; j <= jStop; j++) {
                 Point temp = new Point(point.x + i, point.y + j);

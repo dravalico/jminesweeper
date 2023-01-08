@@ -34,7 +34,7 @@ class BoardActionTest {
     @ParameterizedTest
     @CsvSource({"0,-1", "-1,0", "0,0", "1, 1", "2, 3", "100, -100", "20,4", "-5,2", "-4,13"})
     void givenAPointOutOfTheBoardThrowAnException(int xShift, int yShift) {
-        Point point = new Point(WIDTH + xShift, HEIGHT + yShift);
+        Point point = new Point(HEIGHT + xShift, WIDTH + yShift);
         assertThrows(IllegalArgumentException.class, () -> boardManager.actionAt(point));
     }
 
@@ -79,8 +79,8 @@ class BoardActionTest {
 
     private static Stream<Point> generatePointsRepresentingActionAt() {
         java.util.List<Point> points = new ArrayList<>();
-        IntStream.range(0, WIDTH)
-                .forEach(i -> IntStream.range(0, HEIGHT)
+        IntStream.range(0, HEIGHT)
+                .forEach(i -> IntStream.range(0, WIDTH)
                         .forEach(j -> points.add(new Point(i, j)))
                 );
         return points.stream();
@@ -88,8 +88,8 @@ class BoardActionTest {
 
     private static Stream<Point> onFirstClickNotOnEdgeUncoverAtLeastNineSpots() {
         java.util.List<Point> points = new ArrayList<>();
-        IntStream.range(1, WIDTH - 1)
-                .forEach(i -> IntStream.range(1, HEIGHT - 1)
+        IntStream.range(1, HEIGHT - 1)
+                .forEach(i -> IntStream.range(1, WIDTH - 1)
                         .forEach(j -> points.add(new Point(i, j)))
                 );
         return points.stream();
@@ -97,17 +97,17 @@ class BoardActionTest {
 
     private static Stream<Point> onFirstClickOnEdgeUncoverAtLeastFourSpots() {
         java.util.List<Point> points = new ArrayList<>();
-        IntStream.range(0, WIDTH)
+        IntStream.range(0, HEIGHT)
                 .forEach(i -> points.add(new Point(i, 0))
                 );
-        IntStream.range(0, HEIGHT)
+        IntStream.range(0, WIDTH)
                 .forEach(j -> points.add(new Point(0, j))
                 );
-        IntStream.range(0, WIDTH)
-                .forEach(i -> points.add(new Point(i, HEIGHT - 1))
-                );
         IntStream.range(0, HEIGHT)
-                .forEach(j -> points.add(new Point(WIDTH - 1, j))
+                .forEach(i -> points.add(new Point(i, WIDTH - 1))
+                );
+        IntStream.range(0, WIDTH)
+                .forEach(j -> points.add(new Point(HEIGHT - 1, j))
                 );
         return points.stream();
     }
