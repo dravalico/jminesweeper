@@ -1,7 +1,7 @@
-package it.units.sdm.jminesweeper.generation;
+package it.units.sdm.jminesweeper.core.generation;
 
-import it.units.sdm.jminesweeper.GameSymbol;
-import it.units.sdm.jminesweeper.Tile;
+import it.units.sdm.jminesweeper.enumeration.GameSymbol;
+import it.units.sdm.jminesweeper.core.Tile;
 
 import java.awt.*;
 import java.util.Comparator;

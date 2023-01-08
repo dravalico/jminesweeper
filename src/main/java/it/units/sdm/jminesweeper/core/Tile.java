@@ -1,4 +1,6 @@
-package it.units.sdm.jminesweeper;
+package it.units.sdm.jminesweeper.core;
+
+import it.units.sdm.jminesweeper.enumeration.GameSymbol;
 
 import java.util.Objects;
 

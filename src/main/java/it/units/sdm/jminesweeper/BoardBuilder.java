@@ -1,5 +1,8 @@
 package it.units.sdm.jminesweeper;
 
+import it.units.sdm.jminesweeper.core.Tile;
+import it.units.sdm.jminesweeper.enumeration.GameSymbol;
+
 import java.awt.*;
 import java.util.Map;
 

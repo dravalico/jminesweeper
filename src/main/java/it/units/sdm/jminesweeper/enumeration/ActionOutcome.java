@@ -1,4 +1,4 @@
-package it.units.sdm.jminesweeper;
+package it.units.sdm.jminesweeper.enumeration;
 
 public enum ActionOutcome {
     DEFEAT,

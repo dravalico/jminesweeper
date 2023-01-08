@@ -1,10 +1,10 @@
 package it.units.sdm.jminesweeper.test.generation;
 
 import it.units.sdm.jminesweeper.GameConfiguration;
-import it.units.sdm.jminesweeper.GameSymbol;
-import it.units.sdm.jminesweeper.Tile;
-import it.units.sdm.jminesweeper.generation.BoardInitializer;
-import it.units.sdm.jminesweeper.generation.MinesPlacer;
+import it.units.sdm.jminesweeper.enumeration.GameSymbol;
+import it.units.sdm.jminesweeper.core.Tile;
+import it.units.sdm.jminesweeper.core.generation.BoardInitializer;
+import it.units.sdm.jminesweeper.core.generation.MinesPlacer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

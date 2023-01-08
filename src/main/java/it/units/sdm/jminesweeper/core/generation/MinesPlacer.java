@@ -1,4 +1,4 @@
-package it.units.sdm.jminesweeper.generation;
+package it.units.sdm.jminesweeper.core.generation;
 
 public interface MinesPlacer<B, C> {
 

@@ -1,9 +1,9 @@
 package it.units.sdm.jminesweeper.test.game;
 
-import it.units.sdm.jminesweeper.ActionOutcome;
+import it.units.sdm.jminesweeper.enumeration.ActionOutcome;
 import it.units.sdm.jminesweeper.BoardManager;
 import it.units.sdm.jminesweeper.GameConfiguration;
-import it.units.sdm.jminesweeper.GameSymbol;
+import it.units.sdm.jminesweeper.enumeration.GameSymbol;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
