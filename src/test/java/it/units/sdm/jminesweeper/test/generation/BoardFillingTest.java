@@ -1,8 +1,9 @@
 package it.units.sdm.jminesweeper.test.generation;
 
-import it.units.sdm.jminesweeper.BoardManager;
 import it.units.sdm.jminesweeper.GameConfiguration;
 import it.units.sdm.jminesweeper.GameSymbol;
+import it.units.sdm.jminesweeper.Tile;
+import it.units.sdm.jminesweeper.generation.BoardInitializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -14,7 +15,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BoardFillingTest {
-    private Map<Point, GameSymbol> expectedBoard;
+    private Map<Point, Tile> expectedBoard;
     private int minesNumber;
 
     @BeforeEach
@@ -24,16 +25,16 @@ class BoardFillingTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"9,9", "16,16", "30,16"})
-    void givenBoardSizeGenerateBoardWithCoveredSymbol(int width, int height) {
+    @CsvSource({"9,9", "16,16", "30,16", "100, 100", "200, 100"})
+    void givenBoardSizeGenerateBoardWithEmptyTileAndCorrectDimension(int width, int height) {
         Dimension boardDimension = new Dimension(width, height);
-        BoardManager boardManager = new BoardManager(new GameConfiguration(boardDimension, minesNumber));
+        BoardInitializer boardInitializer = new BoardInitializer(new GameConfiguration(boardDimension, minesNumber));
         for (int i = 0; i < boardDimension.width; i++) {
             for (int j = 0; j < boardDimension.height; j++) {
-                expectedBoard.put(new Point(i, j), GameSymbol.COVERED);
+                expectedBoard.put(new Point(i, j), new Tile(GameSymbol.EMPTY));
             }
         }
-        assertEquals(expectedBoard, boardManager.getMapBoard());
+        assertEquals(expectedBoard, boardInitializer.init());
     }
 
 }
