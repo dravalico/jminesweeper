@@ -1,8 +1,9 @@
 package it.units.sdm.jminesweeper.test.game;
 
-import it.units.sdm.jminesweeper.enumeration.ActionOutcome;
 import it.units.sdm.jminesweeper.BoardManager;
 import it.units.sdm.jminesweeper.GameConfiguration;
+import it.units.sdm.jminesweeper.core.GameManager;
+import it.units.sdm.jminesweeper.enumeration.ActionOutcome;
 import it.units.sdm.jminesweeper.enumeration.GameSymbol;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -35,7 +36,9 @@ class BoardActionTest {
     @CsvSource({"0,-1", "-1,0", "0,0", "1, 1", "2, 3", "100, -100", "20,4", "-5,2", "-4,13"})
     void givenAPointOutOfTheBoardThrowAnException(int xShift, int yShift) {
         Point point = new Point(HEIGHT + xShift, WIDTH + yShift);
-        assertThrows(IllegalArgumentException.class, () -> boardManager.actionAt(point));
+        Dimension dimension = new Dimension(WIDTH, HEIGHT);
+        GameManager gameManager = new GameManager(new GameConfiguration(dimension, 0));
+        assertThrows(IllegalArgumentException.class, () -> gameManager.actionAt(point));
     }
 
     @ParameterizedTest
