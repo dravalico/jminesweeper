@@ -38,7 +38,7 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
             boardInitializer.init(board, point);
         }
         uncoverFreeSpotRecursively(point);
-        return null;
+        return ActionOutcome.PROGRESS;
     }
 
     private void verifyPointWithinBoardDimension(Point point) {

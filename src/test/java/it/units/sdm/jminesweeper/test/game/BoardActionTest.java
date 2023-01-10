@@ -71,12 +71,11 @@ class BoardActionTest {
     @Test
     void onFirstClickUncoverSpotsCorrectlyWithRespectToCsvFile() {
         Dimension boardDimension = new Dimension(9, 9);
-
         Map<Point, GameSymbol> expectedMapBoard = CSVParserUtil.csvParseGameSymbols(ROOT_FOLDER_NAME_FOR_BOARDS
                 + "/first_click_outcome1/" + FILENAME_FOR_EXPECTED);
+
         String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_BOARDS + "/first_click_outcome1/" +
                 FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
-
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
@@ -84,6 +83,19 @@ class BoardActionTest {
         gameManager = new GameManager(new GameConfiguration(boardDimension, 10), minesPlacer);
         gameManager.actionAt(new Point(3, 3));
         assertEquals(expectedMapBoard, gameManager.getBoardStatus());
+    }
+
+    @Test
+    void onFirstClickReturnProgress() {
+        Dimension boardDimension = new Dimension(9, 9);
+        String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_BOARDS + "/first_click_outcome1/" +
+                FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
+        MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
+                Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
+                        .forEach(board::replace);
+        gameManager = new GameManager(new GameConfiguration(boardDimension, 10), minesPlacer);
+
+        assertEquals(ActionOutcome.PROGRESS, gameManager.actionAt(new Point(3, 3)));
     }
 
     @ParameterizedTest
