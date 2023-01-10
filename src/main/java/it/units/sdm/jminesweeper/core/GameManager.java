@@ -45,6 +45,9 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
         } else {
             uncoverFreeSpotRecursively(point);
         }
+        if (isVictory()) {
+            return ActionOutcome.VICTORY;
+        }
         return ActionOutcome.PROGRESS;
     }
 
@@ -79,6 +82,10 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
     private void uncoverTile(Point point) {
         uncoveredTiles = uncoveredTiles + 1;
         board.get(point).uncover();
+    }
+
+    private boolean isVictory() {
+        return (board.size() - gameConfiguration.minesNumber()) == uncoveredTiles;
     }
 
 }

@@ -133,6 +133,22 @@ class BoardActionTest {
         assertEquals(ActionOutcome.DEFEAT, gameManager.actionAt(new Point(x, y)));
     }
 
+    @Test
+    void onAllSpotsUncoveredButMinesDeclareVictory() {
+        Dimension boardDimension = new Dimension(4, 4);
+        String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_BOARDS + "/victory_example1/" +
+                FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
+        MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
+                Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
+                        .forEach(board::replace);
+        gameManager = new GameManager(new GameConfiguration(boardDimension, 2), minesPlacer);
+
+        gameManager.actionAt(new Point(3, 0));
+        gameManager.actionAt(new Point(0, 1));
+        gameManager.actionAt(new Point(0, 2));
+        assertEquals(ActionOutcome.VICTORY, gameManager.actionAt(new Point(0, 3)));
+    }
+
     @ParameterizedTest
     @MethodSource
     void onFirstClickNotOnEdgeUncoverAtLeastNineSpots(Point pointOfAction) {
