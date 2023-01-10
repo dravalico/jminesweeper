@@ -99,6 +99,26 @@ class BoardActionTest {
     }
 
     @ParameterizedTest
+    @CsvSource({"0,0,1", "8,5,2", "0,8,3", "5,1,1", "2,8,2", "7,5,3"})
+    void onClickOnNumberUncoverOnlyTileInClickPosition(int x, int y, int tileValue) {
+        Dimension boardDimension = new Dimension(9, 9);
+        Map<Point, GameSymbol> expectedMapBoard = CSVParserUtil.csvParseGameSymbols(ROOT_FOLDER_NAME_FOR_BOARDS
+                + "/first_click_outcome1/" + FILENAME_FOR_EXPECTED);
+
+        String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_BOARDS + "/first_click_outcome1/" +
+                FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
+        MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
+                Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
+                        .forEach(board::replace);
+
+        gameManager = new GameManager(new GameConfiguration(boardDimension, 10), minesPlacer);
+        gameManager.actionAt(new Point(3, 3));
+        gameManager.actionAt(new Point(x, y));
+        expectedMapBoard.replace(new Point(x, y), GameSymbol.fromInt(tileValue));
+        assertEquals(expectedMapBoard, gameManager.getBoardStatus());
+    }
+
+    @ParameterizedTest
     @MethodSource
     void onFirstClickNotOnEdgeUncoverAtLeastNineSpots(Point pointOfAction) {
         boardManager.actionAt(pointOfAction);
