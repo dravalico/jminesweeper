@@ -37,6 +37,9 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
         if (uncoveredTiles == 0) {
             boardInitializer.init(board, point);
         }
+        if (board.get(point).isAMine()) {
+            return ActionOutcome.DEFEAT;
+        }
         if (board.get(point).isANumber()) {
             uncoverTile(point);
         } else {

@@ -119,6 +119,21 @@ class BoardActionTest {
     }
 
     @ParameterizedTest
+    @CsvSource({"1,0", "2,0", "0,7", "1,7", "1,8", "5,2", "6,3", "6,6", "7,4", "8,6"})
+    void onClickOnAMineDeclareDefeat(int x, int y) {
+        Dimension boardDimension = new Dimension(9, 9);
+        String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_BOARDS + "/first_click_outcome1/" +
+                FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
+        MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
+                Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
+                        .forEach(board::replace);
+        gameManager = new GameManager(new GameConfiguration(boardDimension, 10), minesPlacer);
+
+        gameManager.actionAt(new Point(3, 3));
+        assertEquals(ActionOutcome.DEFEAT, gameManager.actionAt(new Point(x, y)));
+    }
+
+    @ParameterizedTest
     @MethodSource
     void onFirstClickNotOnEdgeUncoverAtLeastNineSpots(Point pointOfAction) {
         boardManager.actionAt(pointOfAction);
@@ -140,14 +155,6 @@ class BoardActionTest {
         boardManager.actionAt(pointOfAction);
         int coveredTiles = Collections.frequency(boardManager.getMapBoard().values(), GameSymbol.COVERED);
         assertTrue(coveredTiles >= MINES_NUMBER);
-    }
-
-    @Disabled
-    @Test
-    void whenClickOnAMineDeclareDefeat() {
-        BoardManager boardManager = new BoardManager(new GameConfiguration(new Dimension(3, 3), 5));
-        boardManager.actionAt(new Point(0, 0));
-        assertEquals(ActionOutcome.DEFEAT, boardManager.actionAt(new Point(2, 2)));
     }
 
     private static Stream<Point> generatePointsRepresentingActionAt() {
