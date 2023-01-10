@@ -14,12 +14,14 @@ import java.util.stream.Collectors;
 public class GameManager extends AbstractBoard<Map<Point, Tile>> implements ActionHandler<Point, ActionOutcome> {
     private final GameConfiguration gameConfiguration;
     private final BoardInitializer boardInitializer;
+    private int uncoveredTiles;
 
     public GameManager(GameConfiguration gameConfiguration, MinesPlacer<Map<Point, Tile>, Point> minesPlacer) {
         super(new LinkedHashMap<>());
         this.gameConfiguration = gameConfiguration;
         boardInitializer = new BoardInitializer(gameConfiguration, minesPlacer);
         boardInitializer.fillBoard(board);
+        uncoveredTiles = 0;
     }
 
     public Map<Point, GameSymbol> getBoardStatus() {
@@ -32,6 +34,9 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
     @Override
     public ActionOutcome actionAt(Point point) {
         verifyPointWithinBoardDimension(point);
+        if (uncoveredTiles == 0) {
+            boardInitializer.init(board, point);
+        }
         uncoverFreeSpotRecursively(point);
         return null;
     }
@@ -65,6 +70,7 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
     }
 
     private void uncoverTile(Point point) {
+        uncoveredTiles = uncoveredTiles + 1;
         board.get(point).uncover();
     }
 

@@ -17,19 +17,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BoardFillingTest {
     private Map<Point, Tile> expectedBoard;
-    private int minesNumber;
+    private static final int MINES_NUMBER = 0;
 
     @BeforeEach
     void init() {
         expectedBoard = new LinkedHashMap<>();
-        minesNumber = 0;
     }
 
     @ParameterizedTest
     @CsvSource({"9,9", "16,16", "30,16", "32,60"})
     void givenBoardSizeGenerateBoardWithEmptyTileAndCorrectDimension(int width, int height) {
         Dimension boardDimension = new Dimension(width, height);
-        BoardInitializer boardInitializer = new BoardInitializer(new GameConfiguration(boardDimension, minesNumber),
+        BoardInitializer boardInitializer = new BoardInitializer(new GameConfiguration(boardDimension, MINES_NUMBER),
                 new GuassianMinesPlacer());
         for (int i = 0; i < boardDimension.height; i++) {
             for (int j = 0; j < boardDimension.width; j++) {

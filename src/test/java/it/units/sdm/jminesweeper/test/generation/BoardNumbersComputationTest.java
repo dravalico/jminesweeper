@@ -1,39 +1,29 @@
 package it.units.sdm.jminesweeper.test.generation;
 
 import it.units.sdm.jminesweeper.GameConfiguration;
-import it.units.sdm.jminesweeper.enumeration.GameSymbol;
 import it.units.sdm.jminesweeper.core.Tile;
 import it.units.sdm.jminesweeper.core.generation.BoardInitializer;
 import it.units.sdm.jminesweeper.core.generation.MinesPlacer;
-import org.junit.jupiter.api.BeforeEach;
+import it.units.sdm.jminesweeper.enumeration.GameSymbol;
+import it.units.sdm.jminesweeper.test.CSVParserUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BoardNumbersComputationTest {
-    private static final String ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS = "3x3boards";
+    private static final String ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS = "board_number_computation";
     private static final String FILENAME_FOR_EXPECTED = "expected.csv";
     private static final String FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION = "actual_before_computation.csv";
     private Map<Point, Tile> expectedMapBoard;
     private BoardInitializer boardInitializer;
     private Dimension dimension;
-
-    @BeforeEach
-    void init() {
-        expectedMapBoard = null;
-        boardInitializer = null;
-        dimension = null;
-    }
 
     @Test
     void placeAOneIn2x1BoardWithOneMine() {
@@ -69,13 +59,13 @@ class BoardNumbersComputationTest {
     @Test
     void placeNumbersIn3x3BoardWithOneCentralMine() {
         dimension = new Dimension(3, 3);
-        expectedMapBoard = csvParse(ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS
+        expectedMapBoard = CSVParserUtil.csvParseTiles(ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS
                 + "/one_mine_central/" + FILENAME_FOR_EXPECTED);
 
         String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS
                 + "/one_mine_central/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
-                Objects.requireNonNull(csvParse(actualBeforeComputationPath))
+                Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
 
         boardInitializer = new BoardInitializer(new GameConfiguration(dimension, 1), minesPlacer);
@@ -93,11 +83,11 @@ class BoardNumbersComputationTest {
     void placeNumbersIn3x3BoardWithIncrementalMinesNumber(String folderName) {
         dimension = new Dimension(3, 3);
         String rootFolderName = ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS + "/incremental_pattern/" + folderName;
-        expectedMapBoard = csvParse(rootFolderName + "/" + FILENAME_FOR_EXPECTED);
+        expectedMapBoard = CSVParserUtil.csvParseTiles(rootFolderName + "/" + FILENAME_FOR_EXPECTED);
 
         String actualBeforeComputationPath = rootFolderName + "/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
-                Objects.requireNonNull(csvParse(actualBeforeComputationPath)).
+                Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath)).
                         forEach(board::replace);
 
         boardInitializer = new BoardInitializer(new GameConfiguration(dimension, 1), minesPlacer);
@@ -113,11 +103,11 @@ class BoardNumbersComputationTest {
     void placeNumbersIn3x3BoardWithParticularPattern(String folderName) {
         dimension = new Dimension(3, 3);
         String rootFolderName = ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS + "/particular_pattern/" + folderName;
-        expectedMapBoard = csvParse(rootFolderName + "/" + FILENAME_FOR_EXPECTED);
+        expectedMapBoard = CSVParserUtil.csvParseTiles(rootFolderName + "/" + FILENAME_FOR_EXPECTED);
 
         String actualBeforeComputationPath = rootFolderName + "/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
-                Objects.requireNonNull(csvParse(actualBeforeComputationPath))
+                Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
 
         boardInitializer = new BoardInitializer(new GameConfiguration(dimension, 1), minesPlacer);
@@ -126,39 +116,6 @@ class BoardNumbersComputationTest {
         boardInitializer.fillBoard(actualBoard);
         boardInitializer.init(actualBoard, new Point(0, 0));
         assertEquals(expectedMapBoard, actualBoard);
-    }
-
-    private Map<Point, Tile> csvParse(String resourceName) {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(Objects.requireNonNull(classLoader.getResource(resourceName)).getFile());
-        String absolutePath = file.getAbsolutePath();
-        try (Scanner scanner = new Scanner(new File(absolutePath))) {
-            Map<Point, Tile> mapBoard = new LinkedHashMap<>();
-            int rowCounter = 0;
-            while (scanner.hasNext()) {
-                String[] row = scanner.next().split(",");
-                for (int i = 0; i < row.length; i++) {
-                    GameSymbol gameSymbol = null;
-                    switch (row[i]) {
-                        case "1" -> gameSymbol = GameSymbol.ONE;
-                        case "2" -> gameSymbol = GameSymbol.TWO;
-                        case "3" -> gameSymbol = GameSymbol.THREE;
-                        case "4" -> gameSymbol = GameSymbol.FOUR;
-                        case "5" -> gameSymbol = GameSymbol.FIVE;
-                        case "6" -> gameSymbol = GameSymbol.SIX;
-                        case "7" -> gameSymbol = GameSymbol.SEVEN;
-                        case "8" -> gameSymbol = GameSymbol.EIGHT;
-                        case "*" -> gameSymbol = GameSymbol.MINE;
-                        case "-" -> gameSymbol = GameSymbol.EMPTY;
-                    }
-                    mapBoard.put(new Point(rowCounter, i), new Tile(gameSymbol));
-                }
-                rowCounter = rowCounter + 1;
-            }
-            return mapBoard;
-        } catch (FileNotFoundException ignored) {
-        }
-        return null;
     }
 
 }

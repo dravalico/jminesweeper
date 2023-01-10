@@ -3,9 +3,12 @@ package it.units.sdm.jminesweeper.test.game;
 import it.units.sdm.jminesweeper.BoardManager;
 import it.units.sdm.jminesweeper.GameConfiguration;
 import it.units.sdm.jminesweeper.core.GameManager;
+import it.units.sdm.jminesweeper.core.Tile;
 import it.units.sdm.jminesweeper.core.generation.GuassianMinesPlacer;
+import it.units.sdm.jminesweeper.core.generation.MinesPlacer;
 import it.units.sdm.jminesweeper.enumeration.ActionOutcome;
 import it.units.sdm.jminesweeper.enumeration.GameSymbol;
+import it.units.sdm.jminesweeper.test.CSVParserUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -14,27 +17,27 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class BoardActionTest {
-    private BoardManager boardManager;
-    private int minesNumber;
+    private static final int MINES_NUMBER = 99;
     private static final int WIDTH = 30;
     private static final int HEIGHT = 16;
     private static final Dimension BOARD_DIMENSION = new Dimension(WIDTH, HEIGHT);
+    private static final String ROOT_FOLDER_NAME_FOR_BOARDS = "board_actions";
+    private static final String FILENAME_FOR_EXPECTED = "expected.csv";
+    private static final String FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION = "actual_before_computation.csv";
+    private BoardManager boardManager;
     private GameManager gameManager;
+
 
     @BeforeEach
     void init() {
-        minesNumber = 99;
-        boardManager = new BoardManager(new GameConfiguration(new Dimension(WIDTH, HEIGHT), minesNumber));
+        boardManager = new BoardManager(new GameConfiguration(new Dimension(WIDTH, HEIGHT), MINES_NUMBER));
     }
 
     @ParameterizedTest
@@ -65,6 +68,24 @@ class BoardActionTest {
         assertNotEquals(GameSymbol.COVERED, gameManager.getBoardStatus().get(pointToUncover));
     }
 
+    @Test
+    void onFirstClickUncoverSpotsCorrectlyWithRespectToCsvFile() {
+        Dimension boardDimension = new Dimension(9, 9);
+
+        Map<Point, GameSymbol> expectedMapBoard = CSVParserUtil.csvParseGameSymbols(ROOT_FOLDER_NAME_FOR_BOARDS
+                + "/first_click_outcome1/" + FILENAME_FOR_EXPECTED);
+        String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_BOARDS + "/first_click_outcome1/" +
+                FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
+
+        MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
+                Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
+                        .forEach(board::replace);
+
+        gameManager = new GameManager(new GameConfiguration(boardDimension, 10), minesPlacer);
+        gameManager.actionAt(new Point(3, 3));
+        assertEquals(expectedMapBoard, gameManager.getBoardStatus());
+    }
+
     @ParameterizedTest
     @MethodSource
     void onFirstClickNotOnEdgeUncoverAtLeastNineSpots(Point pointOfAction) {
@@ -86,7 +107,7 @@ class BoardActionTest {
     void onFirstClickUncoverAtLeastNineSpotsButMines(Point pointOfAction) {
         boardManager.actionAt(pointOfAction);
         int coveredTiles = Collections.frequency(boardManager.getMapBoard().values(), GameSymbol.COVERED);
-        assertTrue(coveredTiles >= minesNumber);
+        assertTrue(coveredTiles >= MINES_NUMBER);
     }
 
     @Disabled
