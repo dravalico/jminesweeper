@@ -22,16 +22,17 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
         boardInitializer.fillBoard(board);
     }
 
-    public Map<Point, GameSymbol> getMapBoard() {
+    public Map<Point, GameSymbol> getBoardStatus() {
         return board.entrySet()
                 .stream()
                 .collect(Collectors.toMap(Map.Entry::getKey,
-                        e -> GameSymbol.COVERED));
+                        e -> e.getValue().isCovered() ? GameSymbol.COVERED : e.getValue().getValue()));
     }
 
     @Override
     public ActionOutcome actionAt(Point point) {
         verifyPointWithinBoardDimension(point);
+        uncoverFreeSpotRecursively(point);
         return null;
     }
 
@@ -41,4 +42,30 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
             throw new IllegalArgumentException("Coordinates not allowed!");
         }
     }
+
+    private void uncoverFreeSpotRecursively(Point point) {
+        uncoverTile(point);
+        Dimension dimension = gameConfiguration.dimension();
+        int iStart = (point.x == 0 ? 0 : -1);
+        int iStop = (point.x == dimension.height - 1 ? 0 : 1);
+        int jStart = (point.y == 0 ? 0 : -1);
+        int jStop = (point.y == dimension.width - 1 ? 0 : 1);
+        for (int i = iStart; i <= iStop; i++) {
+            for (int j = jStart; j <= jStop; j++) {
+                Point temp = new Point(point.x + i, point.y + j);
+                if (board.get(temp).isCovered()) {
+                    if (board.get(temp).isANumber()) {
+                        uncoverTile(temp);
+                    } else {
+                        uncoverFreeSpotRecursively(temp);
+                    }
+                }
+            }
+        }
+    }
+
+    private void uncoverTile(Point point) {
+        board.get(point).uncover();
+    }
+
 }

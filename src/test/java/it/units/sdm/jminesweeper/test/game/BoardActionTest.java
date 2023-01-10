@@ -3,6 +3,7 @@ package it.units.sdm.jminesweeper.test.game;
 import it.units.sdm.jminesweeper.BoardManager;
 import it.units.sdm.jminesweeper.GameConfiguration;
 import it.units.sdm.jminesweeper.core.GameManager;
+import it.units.sdm.jminesweeper.core.generation.GuassianMinesPlacer;
 import it.units.sdm.jminesweeper.enumeration.ActionOutcome;
 import it.units.sdm.jminesweeper.enumeration.GameSymbol;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +28,8 @@ class BoardActionTest {
     private int minesNumber;
     private static final int WIDTH = 30;
     private static final int HEIGHT = 16;
+    private static final Dimension BOARD_DIMENSION = new Dimension(WIDTH, HEIGHT);
+    private GameManager gameManager;
 
     @BeforeEach
     void init() {
@@ -38,29 +41,28 @@ class BoardActionTest {
     @CsvSource({"0,-1", "-1,0", "0,0", "1, 1", "2, 3", "100, -100", "20,4", "-5,2", "-4,13"})
     void givenAPointOutOfTheBoardThrowAnException(int xShift, int yShift) {
         Point point = new Point(HEIGHT + xShift, WIDTH + yShift);
-        Dimension boardDimension = new Dimension(WIDTH, HEIGHT);
-        GameManager gameManager = new GameManager(new GameConfiguration(boardDimension, 0), null);
+        gameManager = new GameManager(new GameConfiguration(BOARD_DIMENSION, 0), null);
         assertThrows(IllegalArgumentException.class, () -> gameManager.actionAt(point));
     }
 
     @Test
     void givenFreshGameReturnBoardWithOnlyCoveredSymbol() {
-        Dimension boardDimension = new Dimension(WIDTH, HEIGHT);
-        GameManager gameManager = new GameManager(new GameConfiguration(boardDimension, 0), null);
+        gameManager = new GameManager(new GameConfiguration(BOARD_DIMENSION, 0), null);
         Map<Point, GameSymbol> expectedBoard = new LinkedHashMap<>();
         for (int i = 0; i < HEIGHT; i++) {
             for (int j = 0; j < WIDTH; j++) {
                 expectedBoard.put(new Point(i, j), GameSymbol.COVERED);
             }
         }
-        assertEquals(expectedBoard, gameManager.getMapBoard());
+        assertEquals(expectedBoard, gameManager.getBoardStatus());
     }
 
     @ParameterizedTest
     @MethodSource("generatePointsRepresentingActionAt")
     void givenPointUncoverTile(Point pointToUncover) {
-        boardManager.actionAt(pointToUncover);
-        assertNotEquals(GameSymbol.COVERED, boardManager.getMapBoard().get(pointToUncover));
+        gameManager = new GameManager(new GameConfiguration(BOARD_DIMENSION, 0), new GuassianMinesPlacer());
+        gameManager.actionAt(pointToUncover);
+        assertNotEquals(GameSymbol.COVERED, gameManager.getBoardStatus().get(pointToUncover));
     }
 
     @ParameterizedTest
