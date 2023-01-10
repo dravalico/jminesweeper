@@ -35,8 +35,10 @@ class BoardNumbersComputationTest {
                 (board, minesNumber, firstClick) -> board.replace(new Point(0, 1), new Tile(GameSymbol.MINE))
         );
         Map<Point, Tile> actualBoard = new LinkedHashMap<>();
+
         boardInitializer.fillBoard(actualBoard);
         boardInitializer.init(actualBoard, new Point(0, 0));
+
         assertEquals(expectedMapBoard, actualBoard);
     }
 
@@ -45,14 +47,14 @@ class BoardNumbersComputationTest {
         dimension = new Dimension(2, 1);
         expectedMapBoard = Map.of(new Point(0, 0), new Tile(GameSymbol.EMPTY),
                 new Point(0, 1), new Tile(GameSymbol.EMPTY));
-
         boardInitializer = new BoardInitializer(new GameConfiguration(dimension, 0),
                 (board, minesNumber, firstClick) -> {
                 });
-
         Map<Point, Tile> actualBoard = new LinkedHashMap<>();
+
         boardInitializer.fillBoard(actualBoard);
         boardInitializer.init(actualBoard, new Point(0, 0));
+
         assertEquals(expectedMapBoard, actualBoard);
     }
 
@@ -61,18 +63,17 @@ class BoardNumbersComputationTest {
         dimension = new Dimension(3, 3);
         expectedMapBoard = CSVParserUtil.csvParseTiles(ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS
                 + "/one_mine_central/" + FILENAME_FOR_EXPECTED);
-
         String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS
                 + "/one_mine_central/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
-
         boardInitializer = new BoardInitializer(new GameConfiguration(dimension, 1), minesPlacer);
-
         Map<Point, Tile> actualBoard = new LinkedHashMap<>();
+
         boardInitializer.fillBoard(actualBoard);
         boardInitializer.init(actualBoard, new Point(0, 0));
+
         assertEquals(expectedMapBoard, actualBoard);
     }
 
@@ -84,17 +85,16 @@ class BoardNumbersComputationTest {
         dimension = new Dimension(3, 3);
         String rootFolderName = ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS + "/incremental_pattern/" + folderName;
         expectedMapBoard = CSVParserUtil.csvParseTiles(rootFolderName + "/" + FILENAME_FOR_EXPECTED);
-
         String actualBeforeComputationPath = rootFolderName + "/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath)).
                         forEach(board::replace);
-
         boardInitializer = new BoardInitializer(new GameConfiguration(dimension, 1), minesPlacer);
-
         Map<Point, Tile> actualBoard = new LinkedHashMap<>();
+
         boardInitializer.fillBoard(actualBoard);
         boardInitializer.init(actualBoard, new Point(0, 0));
+
         assertEquals(expectedMapBoard, actualBoard);
     }
 
@@ -104,17 +104,16 @@ class BoardNumbersComputationTest {
         dimension = new Dimension(3, 3);
         String rootFolderName = ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS + "/particular_pattern/" + folderName;
         expectedMapBoard = CSVParserUtil.csvParseTiles(rootFolderName + "/" + FILENAME_FOR_EXPECTED);
-
         String actualBeforeComputationPath = rootFolderName + "/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
-
         boardInitializer = new BoardInitializer(new GameConfiguration(dimension, 1), minesPlacer);
-
         Map<Point, Tile> actualBoard = new LinkedHashMap<>();
+
         boardInitializer.fillBoard(actualBoard);
         boardInitializer.init(actualBoard, new Point(0, 0));
+
         assertEquals(expectedMapBoard, actualBoard);
     }
 

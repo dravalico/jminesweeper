@@ -40,18 +40,22 @@ class MinesPlacementTest {
             }
         }
         int expectedMinesNumber = 1;
+
         minesPlacer.place(board, expectedMinesNumber, new Point(0, 0));
         int actualMinesNumber = Collections.frequency(board.values(), new Tile(GameSymbol.MINE));
+
         assertEquals(expectedMinesNumber, actualMinesNumber);
     }
 
     @ParameterizedTest
     @MethodSource("generateEveryPointOnTheBoard")
     void place10MinesOnTheBoardAvoidingAPointAndItsNeighborhood(Point point) {
-        fillBoard();
+        fillExpectedBoard();
         int expectedMinesNumber = 10;
+
         minesPlacer.place(board, expectedMinesNumber, point);
         int actualMinesNumber = Collections.frequency(board.values(), new Tile(GameSymbol.MINE));
+
         assertEquals(expectedMinesNumber, actualMinesNumber);
         assertTrue(notMineInPointAndNeighborhood(board, point));
     }
@@ -59,10 +63,12 @@ class MinesPlacementTest {
     @ParameterizedTest
     @MethodSource("generateEveryPointOnTheBoard")
     void place32MinesOnTheBoardAvoidingAPointAndItsNeighborhood(Point point) {
-        fillBoard();
+        fillExpectedBoard();
         int expectedMinesNumber = 32;
+
         minesPlacer.place(board, expectedMinesNumber, point);
         int actualMinesNumber = Collections.frequency(board.values(), new Tile(GameSymbol.MINE));
+
         assertEquals(expectedMinesNumber, actualMinesNumber);
         assertTrue(notMineInPointAndNeighborhood(board, point));
     }
@@ -70,10 +76,12 @@ class MinesPlacementTest {
     @ParameterizedTest
     @MethodSource("generateEveryPointOnTheBoard")
     void place99MinesOnTheBoardAvoidingAPointAndItsNeighborhood(Point point) {
-        fillBoard();
+        fillExpectedBoard();
         int expectedMinesNumber = 99;
+
         minesPlacer.place(board, expectedMinesNumber, point);
         int actualMinesNumber = Collections.frequency(board.values(), new Tile(GameSymbol.MINE));
+
         assertEquals(expectedMinesNumber, actualMinesNumber);
         assertTrue(notMineInPointAndNeighborhood(board, point));
     }
@@ -81,12 +89,12 @@ class MinesPlacementTest {
     @ParameterizedTest
     @MethodSource("generateEveryPointOnTheBoard")
     void throwExceptionIfNumberOfMinesIsGreaterThanMineableSpots(Point point) {
-        fillBoard();
+        fillExpectedBoard();
         int minesNumber = 480;
         assertThrows(IllegalArgumentException.class, () -> minesPlacer.place(board, minesNumber, point));
     }
 
-    private void fillBoard() {
+    private void fillExpectedBoard() {
         for (int i = 0; i < BOARD_HEIGHT; i++) {
             for (int j = 0; j < BOARD_WIDTH; j++) {
                 board.put(new Point(i, j), new Tile(GameSymbol.EMPTY));
