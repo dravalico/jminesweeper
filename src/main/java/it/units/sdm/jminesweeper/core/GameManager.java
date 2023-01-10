@@ -80,8 +80,10 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
     }
 
     private void uncoverTile(Point point) {
-        uncoveredTiles = uncoveredTiles + 1;
-        board.get(point).uncover();
+        if (board.get(point).isCovered()) {
+            uncoveredTiles = uncoveredTiles + 1;
+            board.get(point).uncover();
+        }
     }
 
     private boolean isVictory() {
