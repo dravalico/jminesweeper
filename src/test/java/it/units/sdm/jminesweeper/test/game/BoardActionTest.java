@@ -38,19 +38,18 @@ class BoardActionTest {
     @CsvSource({"0,-1", "-1,0", "0,0", "1, 1", "2, 3", "100, -100", "20,4", "-5,2", "-4,13"})
     void givenAPointOutOfTheBoardThrowAnException(int xShift, int yShift) {
         Point point = new Point(HEIGHT + xShift, WIDTH + yShift);
-        Dimension dimension = new Dimension(WIDTH, HEIGHT);
-        GameManager gameManager = new GameManager(new GameConfiguration(dimension, 0));
+        Dimension boardDimension = new Dimension(WIDTH, HEIGHT);
+        GameManager gameManager = new GameManager(new GameConfiguration(boardDimension, 0), null);
         assertThrows(IllegalArgumentException.class, () -> gameManager.actionAt(point));
     }
 
-    @Disabled
     @Test
     void givenFreshGameReturnBoardWithOnlyCoveredSymbol() {
-        Dimension dimension = new Dimension(WIDTH, HEIGHT);
-        GameManager gameManager = new GameManager(new GameConfiguration(dimension, 0));
+        Dimension boardDimension = new Dimension(WIDTH, HEIGHT);
+        GameManager gameManager = new GameManager(new GameConfiguration(boardDimension, 0), null);
         Map<Point, GameSymbol> expectedBoard = new LinkedHashMap<>();
-        for (int i = 0; i < WIDTH; i++) {
-            for (int j = 0; j < HEIGHT; j++) {
+        for (int i = 0; i < HEIGHT; i++) {
+            for (int j = 0; j < WIDTH; j++) {
                 expectedBoard.put(new Point(i, j), GameSymbol.COVERED);
             }
         }
