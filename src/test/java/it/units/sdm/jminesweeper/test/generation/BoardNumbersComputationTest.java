@@ -44,8 +44,10 @@ class BoardNumbersComputationTest {
         boardInitializer = new BoardInitializer(new GameConfiguration(dimension, 1),
                 (board, minesNumber, firstClick) -> board.replace(new Point(0, 1), new Tile(GameSymbol.MINE))
         );
-
-        assertEquals(expectedMapBoard, boardInitializer.init(new Point(0, 0)));
+        Map<Point, Tile> actualBoard = new LinkedHashMap<>();
+        boardInitializer.fillBoard(actualBoard);
+        boardInitializer.init(actualBoard, new Point(0, 0));
+        assertEquals(expectedMapBoard, actualBoard);
     }
 
     @Test
@@ -58,7 +60,10 @@ class BoardNumbersComputationTest {
                 (board, minesNumber, firstClick) -> {
                 });
 
-        assertEquals(expectedMapBoard, boardInitializer.init(new Point(0, 0)));
+        Map<Point, Tile> actualBoard = new LinkedHashMap<>();
+        boardInitializer.fillBoard(actualBoard);
+        boardInitializer.init(actualBoard, new Point(0, 0));
+        assertEquals(expectedMapBoard, actualBoard);
     }
 
     @Test
@@ -75,7 +80,10 @@ class BoardNumbersComputationTest {
 
         boardInitializer = new BoardInitializer(new GameConfiguration(dimension, 1), minesPlacer);
 
-        assertEquals(expectedMapBoard, boardInitializer.init(new Point(0, 0)));
+        Map<Point, Tile> actualBoard = new LinkedHashMap<>();
+        boardInitializer.fillBoard(actualBoard);
+        boardInitializer.init(actualBoard, new Point(0, 0));
+        assertEquals(expectedMapBoard, actualBoard);
     }
 
     @ParameterizedTest
@@ -94,7 +102,10 @@ class BoardNumbersComputationTest {
 
         boardInitializer = new BoardInitializer(new GameConfiguration(dimension, 1), minesPlacer);
 
-        assertEquals(expectedMapBoard, boardInitializer.init(new Point(0, 0)));
+        Map<Point, Tile> actualBoard = new LinkedHashMap<>();
+        boardInitializer.fillBoard(actualBoard);
+        boardInitializer.init(actualBoard, new Point(0, 0));
+        assertEquals(expectedMapBoard, actualBoard);
     }
 
     @ParameterizedTest
@@ -111,7 +122,10 @@ class BoardNumbersComputationTest {
 
         boardInitializer = new BoardInitializer(new GameConfiguration(dimension, 1), minesPlacer);
 
-        assertEquals(expectedMapBoard, boardInitializer.init(new Point(0, 0)));
+        Map<Point, Tile> actualBoard = new LinkedHashMap<>();
+        boardInitializer.fillBoard(actualBoard);
+        boardInitializer.init(actualBoard, new Point(0, 0));
+        assertEquals(expectedMapBoard, actualBoard);
     }
 
     private Map<Point, Tile> csvParse(String resourceName) {

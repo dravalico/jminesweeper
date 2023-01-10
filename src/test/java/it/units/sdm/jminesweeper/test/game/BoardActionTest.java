@@ -15,6 +15,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -39,6 +41,20 @@ class BoardActionTest {
         Dimension dimension = new Dimension(WIDTH, HEIGHT);
         GameManager gameManager = new GameManager(new GameConfiguration(dimension, 0));
         assertThrows(IllegalArgumentException.class, () -> gameManager.actionAt(point));
+    }
+
+    @Disabled
+    @Test
+    void givenFreshGameReturnBoardWithOnlyCoveredSymbol() {
+        Dimension dimension = new Dimension(WIDTH, HEIGHT);
+        GameManager gameManager = new GameManager(new GameConfiguration(dimension, 0));
+        Map<Point, GameSymbol> expectedBoard = new LinkedHashMap<>();
+        for (int i = 0; i < WIDTH; i++) {
+            for (int j = 0; j < HEIGHT; j++) {
+                expectedBoard.put(new Point(i, j), GameSymbol.COVERED);
+            }
+        }
+        assertEquals(expectedBoard, gameManager.getMapBoard());
     }
 
     @ParameterizedTest

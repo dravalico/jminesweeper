@@ -29,13 +29,16 @@ class BoardFillingTest {
     @CsvSource({"9,9", "16,16", "30,16", "32,60"})
     void givenBoardSizeGenerateBoardWithEmptyTileAndCorrectDimension(int width, int height) {
         Dimension boardDimension = new Dimension(width, height);
-        BoardInitializer boardInitializer = new BoardInitializer(new GameConfiguration(boardDimension, minesNumber), new GuassianMinesPlacer());
+        BoardInitializer boardInitializer = new BoardInitializer(new GameConfiguration(boardDimension, minesNumber),
+                new GuassianMinesPlacer());
         for (int i = 0; i < boardDimension.height; i++) {
             for (int j = 0; j < boardDimension.width; j++) {
                 expectedBoard.put(new Point(i, j), new Tile(GameSymbol.EMPTY));
             }
         }
-        assertEquals(expectedBoard, boardInitializer.init(new Point(0, 0)));
+        Map<Point, Tile> actualBoard = new LinkedHashMap<>();
+        boardInitializer.fillBoard(actualBoard);
+        assertEquals(expectedBoard, actualBoard);
     }
 
 }
