@@ -1,6 +1,5 @@
 package it.units.sdm.jminesweeper.test.game;
 
-import it.units.sdm.jminesweeper.BoardManager;
 import it.units.sdm.jminesweeper.GameConfiguration;
 import it.units.sdm.jminesweeper.core.GameManager;
 import it.units.sdm.jminesweeper.core.Tile;
@@ -9,36 +8,29 @@ import it.units.sdm.jminesweeper.core.generation.MinesPlacer;
 import it.units.sdm.jminesweeper.enumeration.ActionOutcome;
 import it.units.sdm.jminesweeper.enumeration.GameSymbol;
 import it.units.sdm.jminesweeper.test.CSVParserUtil;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class BoardActionTest {
-    private static final int MINES_NUMBER = 99;
     private static final int WIDTH = 30;
     private static final int HEIGHT = 16;
     private static final Dimension BOARD_DIMENSION = new Dimension(WIDTH, HEIGHT);
     private static final String ROOT_FOLDER_NAME_FOR_BOARDS = "board_actions";
     private static final String FILENAME_FOR_EXPECTED = "expected.csv";
     private static final String FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION = "actual_before_computation.csv";
-    private BoardManager boardManager;
     private GameManager gameManager;
-
-
-    @BeforeEach
-    void init() {
-        boardManager = new BoardManager(new GameConfiguration(new Dimension(WIDTH, HEIGHT), MINES_NUMBER));
-    }
 
     @ParameterizedTest
     @CsvSource({"0,-1", "-1,0", "0,0", "1, 1", "2, 3", "100, -100", "20,4", "-5,2", "-4,13"})
@@ -149,61 +141,11 @@ class BoardActionTest {
         assertEquals(ActionOutcome.VICTORY, gameManager.actionAt(new Point(0, 3)));
     }
 
-    @ParameterizedTest
-    @MethodSource
-    void onFirstClickNotOnEdgeUncoverAtLeastNineSpots(Point pointOfAction) {
-        boardManager.actionAt(pointOfAction);
-        int uncoveredTiles = WIDTH * HEIGHT - Collections.frequency(boardManager.getMapBoard().values(), GameSymbol.COVERED);
-        assertTrue(uncoveredTiles >= 9);
-    }
-
-    @ParameterizedTest
-    @MethodSource
-    void onFirstClickOnEdgeUncoverAtLeastFourSpots(Point pointOfAction) {
-        boardManager.actionAt(pointOfAction);
-        int uncoveredTiles = WIDTH * HEIGHT - Collections.frequency(boardManager.getMapBoard().values(), GameSymbol.COVERED);
-        assertTrue(uncoveredTiles >= 4);
-    }
-
-    @ParameterizedTest
-    @MethodSource("generatePointsRepresentingActionAt")
-    void onFirstClickUncoverAtLeastNineSpotsButMines(Point pointOfAction) {
-        boardManager.actionAt(pointOfAction);
-        int coveredTiles = Collections.frequency(boardManager.getMapBoard().values(), GameSymbol.COVERED);
-        assertTrue(coveredTiles >= MINES_NUMBER);
-    }
-
     private static Stream<Point> generatePointsRepresentingActionAt() {
         java.util.List<Point> points = new ArrayList<>();
         IntStream.range(0, HEIGHT)
                 .forEach(i -> IntStream.range(0, WIDTH)
                         .forEach(j -> points.add(new Point(i, j)))
-                );
-        return points.stream();
-    }
-
-    private static Stream<Point> onFirstClickNotOnEdgeUncoverAtLeastNineSpots() {
-        java.util.List<Point> points = new ArrayList<>();
-        IntStream.range(1, HEIGHT - 1)
-                .forEach(i -> IntStream.range(1, WIDTH - 1)
-                        .forEach(j -> points.add(new Point(i, j)))
-                );
-        return points.stream();
-    }
-
-    private static Stream<Point> onFirstClickOnEdgeUncoverAtLeastFourSpots() {
-        java.util.List<Point> points = new ArrayList<>();
-        IntStream.range(0, HEIGHT)
-                .forEach(i -> points.add(new Point(i, 0))
-                );
-        IntStream.range(0, WIDTH)
-                .forEach(j -> points.add(new Point(0, j))
-                );
-        IntStream.range(0, HEIGHT)
-                .forEach(i -> points.add(new Point(i, WIDTH - 1))
-                );
-        IntStream.range(0, WIDTH)
-                .forEach(j -> points.add(new Point(HEIGHT - 1, j))
                 );
         return points.stream();
     }

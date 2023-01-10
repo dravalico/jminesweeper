@@ -1,9 +1,9 @@
 package it.units.sdm.jminesweeper.test.generation;
 
-import it.units.sdm.jminesweeper.enumeration.GameSymbol;
 import it.units.sdm.jminesweeper.core.Tile;
 import it.units.sdm.jminesweeper.core.generation.GuassianMinesPlacer;
 import it.units.sdm.jminesweeper.core.generation.MinesPlacer;
+import it.units.sdm.jminesweeper.enumeration.GameSymbol;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
