@@ -100,8 +100,8 @@ class BoardActionTest {
                         .forEach(board::replace);
         gameManager = new GameManager(BEGINNER_CONFIGURATION, minesPlacer);
         TestListener testListener = new TestListener();
-
         gameManager.addListener(testListener, EventType.PROGRESS);
+
         gameManager.newActionAt(new Point(3, 3));
 
         assertEquals(EventType.PROGRESS, testListener.eventTypeReceived);
@@ -137,8 +137,8 @@ class BoardActionTest {
                         .forEach(board::replace);
         gameManager = new GameManager(BEGINNER_CONFIGURATION, minesPlacer);
         TestListener testListener = new TestListener();
-
         gameManager.addListener(testListener, EventType.DEFEAT);
+
         gameManager.newActionAt(new Point(3, 3));
         gameManager.newActionAt(new Point(x, y));
 
@@ -154,12 +154,15 @@ class BoardActionTest {
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
         gameManager = new GameManager(new GameConfiguration(boardDimension, 2), minesPlacer);
+        TestListener testListener = new TestListener();
+        gameManager.addListener(testListener, EventType.VICTORY);
 
-        gameManager.actionAt(new Point(3, 0));
-        gameManager.actionAt(new Point(0, 1));
-        gameManager.actionAt(new Point(0, 2));
+        gameManager.newActionAt(new Point(3, 0));
+        gameManager.newActionAt(new Point(0, 1));
+        gameManager.newActionAt(new Point(0, 2));
+        gameManager.newActionAt(new Point(0, 3));
 
-        assertEquals(ActionOutcome.VICTORY, gameManager.actionAt(new Point(0, 3)));
+        assertEquals(EventType.VICTORY, testListener.eventTypeReceived);
     }
 
     @Test
