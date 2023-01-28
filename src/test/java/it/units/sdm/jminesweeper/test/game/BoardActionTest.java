@@ -118,8 +118,8 @@ class BoardActionTest {
                         .forEach(board::replace);
         gameManager = new GameManager(BEGINNER_CONFIGURATION, minesPlacer);
 
-        gameManager.actionAt(new Point(3, 3));
-        gameManager.actionAt(new Point(x, y));
+        gameManager.newActionAt(new Point(3, 3));
+        gameManager.newActionAt(new Point(x, y));
         assert expectedMapBoard != null;
         expectedMapBoard.replace(new Point(x, y), GameSymbol.fromInt(tileValue));
 
