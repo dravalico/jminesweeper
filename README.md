@@ -1,9 +1,9 @@
+![CircleCI](https://img.shields.io/circleci/build/github/damianoravalico/jminesweeper)
+![GitHub](https://img.shields.io/github/license/damianoravalico/jminesweeper)
+
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white)
 ![Gradle](https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white)
 ![JUnit](https://img.shields.io/badge/Junit5-25A162?style=for-the-badge&logo=junit5&logoColor=white)
-
-![CircleCI](https://img.shields.io/circleci/build/github/damianoravalico/jminesweeper)
-![GitHub](https://img.shields.io/github/license/damianoravalico/jminesweeper)
 
 # JMinesweeper
 
