@@ -5,7 +5,6 @@ import it.units.sdm.jminesweeper.core.GameManager;
 import it.units.sdm.jminesweeper.core.Tile;
 import it.units.sdm.jminesweeper.core.generation.GuassianMinesPlacer;
 import it.units.sdm.jminesweeper.core.generation.MinesPlacer;
-import it.units.sdm.jminesweeper.enumeration.ActionOutcome;
 import it.units.sdm.jminesweeper.enumeration.GameSymbol;
 import it.units.sdm.jminesweeper.event.EventType;
 import it.units.sdm.jminesweeper.event.GameEvent;
@@ -146,7 +145,7 @@ class BoardActionTest {
     }
 
     @Test
-    void onAllSpotsUncoveredButMinesDeclareVictory() {
+    void onAllSpotsUncoveredButMinesNotifyVictory() {
         Dimension boardDimension = new Dimension(4, 4);
         String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_BOARDS + "victory_example1"
                 + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
@@ -174,15 +173,18 @@ class BoardActionTest {
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
         gameManager = new GameManager(new GameConfiguration(boardDimension, 2), minesPlacer);
+        TestListener testListener = new TestListener();
+        gameManager.addListener(testListener, EventType.VICTORY);
 
-        gameManager.actionAt(new Point(3, 0));
-        gameManager.actionAt(new Point(0, 1));
-        gameManager.actionAt(new Point(3, 2));
-        gameManager.actionAt(new Point(0, 1));
-        gameManager.actionAt(new Point(0, 2));
-        gameManager.actionAt(new Point(0, 2));
+        gameManager.newActionAt(new Point(3, 0));
+        gameManager.newActionAt(new Point(0, 1));
+        gameManager.newActionAt(new Point(3, 2));
+        gameManager.newActionAt(new Point(0, 1));
+        gameManager.newActionAt(new Point(0, 2));
+        gameManager.newActionAt(new Point(0, 2));
+        gameManager.newActionAt(new Point(0, 3));
 
-        assertEquals(ActionOutcome.VICTORY, gameManager.actionAt(new Point(0, 3)));
+        assertEquals(EventType.VICTORY, testListener.eventTypeReceived);
     }
 
     private static Stream<Point> generatePointsRepresentingActionAt() {
