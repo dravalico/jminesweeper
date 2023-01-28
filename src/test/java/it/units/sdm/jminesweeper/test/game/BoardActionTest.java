@@ -73,7 +73,7 @@ class BoardActionTest {
                         .forEach(board::replace);
         gameManager = new GameManager(BEGINNER_CONFIGURATION, minesPlacer);
 
-        gameManager.actionAt(new Point(3, 3));
+        gameManager.newActionAt(new Point(3, 3));
 
         assertEquals(expectedMapBoard, gameManager.getBoardStatus());
     }
