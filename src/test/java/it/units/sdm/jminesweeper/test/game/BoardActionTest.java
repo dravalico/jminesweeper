@@ -187,6 +187,25 @@ class BoardActionTest {
         assertEquals(EventType.VICTORY, testListener.eventTypeReceived);
     }
 
+    @ParameterizedTest
+    @CsvSource({"1,0", "2,0", "0,7", "1,7", "1,8", "5,2", "6,3", "6,6", "7,4", "8,6"})
+    void afterDefeatNotifyOnlyDefeat(int x, int y) {
+        String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_BOARDS + "first_click_outcome1"
+                + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
+        MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
+                Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
+                        .forEach(board::replace);
+        gameManager = new GameManager(BEGINNER_CONFIGURATION, minesPlacer);
+        TestListener testListener = new TestListener();
+        gameManager.addListener(testListener, EventType.values());
+
+        gameManager.actionAt(new Point(3, 3));
+        gameManager.actionAt(new Point(x, y));
+        gameManager.actionAt(new Point(1, 1));
+
+        assertEquals(EventType.DEFEAT, testListener.eventTypeReceived);
+    }
+
     private static Stream<Point> generatePointsRepresentingActionAt() {
         java.util.List<Point> points = new ArrayList<>();
         IntStream.range(0, HEIGHT)

@@ -16,6 +16,7 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
     private final BoardInitializer boardInitializer;
     private int uncoveredTiles;
     private final Map<EventType, List<GameEventListener>> listenersMap;
+    private boolean isGameFinished;
 
     public GameManager(GameConfiguration gameConfiguration, MinesPlacer<Map<Point, Tile>, Point> minesPlacer) {
         super(new LinkedHashMap<>());
@@ -24,6 +25,7 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
         boardInitializer.fillBoard(board);
         uncoveredTiles = 0;
         listenersMap = new EnumMap<>(EventType.class);
+        isGameFinished = false;
     }
 
     public Map<Point, GameSymbol> getBoardStatus() {
@@ -53,17 +55,17 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
         if (uncoveredTiles == 0) {
             boardInitializer.init(board, point);
         }
-        if (board.get(point).isAMine()) {
-            notifyListeners(new DefeatEvent(this));
-            return;
+        if (!isGameFinished) {
+            uncoverTriggeredTiles(point);
         }
-        if (board.get(point).isANumber()) {
-            uncoverTile(point);
-        } else {
-            uncoverFreeSpotRecursively(point);
+        if (isDefeat()) {
+            notifyListeners(new DefeatEvent(this));
+            isGameFinished = true;
+            return;
         }
         if (isVictory()) {
             notifyListeners(new VictoryEvent(this));
+            isGameFinished = true;
             return;
         }
         notifyListeners(new ProgressEvent(this));
@@ -87,7 +89,7 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
             for (int j = jStart; j <= jStop; j++) {
                 Point temp = new Point(point.x + i, point.y + j);
                 if (board.get(temp).isCovered()) {
-                    if (board.get(temp).isANumber()) {
+                    if (board.get(temp).isNumber()) {
                         uncoverTile(temp);
                     } else {
                         uncoverFreeSpotRecursively(temp);
@@ -97,11 +99,28 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
         }
     }
 
+    private void uncoverTriggeredTiles(Point point) {
+        if (!board.get(point).isCovered()) {
+            return;
+        }
+        if (board.get(point).isNumber() || board.get(point).isMine()) {
+            uncoverTile(point);
+        } else {
+            uncoverFreeSpotRecursively(point);
+        }
+    }
+
     private void uncoverTile(Point point) {
         if (board.get(point).isCovered()) {
             uncoveredTiles = uncoveredTiles + 1;
             board.get(point).uncover();
         }
+    }
+
+    private boolean isDefeat() {
+        return board.values()
+                .stream()
+                .anyMatch(v -> v.isMine() && !v.isCovered());
     }
 
     private boolean isVictory() {

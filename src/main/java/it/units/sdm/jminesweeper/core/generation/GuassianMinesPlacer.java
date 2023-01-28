@@ -56,7 +56,7 @@ public class GuassianMinesPlacer implements MinesPlacer<Map<Point, Tile>, Point>
         int standardDeviation = 1;
         Point startingPoint = generateRandomPointWithin(dimension);
         Point minePosition = new Point(startingPoint.x, startingPoint.y);
-        while (mapBoard.get(minePosition).isAMine() || isInNeighborhood(minePosition, firstClickPosition)) {
+        while (mapBoard.get(minePosition).isMine() || isInNeighborhood(minePosition, firstClickPosition)) {
             standardDeviation = standardDeviation * 2;
             Pair<Integer, Integer> shifts = computeRandomShifts(standardDeviation, dimension);
             minePosition.x = shiftCoordinateFromStartingPoint(shifts.first, startingPoint.x, dimension.width);

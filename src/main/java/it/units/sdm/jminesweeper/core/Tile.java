@@ -13,11 +13,11 @@ public class Tile {
         isCovered = true;
     }
 
-    public boolean isAMine() {
+    public boolean isMine() {
         return value.equals(GameSymbol.MINE);
     }
 
-    public boolean isANumber() {
+    public boolean isNumber() {
         return !(value.equals(GameSymbol.MINE) || value.equals(GameSymbol.EMPTY));
     }
 

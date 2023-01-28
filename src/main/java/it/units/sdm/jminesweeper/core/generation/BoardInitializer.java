@@ -5,7 +5,6 @@ import it.units.sdm.jminesweeper.enumeration.GameSymbol;
 import it.units.sdm.jminesweeper.core.Tile;
 
 import java.awt.*;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class BoardInitializer {
@@ -32,10 +31,10 @@ public class BoardInitializer {
 
     private void computeNumberForCells(Map<Point, Tile> board) {
         board.forEach((k, v) -> {
-            if (!v.isAMine()) {
+            if (!v.isMine()) {
                 v.setValue(GameSymbol.fromInt((int) board.entrySet()
                         .stream()
-                        .filter(e -> e.getKey().distance(k) <= Math.sqrt(2) && e.getValue().isAMine())
+                        .filter(e -> e.getKey().distance(k) <= Math.sqrt(2) && e.getValue().isMine())
                         .count()));
             }
         });
