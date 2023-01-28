@@ -3,16 +3,15 @@ package it.units.sdm.jminesweeper.core;
 import it.units.sdm.jminesweeper.GameConfiguration;
 import it.units.sdm.jminesweeper.core.generation.BoardInitializer;
 import it.units.sdm.jminesweeper.core.generation.MinesPlacer;
-import it.units.sdm.jminesweeper.enumeration.ActionOutcome;
 import it.units.sdm.jminesweeper.enumeration.GameSymbol;
 import it.units.sdm.jminesweeper.event.*;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class GameManager extends AbstractBoard<Map<Point, Tile>> implements ActionHandler<Point, ActionOutcome>, NewActionHandler<Point> {
+public class GameManager extends AbstractBoard<Map<Point, Tile>> implements ActionHandler<Point> {
     private final GameConfiguration gameConfiguration;
     private final BoardInitializer boardInitializer;
     private int uncoveredTiles;
@@ -49,27 +48,7 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
     }
 
     @Override
-    public ActionOutcome actionAt(Point point) {
-        verifyPointWithinBoardDimension(point);
-        if (uncoveredTiles == 0) {
-            boardInitializer.init(board, point);
-        }
-        if (board.get(point).isAMine()) {
-            return ActionOutcome.DEFEAT;
-        }
-        if (board.get(point).isANumber()) {
-            uncoverTile(point);
-        } else {
-            uncoverFreeSpotRecursively(point);
-        }
-        if (isVictory()) {
-            return ActionOutcome.VICTORY;
-        }
-        return ActionOutcome.PROGRESS;
-    }
-
-    @Override
-    public void newActionAt(Point point) {
+    public void actionAt(Point point) {
         verifyPointWithinBoardDimension(point);
         if (uncoveredTiles == 0) {
             boardInitializer.init(board, point);

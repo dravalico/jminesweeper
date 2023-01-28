@@ -60,7 +60,7 @@ class BoardActionTest {
     @MethodSource("generatePointsRepresentingActionAt")
     void givenPointUncoverTile(Point pointToUncover) {
         gameManager = new GameManager(new GameConfiguration(BOARD_DIMENSION, 0), new GuassianMinesPlacer());
-        gameManager.newActionAt(pointToUncover);
+        gameManager.actionAt(pointToUncover);
         assertNotEquals(GameSymbol.COVERED, gameManager.getBoardStatus().get(pointToUncover));
     }
 
@@ -75,7 +75,7 @@ class BoardActionTest {
                         .forEach(board::replace);
         gameManager = new GameManager(BEGINNER_CONFIGURATION, minesPlacer);
 
-        gameManager.newActionAt(new Point(3, 3));
+        gameManager.actionAt(new Point(3, 3));
 
         assertEquals(expectedMapBoard, gameManager.getBoardStatus());
     }
@@ -101,7 +101,7 @@ class BoardActionTest {
         TestListener testListener = new TestListener();
         gameManager.addListener(testListener, EventType.PROGRESS);
 
-        gameManager.newActionAt(new Point(3, 3));
+        gameManager.actionAt(new Point(3, 3));
 
         assertEquals(EventType.PROGRESS, testListener.eventTypeReceived);
     }
@@ -118,8 +118,8 @@ class BoardActionTest {
                         .forEach(board::replace);
         gameManager = new GameManager(BEGINNER_CONFIGURATION, minesPlacer);
 
-        gameManager.newActionAt(new Point(3, 3));
-        gameManager.newActionAt(new Point(x, y));
+        gameManager.actionAt(new Point(3, 3));
+        gameManager.actionAt(new Point(x, y));
         assert expectedMapBoard != null;
         expectedMapBoard.replace(new Point(x, y), GameSymbol.fromInt(tileValue));
 
@@ -138,8 +138,8 @@ class BoardActionTest {
         TestListener testListener = new TestListener();
         gameManager.addListener(testListener, EventType.DEFEAT);
 
-        gameManager.newActionAt(new Point(3, 3));
-        gameManager.newActionAt(new Point(x, y));
+        gameManager.actionAt(new Point(3, 3));
+        gameManager.actionAt(new Point(x, y));
 
         assertEquals(EventType.DEFEAT, testListener.eventTypeReceived);
     }
@@ -156,10 +156,10 @@ class BoardActionTest {
         TestListener testListener = new TestListener();
         gameManager.addListener(testListener, EventType.VICTORY);
 
-        gameManager.newActionAt(new Point(3, 0));
-        gameManager.newActionAt(new Point(0, 1));
-        gameManager.newActionAt(new Point(0, 2));
-        gameManager.newActionAt(new Point(0, 3));
+        gameManager.actionAt(new Point(3, 0));
+        gameManager.actionAt(new Point(0, 1));
+        gameManager.actionAt(new Point(0, 2));
+        gameManager.actionAt(new Point(0, 3));
 
         assertEquals(EventType.VICTORY, testListener.eventTypeReceived);
     }
@@ -176,13 +176,13 @@ class BoardActionTest {
         TestListener testListener = new TestListener();
         gameManager.addListener(testListener, EventType.VICTORY);
 
-        gameManager.newActionAt(new Point(3, 0));
-        gameManager.newActionAt(new Point(0, 1));
-        gameManager.newActionAt(new Point(3, 2));
-        gameManager.newActionAt(new Point(0, 1));
-        gameManager.newActionAt(new Point(0, 2));
-        gameManager.newActionAt(new Point(0, 2));
-        gameManager.newActionAt(new Point(0, 3));
+        gameManager.actionAt(new Point(3, 0));
+        gameManager.actionAt(new Point(0, 1));
+        gameManager.actionAt(new Point(3, 2));
+        gameManager.actionAt(new Point(0, 1));
+        gameManager.actionAt(new Point(0, 2));
+        gameManager.actionAt(new Point(0, 2));
+        gameManager.actionAt(new Point(0, 3));
 
         assertEquals(EventType.VICTORY, testListener.eventTypeReceived);
     }

@@ -1,8 +1,9 @@
 package it.units.sdm.jminesweeper.core;
 
-@FunctionalInterface
-public interface ActionHandler<A, R> {
+import it.units.sdm.jminesweeper.event.GameEventSource;
 
-    R actionAt(A action);
+public interface ActionHandler<A> extends GameEventSource {
+
+    void actionAt(A action);
 
 }
