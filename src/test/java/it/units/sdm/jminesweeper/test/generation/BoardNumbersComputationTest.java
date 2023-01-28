@@ -11,6 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.awt.*;
+import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -18,9 +19,9 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BoardNumbersComputationTest {
-    private static final String ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS = "board_number_computation";
-    private static final String FILENAME_FOR_EXPECTED = "expected.csv";
-    private static final String FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION = "actual_before_computation.csv";
+    private static final String ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS = "board_number_computation" + File.separatorChar;
+    private static final String FILENAME_FOR_EXPECTED = File.separatorChar + "expected.csv";
+    private static final String FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION = File.separatorChar + "actual_before_computation.csv";
     private Map<Point, Tile> expectedMapBoard;
     private BoardInitializer boardInitializer;
     private Dimension dimension;
@@ -62,9 +63,9 @@ class BoardNumbersComputationTest {
     void placeNumbersIn3x3BoardWithOneCentralMine() {
         dimension = new Dimension(3, 3);
         expectedMapBoard = CSVParserUtil.csvParseTiles(ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS
-                + "/one_mine_central/" + FILENAME_FOR_EXPECTED);
+                + "one_mine_central" + FILENAME_FOR_EXPECTED);
         String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS
-                + "/one_mine_central/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
+                + "one_mine_central" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
@@ -83,9 +84,11 @@ class BoardNumbersComputationTest {
             "seven_mines", "eight_mines"})
     void placeNumbersIn3x3BoardWithIncrementalMinesNumber(String folderName) {
         dimension = new Dimension(3, 3);
-        String rootFolderName = ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS + "/incremental_pattern/" + folderName;
-        expectedMapBoard = CSVParserUtil.csvParseTiles(rootFolderName + "/" + FILENAME_FOR_EXPECTED);
-        String actualBeforeComputationPath = rootFolderName + "/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
+        String rootFolderName = ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS + "incremental_pattern" + File.separatorChar
+                + folderName;
+        expectedMapBoard = CSVParserUtil.csvParseTiles(rootFolderName + File.separatorChar
+                + FILENAME_FOR_EXPECTED);
+        String actualBeforeComputationPath = rootFolderName + File.separatorChar + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath)).
                         forEach(board::replace);
@@ -102,9 +105,10 @@ class BoardNumbersComputationTest {
     @ValueSource(strings = {"pattern1", "pattern2", "pattern3", "pattern4"})
     void placeNumbersIn3x3BoardWithParticularPattern(String folderName) {
         dimension = new Dimension(3, 3);
-        String rootFolderName = ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS + "/particular_pattern/" + folderName;
-        expectedMapBoard = CSVParserUtil.csvParseTiles(rootFolderName + "/" + FILENAME_FOR_EXPECTED);
-        String actualBeforeComputationPath = rootFolderName + "/" + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
+        String rootFolderName = ROOT_FOLDER_NAME_FOR_3_X_3_BOARDS + "particular_pattern" + File.separatorChar + folderName;
+        expectedMapBoard = CSVParserUtil.csvParseTiles(rootFolderName + File.separatorChar
+                + FILENAME_FOR_EXPECTED);
+        String actualBeforeComputationPath = rootFolderName + File.separatorChar + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
