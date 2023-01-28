@@ -5,16 +5,18 @@ import it.units.sdm.jminesweeper.core.generation.BoardInitializer;
 import it.units.sdm.jminesweeper.core.generation.MinesPlacer;
 import it.units.sdm.jminesweeper.enumeration.ActionOutcome;
 import it.units.sdm.jminesweeper.enumeration.GameSymbol;
+import it.units.sdm.jminesweeper.event.*;
 
 import java.awt.*;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
-public class GameManager extends AbstractBoard<Map<Point, Tile>> implements ActionHandler<Point, ActionOutcome> {
+public class GameManager extends AbstractBoard<Map<Point, Tile>> implements ActionHandler<Point, ActionOutcome>, NewActionHandler<Point> {
     private final GameConfiguration gameConfiguration;
     private final BoardInitializer boardInitializer;
     private int uncoveredTiles;
+    private final Map<EventType, List<GameEventListener>> listenersMap;
 
     public GameManager(GameConfiguration gameConfiguration, MinesPlacer<Map<Point, Tile>, Point> minesPlacer) {
         super(new LinkedHashMap<>());
@@ -22,6 +24,7 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
         boardInitializer = new BoardInitializer(gameConfiguration, minesPlacer);
         boardInitializer.fillBoard(board);
         uncoveredTiles = 0;
+        listenersMap = new EnumMap<>(EventType.class);
     }
 
     public Map<Point, GameSymbol> getBoardStatus() {
@@ -29,6 +32,19 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
                 .stream()
                 .collect(Collectors.toMap(Map.Entry::getKey,
                         e -> e.getValue().isCovered() ? GameSymbol.COVERED : e.getValue().getValue()));
+    }
+
+    @Override
+    public void addListener(GameEventListener listener, EventType... eventTypes) {
+        Arrays.stream(eventTypes).forEach(e -> {
+            listenersMap.putIfAbsent(e, new ArrayList<>());
+            listenersMap.get(e).add(listener);
+        });
+    }
+
+    @Override
+    public void notifyListeners(GameEvent event) {
+        listenersMap.get(event.getEventType()).forEach(listener -> listener.onGameEvent(event));
     }
 
     @Override
@@ -49,6 +65,28 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
             return ActionOutcome.VICTORY;
         }
         return ActionOutcome.PROGRESS;
+    }
+
+    @Override
+    public void newActionAt(Point point) {
+        verifyPointWithinBoardDimension(point);
+        if (uncoveredTiles == 0) {
+            boardInitializer.init(board, point);
+        }
+        if (board.get(point).isAMine()) {
+            notifyListeners(new DefeatEvent(this));
+            return;
+        }
+        if (board.get(point).isANumber()) {
+            uncoverTile(point);
+        } else {
+            uncoverFreeSpotRecursively(point);
+        }
+        if (isVictory()) {
+            notifyListeners(new VictoryEvent(this));
+            return;
+        }
+        notifyListeners(new ProgressEvent(this));
     }
 
     private void verifyPointWithinBoardDimension(Point point) {
