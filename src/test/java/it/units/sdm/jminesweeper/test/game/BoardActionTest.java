@@ -58,7 +58,7 @@ class BoardActionTest {
     @MethodSource("generatePointsRepresentingActionAt")
     void givenPointUncoverTile(Point pointToUncover) {
         gameManager = new GameManager(new GameConfiguration(BOARD_DIMENSION, 0), new GuassianMinesPlacer());
-        gameManager.actionAt(pointToUncover);
+        gameManager.newActionAt(pointToUncover);
         assertNotEquals(GameSymbol.COVERED, gameManager.getBoardStatus().get(pointToUncover));
     }
 

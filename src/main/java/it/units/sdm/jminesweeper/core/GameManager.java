@@ -44,7 +44,8 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
 
     @Override
     public void notifyListeners(GameEvent event) {
-        listenersMap.get(event.getEventType()).forEach(listener -> listener.onGameEvent(event));
+        listenersMap.getOrDefault(event.getEventType(), new ArrayList<>())
+                .forEach(l -> l.onGameEvent(event));
     }
 
     @Override
