@@ -7,6 +7,9 @@ import it.units.sdm.jminesweeper.core.generation.GuassianMinesPlacer;
 import it.units.sdm.jminesweeper.core.generation.MinesPlacer;
 import it.units.sdm.jminesweeper.enumeration.ActionOutcome;
 import it.units.sdm.jminesweeper.enumeration.GameSymbol;
+import it.units.sdm.jminesweeper.event.EventType;
+import it.units.sdm.jminesweeper.event.GameEvent;
+import it.units.sdm.jminesweeper.event.GameEventListener;
 import it.units.sdm.jminesweeper.test.CSVParserUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -78,16 +81,29 @@ class BoardActionTest {
         assertEquals(expectedMapBoard, gameManager.getBoardStatus());
     }
 
+    static private class TestListener implements GameEventListener {
+        private EventType eventTypeReceived;
+
+        @Override
+        public void onGameEvent(GameEvent event) {
+            eventTypeReceived = event.getEventType();
+        }
+
+    }
+
     @Test
-    void onFirstClickReturnProgress() {
+    void onFirstClickNotifyProgressEvent() {
         String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_BOARDS + "first_click_outcome1"
                 + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
         gameManager = new GameManager(BEGINNER_CONFIGURATION, minesPlacer);
+        TestListener testListener = new TestListener();
+        gameManager.addListener(testListener, EventType.PROGRESS);
+        gameManager.newActionAt(new Point(3, 3));
 
-        assertEquals(ActionOutcome.PROGRESS, gameManager.actionAt(new Point(3, 3)));
+        assertEquals(EventType.PROGRESS, testListener.eventTypeReceived);
     }
 
     @ParameterizedTest
