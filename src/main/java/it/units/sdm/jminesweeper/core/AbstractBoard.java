@@ -1,9 +1,9 @@
 package it.units.sdm.jminesweeper.core;
 
 public abstract class AbstractBoard<T> {
-    protected T board;
+    protected final T board;
 
-    public AbstractBoard(T board) {
+    protected AbstractBoard(T board) {
         this.board = board;
     }
 

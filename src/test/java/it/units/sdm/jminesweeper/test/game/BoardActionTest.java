@@ -5,7 +5,7 @@ import it.units.sdm.jminesweeper.core.GameManager;
 import it.units.sdm.jminesweeper.core.Tile;
 import it.units.sdm.jminesweeper.core.generation.GuassianMinesPlacer;
 import it.units.sdm.jminesweeper.core.generation.MinesPlacer;
-import it.units.sdm.jminesweeper.enumeration.GameSymbol;
+import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.event.EventType;
 import it.units.sdm.jminesweeper.event.GameEvent;
 import it.units.sdm.jminesweeper.event.GameEventListener;

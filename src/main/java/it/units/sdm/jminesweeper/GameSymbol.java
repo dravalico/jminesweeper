@@ -1,4 +1,4 @@
-package it.units.sdm.jminesweeper.enumeration;
+package it.units.sdm.jminesweeper;
 
 public enum GameSymbol {
     COVERED,

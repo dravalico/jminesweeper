@@ -4,7 +4,7 @@ import it.units.sdm.jminesweeper.GameConfiguration;
 import it.units.sdm.jminesweeper.core.Tile;
 import it.units.sdm.jminesweeper.core.generation.BoardInitializer;
 import it.units.sdm.jminesweeper.core.generation.MinesPlacer;
-import it.units.sdm.jminesweeper.enumeration.GameSymbol;
+import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.test.CSVParserUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -38,7 +38,7 @@ class BoardNumbersComputationTest {
         Map<Point, Tile> actualBoard = new LinkedHashMap<>();
 
         boardInitializer.fillBoard(actualBoard);
-        boardInitializer.init(actualBoard, new Point(0, 0));
+        boardInitializer.putMinesAndNumbers(actualBoard, new Point(0, 0));
 
         assertEquals(expectedMapBoard, actualBoard);
     }
@@ -54,7 +54,7 @@ class BoardNumbersComputationTest {
         Map<Point, Tile> actualBoard = new LinkedHashMap<>();
 
         boardInitializer.fillBoard(actualBoard);
-        boardInitializer.init(actualBoard, new Point(0, 0));
+        boardInitializer.putMinesAndNumbers(actualBoard, new Point(0, 0));
 
         assertEquals(expectedMapBoard, actualBoard);
     }
@@ -73,7 +73,7 @@ class BoardNumbersComputationTest {
         Map<Point, Tile> actualBoard = new LinkedHashMap<>();
 
         boardInitializer.fillBoard(actualBoard);
-        boardInitializer.init(actualBoard, new Point(0, 0));
+        boardInitializer.putMinesAndNumbers(actualBoard, new Point(0, 0));
 
         assertEquals(expectedMapBoard, actualBoard);
     }
@@ -96,7 +96,7 @@ class BoardNumbersComputationTest {
         Map<Point, Tile> actualBoard = new LinkedHashMap<>();
 
         boardInitializer.fillBoard(actualBoard);
-        boardInitializer.init(actualBoard, new Point(0, 0));
+        boardInitializer.putMinesAndNumbers(actualBoard, new Point(0, 0));
 
         assertEquals(expectedMapBoard, actualBoard);
     }
@@ -116,7 +116,7 @@ class BoardNumbersComputationTest {
         Map<Point, Tile> actualBoard = new LinkedHashMap<>();
 
         boardInitializer.fillBoard(actualBoard);
-        boardInitializer.init(actualBoard, new Point(0, 0));
+        boardInitializer.putMinesAndNumbers(actualBoard, new Point(0, 0));
 
         assertEquals(expectedMapBoard, actualBoard);
     }

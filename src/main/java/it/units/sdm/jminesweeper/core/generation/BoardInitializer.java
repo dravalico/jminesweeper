@@ -1,7 +1,7 @@
 package it.units.sdm.jminesweeper.core.generation;
 
 import it.units.sdm.jminesweeper.GameConfiguration;
-import it.units.sdm.jminesweeper.enumeration.GameSymbol;
+import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.core.Tile;
 
 import java.awt.*;
@@ -24,7 +24,7 @@ public class BoardInitializer {
         }
     }
 
-    public void init(Map<Point, Tile> board, Point firstClickPosition) {
+    public void putMinesAndNumbers(Map<Point, Tile> board, Point firstClickPosition) {
         minesPlacer.place(board, gameConfiguration.minesNumber(), firstClickPosition);
         computeNumberForCells(board);
     }

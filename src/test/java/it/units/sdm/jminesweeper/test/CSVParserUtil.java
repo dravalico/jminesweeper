@@ -1,7 +1,7 @@
 package it.units.sdm.jminesweeper.test;
 
 import it.units.sdm.jminesweeper.core.Tile;
-import it.units.sdm.jminesweeper.enumeration.GameSymbol;
+import it.units.sdm.jminesweeper.GameSymbol;
 
 import java.awt.*;
 import java.io.File;

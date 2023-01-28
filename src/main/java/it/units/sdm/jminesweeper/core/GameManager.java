@@ -3,7 +3,7 @@ package it.units.sdm.jminesweeper.core;
 import it.units.sdm.jminesweeper.GameConfiguration;
 import it.units.sdm.jminesweeper.core.generation.BoardInitializer;
 import it.units.sdm.jminesweeper.core.generation.MinesPlacer;
-import it.units.sdm.jminesweeper.enumeration.GameSymbol;
+import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.event.*;
 
 import java.awt.*;
@@ -53,7 +53,7 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
     public void actionAt(Point point) {
         verifyPointWithinBoardDimension(point);
         if (uncoveredTiles == 0) {
-            boardInitializer.init(board, point);
+            boardInitializer.putMinesAndNumbers(board, point);
         }
         if (!isGameFinished) {
             uncoverTriggeredTiles(point);
@@ -78,16 +78,27 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
         }
     }
 
-    private void uncoverFreeSpotRecursively(Point point) {
-        uncoverTile(point);
+    private void uncoverTriggeredTiles(Point fromPoint) {
+        if (!board.get(fromPoint).isCovered()) {
+            return;
+        }
+        if (board.get(fromPoint).isNumber() || board.get(fromPoint).isMine()) {
+            uncoverTile(fromPoint);
+        } else {
+            uncoverFreeSpotRecursively(fromPoint);
+        }
+    }
+
+    private void uncoverFreeSpotRecursively(Point startingPoint) {
+        uncoverTile(startingPoint);
         Dimension dimension = gameConfiguration.dimension();
-        int iStart = (point.x == 0 ? 0 : -1);
-        int iStop = (point.x == dimension.height - 1 ? 0 : 1);
-        int jStart = (point.y == 0 ? 0 : -1);
-        int jStop = (point.y == dimension.width - 1 ? 0 : 1);
+        int iStart = (startingPoint.x == 0 ? 0 : -1);
+        int iStop = (startingPoint.x == dimension.height - 1 ? 0 : 1);
+        int jStart = (startingPoint.y == 0 ? 0 : -1);
+        int jStop = (startingPoint.y == dimension.width - 1 ? 0 : 1);
         for (int i = iStart; i <= iStop; i++) {
             for (int j = jStart; j <= jStop; j++) {
-                Point temp = new Point(point.x + i, point.y + j);
+                Point temp = new Point(startingPoint.x + i, startingPoint.y + j);
                 if (board.get(temp).isCovered()) {
                     if (board.get(temp).isNumber()) {
                         uncoverTile(temp);
@@ -96,17 +107,6 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
                     }
                 }
             }
-        }
-    }
-
-    private void uncoverTriggeredTiles(Point point) {
-        if (!board.get(point).isCovered()) {
-            return;
-        }
-        if (board.get(point).isNumber() || board.get(point).isMine()) {
-            uncoverTile(point);
-        } else {
-            uncoverFreeSpotRecursively(point);
         }
     }
 

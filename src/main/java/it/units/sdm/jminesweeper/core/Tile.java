@@ -1,6 +1,6 @@
 package it.units.sdm.jminesweeper.core;
 
-import it.units.sdm.jminesweeper.enumeration.GameSymbol;
+import it.units.sdm.jminesweeper.GameSymbol;
 
 import java.util.Objects;
 
@@ -14,11 +14,11 @@ public class Tile {
     }
 
     public boolean isMine() {
-        return value.equals(GameSymbol.MINE);
+        return value == GameSymbol.MINE;
     }
 
     public boolean isNumber() {
-        return !(value.equals(GameSymbol.MINE) || value.equals(GameSymbol.EMPTY));
+        return !(value == GameSymbol.MINE || value == GameSymbol.EMPTY);
     }
 
     public GameSymbol getValue() {
