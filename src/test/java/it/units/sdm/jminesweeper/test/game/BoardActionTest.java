@@ -100,6 +100,7 @@ class BoardActionTest {
                         .forEach(board::replace);
         gameManager = new GameManager(BEGINNER_CONFIGURATION, minesPlacer);
         TestListener testListener = new TestListener();
+
         gameManager.addListener(testListener, EventType.PROGRESS);
         gameManager.newActionAt(new Point(3, 3));
 
@@ -128,17 +129,20 @@ class BoardActionTest {
 
     @ParameterizedTest
     @CsvSource({"1,0", "2,0", "0,7", "1,7", "1,8", "5,2", "6,3", "6,6", "7,4", "8,6"})
-    void onClickOnAMineDeclareDefeat(int x, int y) {
+    void onClickOnAMineNotifyDefeat(int x, int y) {
         String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_BOARDS + "first_click_outcome1"
                 + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
         gameManager = new GameManager(BEGINNER_CONFIGURATION, minesPlacer);
+        TestListener testListener = new TestListener();
 
-        gameManager.actionAt(new Point(3, 3));
+        gameManager.addListener(testListener, EventType.DEFEAT);
+        gameManager.newActionAt(new Point(3, 3));
+        gameManager.newActionAt(new Point(x, y));
 
-        assertEquals(ActionOutcome.DEFEAT, gameManager.actionAt(new Point(x, y)));
+        assertEquals(EventType.DEFEAT, testListener.eventTypeReceived);
     }
 
     @Test
