@@ -6,6 +6,8 @@ import it.units.sdm.jminesweeper.event.GameEventListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class BoardView implements GameEventListener {
     private JFrame boardFrame;
@@ -33,6 +35,17 @@ public class BoardView implements GameEventListener {
         for (int i = 0; i < boardDimension.height; i++) {
             for (int j = 0; j < boardDimension.width; j++) {
                 Cell cell = new Cell(i, j, cellSideLength);
+                cell.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        cell.setBackground(Color.decode("#dcf5b0"));
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        cell.setProperBackground();
+                    }
+                });
                 boardPanel.add(cell);
             }
         }
