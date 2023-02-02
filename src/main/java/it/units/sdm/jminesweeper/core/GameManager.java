@@ -35,6 +35,10 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
                         e -> e.getValue().isCovered() ? GameSymbol.COVERED : e.getValue().getValue()));
     }
 
+    public GameSymbol getSymbolAt(Point point) {
+        return board.get(point).isCovered() ? GameSymbol.COVERED : board.get(point).getValue();
+    }
+
     @Override
     public void addListener(GameEventListener listener, EventType... eventTypes) {
         Arrays.stream(eventTypes).forEach(e -> {

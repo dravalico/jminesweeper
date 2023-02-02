@@ -1,11 +1,11 @@
 package it.units.sdm.jminesweeper.test.logic.game;
 
 import it.units.sdm.jminesweeper.GameConfiguration;
+import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.core.GameManager;
 import it.units.sdm.jminesweeper.core.Tile;
 import it.units.sdm.jminesweeper.core.generation.GuassianMinesPlacer;
 import it.units.sdm.jminesweeper.core.generation.MinesPlacer;
-import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.event.EventType;
 import it.units.sdm.jminesweeper.event.GameEvent;
 import it.units.sdm.jminesweeper.event.GameEventListener;
@@ -206,10 +206,37 @@ class BoardActionTest {
         assertEquals(EventType.DEFEAT, testListener.eventTypeReceived);
     }
 
+    @ParameterizedTest
+    @MethodSource
+    void givenPointIn9x9ReturnGameSymbolAtThatPoint(Point point) {
+        Map<Point, GameSymbol> expectedMapBoard = CSVParserUtil.csvParseGameSymbols(ROOT_FOLDER_NAME_FOR_BOARDS
+                + "first_click_outcome1" + FILENAME_FOR_EXPECTED);
+        String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_BOARDS + "first_click_outcome1"
+                + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
+        MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
+                Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
+                        .forEach(board::replace);
+        gameManager = new GameManager(BEGINNER_CONFIGURATION, minesPlacer);
+
+        gameManager.actionAt(new Point(3, 3));
+
+        assert expectedMapBoard != null;
+        assertEquals(expectedMapBoard.get(point), gameManager.getSymbolAt(point));
+    }
+
     private static Stream<Point> generatePointsRepresentingActionAt() {
         java.util.List<Point> points = new ArrayList<>();
         IntStream.range(0, HEIGHT)
                 .forEach(i -> IntStream.range(0, WIDTH)
+                        .forEach(j -> points.add(new Point(i, j)))
+                );
+        return points.stream();
+    }
+
+    private static Stream<Point> givenPointIn9x9ReturnGameSymbolAtThatPoint() {
+        java.util.List<Point> points = new ArrayList<>();
+        IntStream.range(0, 9)
+                .forEach(i -> IntStream.range(0, 9)
                         .forEach(j -> points.add(new Point(i, j)))
                 );
         return points.stream();
