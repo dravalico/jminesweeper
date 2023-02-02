@@ -32,9 +32,8 @@ public class BoardView implements GameEventListener {
         int cellSideLength = computeCellSideLength(boardDimension.height);
         for (int i = 0; i < boardDimension.height; i++) {
             for (int j = 0; j < boardDimension.width; j++) {
-                JButton jButton = new JButton();
-                jButton.setPreferredSize(new Dimension(cellSideLength, cellSideLength));
-                boardPanel.add(jButton);
+                Cell cell = new Cell(i, j, cellSideLength);
+                boardPanel.add(cell);
             }
         }
         boardFrame.pack();
