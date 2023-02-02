@@ -224,6 +224,14 @@ class BoardActionTest {
         assertEquals(expectedMapBoard.get(point), gameManager.getSymbolAt(point));
     }
 
+    @ParameterizedTest
+    @CsvSource({"0,-1", "-1,0", "0,0", "1, 1", "2, 3", "100, -100", "20,4", "-5,2", "-4,13"})
+    void whenRequestedPointOutsideBoardThrowAnException(int xShift, int yShift) {
+        Point point = new Point(HEIGHT + xShift, WIDTH + yShift);
+        gameManager = new GameManager(new GameConfiguration(BOARD_DIMENSION, 0), null);
+        assertThrows(IllegalArgumentException.class, () -> gameManager.getSymbolAt(point));
+    }
+
     private static Stream<Point> generatePointsRepresentingActionAt() {
         java.util.List<Point> points = new ArrayList<>();
         IntStream.range(0, HEIGHT)
