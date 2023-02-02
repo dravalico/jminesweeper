@@ -1,4 +1,4 @@
-package it.units.sdm.jminesweeper.test.generation;
+package it.units.sdm.jminesweeper.test.logic.generation;
 
 import it.units.sdm.jminesweeper.core.Tile;
 import it.units.sdm.jminesweeper.core.generation.GuassianMinesPlacer;

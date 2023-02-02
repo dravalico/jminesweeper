@@ -1,4 +1,4 @@
-package it.units.sdm.jminesweeper.test.game;
+package it.units.sdm.jminesweeper.test.logic.game;
 
 import it.units.sdm.jminesweeper.GameConfiguration;
 import it.units.sdm.jminesweeper.core.GameManager;
