@@ -64,6 +64,7 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
             uncoverTriggeredTiles(point);
         }
         if (isDefeat()) {
+            uncoverAllMines();
             notifyListeners(new DefeatEvent(this));
             isGameFinished = true;
             return;
@@ -126,6 +127,13 @@ public class GameManager extends AbstractBoard<Map<Point, Tile>> implements Acti
         return board.values()
                 .stream()
                 .anyMatch(v -> v.isMine() && !v.isCovered());
+    }
+
+    private void uncoverAllMines() {
+        board.entrySet()
+                .stream()
+                .filter(e -> e.getValue().isMine())
+                .forEach(e -> e.getValue().uncover());
     }
 
     private boolean isVictory() {

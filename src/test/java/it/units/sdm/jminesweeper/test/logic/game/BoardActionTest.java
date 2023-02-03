@@ -232,6 +232,27 @@ class BoardActionTest {
         assertThrows(IllegalArgumentException.class, () -> gameManager.getSymbolAt(point));
     }
 
+    @ParameterizedTest
+    @CsvSource({"1,0", "2,0", "0,7", "1,7", "1,8", "5,2", "6,3", "6,6", "7,4", "8,6"})
+    void onDefeatUncoverAllMines(int x, int y) {
+        String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_BOARDS + "first_click_outcome1"
+                + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
+        MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
+                Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
+                        .forEach(board::replace);
+        gameManager = new GameManager(BEGINNER_CONFIGURATION, minesPlacer);
+
+        gameManager.actionAt(new Point(3, 3));
+        gameManager.actionAt(new Point(x, y));
+
+        int uncoveredMines = (int) gameManager.getBoardStatus().values()
+                .stream()
+                .filter(v -> v == GameSymbol.MINE)
+                .count();
+
+        assertEquals(BEGINNER_CONFIGURATION.minesNumber(), uncoveredMines);
+    }
+
     private static Stream<Point> generatePointsRepresentingActionAt() {
         java.util.List<Point> points = new ArrayList<>();
         IntStream.range(0, HEIGHT)
