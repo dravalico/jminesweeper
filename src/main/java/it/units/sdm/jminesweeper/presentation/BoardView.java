@@ -82,6 +82,7 @@ public class BoardView implements GameEventListener {
                 clearBoard();
                 disableBoardView();
             }
+            case DEFEAT -> disableBoardView();
         }
     }
 
