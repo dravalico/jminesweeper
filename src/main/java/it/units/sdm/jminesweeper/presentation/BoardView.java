@@ -77,6 +77,12 @@ public class BoardView implements GameEventListener {
     @Override
     public void onGameEvent(GameEvent event) {
         refreshBoard();
+        switch (event.getEventType()) {
+            case VICTORY -> {
+                clearBoard();
+                disableBoardView();
+            }
+        }
     }
 
     private int computeCellSideLength(int height) {
@@ -101,6 +107,18 @@ public class BoardView implements GameEventListener {
         for (MouseListener mouseListener : jButton.getMouseListeners()) {
             jButton.removeMouseListener(mouseListener);
         }
+    }
+
+    private void clearBoard() {
+        Arrays.stream(boardPanel.getComponents())
+                .filter(Cell.class::isInstance)
+                .forEach(c -> ((Cell) c).victoryStyle());
+    }
+
+    private void disableBoardView() {
+        Arrays.stream(boardPanel.getComponents())
+                .filter(JButton.class::isInstance)
+                .forEach(c -> removeAllMouseListener((JButton) c));
     }
 
 }

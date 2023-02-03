@@ -8,10 +8,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class Cell extends JButton {
     private final Point position;
@@ -86,6 +83,27 @@ public class Cell extends JButton {
             } else {
                 setBackground(Color.decode("#E0C3A3"));
             }
+        }
+    }
+
+    public void victoryStyle() {
+        if (gameSymbol == GameSymbol.COVERED || gameSymbol == GameSymbol.FLAG) {
+            StringBuilder filename = new StringBuilder("icons" + File.separatorChar + "flower_");
+            int whatFlower = new Random().nextInt(3);
+            filename.append(whatFlower).append(".png");
+            try {
+                BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader()
+                        .getResource(String.valueOf(filename))));
+                ImageIcon imageIcon = new ImageIcon(image
+                        .getScaledInstance(sideDimension / 2, sideDimension / 2, Image.SCALE_SMOOTH));
+                setIcon(imageIcon);
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
+                System.exit(1);
+            }
+        } else {
+            setIcon(null);
+            setBackground(Color.decode("#69BFF7"));
         }
     }
 
