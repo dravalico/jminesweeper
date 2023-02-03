@@ -39,7 +39,7 @@ public class BoardView implements GameEventListener {
         int cellSideLength = computeCellSideLength(boardDimension.height);
         for (int i = 0; i < boardDimension.height; i++) {
             for (int j = 0; j < boardDimension.width; j++) {
-                Cell cell = new Cell(i, j, cellSideLength);
+                Cell cell = new Cell(i, j, cellSideLength, model.getSymbolAt(new Point(i, j)));
                 cell.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseReleased(MouseEvent mouseEvent) {
@@ -88,7 +88,7 @@ public class BoardView implements GameEventListener {
                 .forEach(c -> {
                     GameSymbol gameSymbol = model.getSymbolAt(((Cell) c).getPosition());
                     if (gameSymbol != GameSymbol.COVERED) {
-                        ((Cell) c).setText(gameSymbol.toString());
+                        ((Cell) c).setGameSymbol(gameSymbol);
                         removeAllMouseListener(((Cell) c));
                     }
                 });
