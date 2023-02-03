@@ -15,6 +15,10 @@ public class Cell extends JButton {
         setProperBackground();
     }
 
+    public Point getPosition() {
+        return position;
+    }
+
     public void setProperBackground() {
         boolean light = (position.x + position.y) % 2 == 0;
         if (light) {
