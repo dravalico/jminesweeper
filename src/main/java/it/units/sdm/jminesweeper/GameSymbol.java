@@ -4,6 +4,7 @@ public enum GameSymbol {
     COVERED,
     EMPTY,
     MINE,
+    FLAG,
     ONE,
     TWO,
     THREE,

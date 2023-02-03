@@ -47,6 +47,9 @@ public class BoardView implements GameEventListener {
                         if (buttonEvent == MouseEvent.BUTTON1) {
                             boardController.onLeftClick(cell);
                         }
+                        if (buttonEvent == MouseEvent.BUTTON3) {
+                            boardController.onRightClick(cell);
+                        }
                     }
 
                     @Override

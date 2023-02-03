@@ -29,6 +29,7 @@ public class Cell extends JButton {
                     }
                     switch (s) {
                         case MINE -> filename.append("mine.png");
+                        case FLAG -> filename.append("flag.png");
                         case ONE -> filename.append("one.png");
                         case TWO -> filename.append("two.png");
                         case THREE -> filename.append("three.png");
@@ -57,6 +58,11 @@ public class Cell extends JButton {
         setGameSymbol(gameSymbol);
     }
 
+
+    public GameSymbol getGameSymbol() {
+        return gameSymbol;
+    }
+
     public void setGameSymbol(GameSymbol gameSymbol) {
         this.gameSymbol = gameSymbol;
         setIcon();
@@ -68,7 +74,7 @@ public class Cell extends JButton {
 
     public void setProperBackground() {
         boolean light = (position.x + position.y) % 2 == 0;
-        if (gameSymbol == GameSymbol.COVERED) {
+        if (gameSymbol == GameSymbol.COVERED || gameSymbol == GameSymbol.FLAG) {
             if (light) {
                 setBackground(Color.decode("#ACCE5E"));
             } else {
