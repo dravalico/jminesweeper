@@ -16,7 +16,7 @@ import java.util.Objects;
 
 public class MenuView implements GameEventListener {
     private final Controller controller;
-    private final JPanel menuPanel;
+    private final JPanel panel;
     private JComboBox<GameConfiguration.Difficulty> difficultyComboBox;
     private StopwatchLabel stopwatchLabel;
     private JLabel flagCounterLabel;
@@ -26,22 +26,19 @@ public class MenuView implements GameEventListener {
 
     public MenuView(Controller controller, JPanel menuPanel) {
         this.controller = controller;
-        this.menuPanel = menuPanel;
+        this.panel = menuPanel;
     }
 
     public void initMenu() {
-        menuPanel.setLayout(new GridBagLayout());
-        menuPanel.setBackground(Color.decode(COLOR));
-
+        panel.setLayout(new GridBagLayout());
+        panel.setBackground(Color.decode(COLOR));
         difficultyComboBox = new JComboBox<>(GameConfiguration.Difficulty.values());
         difficultyComboBox.setSelectedIndex(0);
         difficultyComboBox.addItemListener(e -> controller.onSelectedComboBox());
-
         stopwatchLabel = new StopwatchLabel();
         stopwatchLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         flagCounterLabel = new JLabel();
         flagCounterLabel.setHorizontalAlignment(SwingConstants.LEFT);
-
         JButton newGameButton = new JButton("New game");
         newGameButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -49,24 +46,21 @@ public class MenuView implements GameEventListener {
                 controller.onNewGameClick();
             }
         });
-
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.insets = new Insets(15, 0, 15, 0);
         constraints.weightx = 1.0;
         constraints.anchor = GridBagConstraints.WEST;
-        menuPanel.add(difficultyComboBox, constraints);
+        panel.add(difficultyComboBox, constraints);
         constraints.anchor = GridBagConstraints.EAST;
         constraints.insets = new Insets(15, 0, 15, 10);
-        menuPanel.add(stopwatchLabel, constraints);
+        panel.add(stopwatchLabel, constraints);
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(15, 10, 15, 0);
-        menuPanel.add(flagCounterLabel, constraints);
+        panel.add(flagCounterLabel, constraints);
         constraints.anchor = GridBagConstraints.EAST;
         constraints.insets = new Insets(15, 0, 15, 0);
-        menuPanel.add(newGameButton, constraints);
-
-        setStyle();
-
+        panel.add(newGameButton, constraints);
+        setComponentsStyle();
         try {
             BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader()
                     .getResource("icons" + File.separatorChar + "flag.png")));
@@ -113,8 +107,8 @@ public class MenuView implements GameEventListener {
         return gameOutcomeDialog;
     }
 
-    private void setStyle() {
-        for (Component component : menuPanel.getComponents()) {
+    private void setComponentsStyle() {
+        for (Component component : panel.getComponents()) {
             if (component instanceof JButton || component instanceof JComboBox<?>) {
                 component.setBackground(Color.WHITE);
                 if (component instanceof JButton) {

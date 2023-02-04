@@ -12,7 +12,7 @@ public class StopwatchLabel extends JLabel {
 
     public StopwatchLabel() {
         resetText();
-        int delay = 1000;
+        int millisDelay = 1000;
         seconds = 0;
         ActionListener task = e -> {
             seconds = seconds + 1;
@@ -22,7 +22,7 @@ public class StopwatchLabel extends JLabel {
             calendar.setTimeInMillis(elapsedMilliseconds);
             setText(formatter.format(calendar.getTime()));
         };
-        timer = new Timer(delay, task);
+        timer = new Timer(millisDelay, task);
     }
 
     public void start() {
