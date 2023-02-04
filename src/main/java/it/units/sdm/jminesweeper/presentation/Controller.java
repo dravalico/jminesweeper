@@ -23,17 +23,17 @@ public class Controller {
 
     public Controller(MinesPlacer<Map<Point, Tile>, Point> minesPlacer) {
         this.minesPlacer = minesPlacer;
+        gameConfiguration = GameConfiguration.fromDifficulty(GameConfiguration.Difficulty.BEGINNER);
+        model = new GameManager(gameConfiguration, minesPlacer);
+    }
+
+    public void startGame() {
         try {
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
         } catch (Exception e) {
             System.err.println(e.getMessage());
             System.exit(1);
         }
-        gameConfiguration = GameConfiguration.fromDifficulty(GameConfiguration.Difficulty.BEGINNER);
-        model = new GameManager(gameConfiguration, minesPlacer);
-    }
-
-    public void startGame() {
         SwingUtilities.invokeLater(() -> {
             mainFrame = new JFrame("Minesweeper");
             createMenuView();
@@ -50,12 +50,24 @@ public class Controller {
             firstMove = false;
         }
         model.actionAt(cell.getPosition());
+        int flagNumber = (int) boardView.getCells()
+                .stream()
+                .filter(v -> v.getGameSymbol() == GameSymbol.FLAG)
+                .count();
+        menuView.getFlagCounterLabel().setText(String.valueOf(gameConfiguration.minesNumber() - flagNumber));
     }
 
     public void onRightClick(Cell cell) {
+        int actualFlagNumber = Integer.parseInt(menuView.getFlagCounterLabel().getText());
         switch (cell.getGameSymbol()) {
-            case COVERED -> cell.setGameSymbol(GameSymbol.FLAG);
-            case FLAG -> cell.setGameSymbol(GameSymbol.COVERED);
+            case COVERED -> {
+                menuView.getFlagCounterLabel().setText(String.valueOf(actualFlagNumber - 1));
+                cell.setGameSymbol(GameSymbol.FLAG);
+            }
+            case FLAG -> {
+                menuView.getFlagCounterLabel().setText(String.valueOf(actualFlagNumber + 1));
+                cell.setGameSymbol(GameSymbol.COVERED);
+            }
         }
     }
 
@@ -78,6 +90,7 @@ public class Controller {
     private void createBoardView() {
         gameConfiguration = GameConfiguration.fromDifficulty((GameConfiguration.Difficulty) Objects
                 .requireNonNull(menuView.getDifficultyComboBox().getSelectedItem()));
+        menuView.getFlagCounterLabel().setText(String.valueOf(gameConfiguration.minesNumber()));
         model = new GameManager(gameConfiguration, minesPlacer);
         model.addListener(menuView, EventType.VICTORY, EventType.DEFEAT);
         JPanel boardPanel = new JPanel(new GridLayout());

@@ -10,19 +10,23 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class BoardView implements GameEventListener {
     private final Controller controller;
     private final JPanel boardPanel;
     private final GameManager model;
     private final Dimension boardDimension;
+    private final List<Cell> cells;
 
     public BoardView(Controller controller, GameManager model, JPanel boardPanel, Dimension boardDimension) {
         this.controller = controller;
         this.model = model;
         this.boardPanel = boardPanel;
         this.boardDimension = boardDimension;
+        cells = new ArrayList<>();
     }
 
     public void initBoard() {
@@ -31,6 +35,7 @@ public class BoardView implements GameEventListener {
         for (int i = 0; i < boardDimension.height; i++) {
             for (int j = 0; j < boardDimension.width; j++) {
                 Cell cell = new Cell(i, j, cellSideLength, model.getSymbolAt(new Point(i, j)));
+                cells.add(cell);
                 addMouseListeners(cell);
                 boardPanel.add(cell);
             }
@@ -47,6 +52,10 @@ public class BoardView implements GameEventListener {
             }
             case DEFEAT -> disableBoardView();
         }
+    }
+
+    public List<Cell> getCells() {
+        return cells;
     }
 
     private int computeCellSideLength(int height) {
