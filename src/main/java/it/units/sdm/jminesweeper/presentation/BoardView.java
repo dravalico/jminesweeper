@@ -3,7 +3,6 @@ package it.units.sdm.jminesweeper.presentation;
 import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.core.GameManager;
 import it.units.sdm.jminesweeper.event.GameEvent;
-import it.units.sdm.jminesweeper.event.GameEventListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class BoardView implements GameEventListener {
+public class BoardView implements View {
     private final Controller controller;
     private final JPanel panel;
     private final GameManager model;
@@ -29,7 +28,8 @@ public class BoardView implements GameEventListener {
         cells = new ArrayList<>();
     }
 
-    public void initBoard() {
+    @Override
+    public void createAndShowGUI() {
         panel.setLayout(new GridLayout(boardDimension.height, boardDimension.width));
         int cellSideLength = computeCellSideLength();
         for (int i = 0; i < boardDimension.height; i++) {

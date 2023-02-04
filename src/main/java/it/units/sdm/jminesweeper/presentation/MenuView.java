@@ -2,7 +2,6 @@ package it.units.sdm.jminesweeper.presentation;
 
 import it.units.sdm.jminesweeper.GameConfiguration;
 import it.units.sdm.jminesweeper.event.GameEvent;
-import it.units.sdm.jminesweeper.event.GameEventListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -14,7 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-public class MenuView implements GameEventListener {
+public class MenuView implements View {
     private final Controller controller;
     private final JPanel panel;
     private JComboBox<GameConfiguration.Difficulty> difficultyComboBox;
@@ -29,7 +28,8 @@ public class MenuView implements GameEventListener {
         this.panel = menuPanel;
     }
 
-    public void initMenu() {
+    @Override
+    public void createAndShowGUI() {
         panel.setLayout(new GridBagLayout());
         panel.setBackground(Color.decode(COLOR));
         difficultyComboBox = new JComboBox<>(GameConfiguration.Difficulty.values());

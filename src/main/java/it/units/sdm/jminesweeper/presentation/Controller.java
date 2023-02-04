@@ -37,8 +37,8 @@ public class Controller {
         SwingUtilities.invokeLater(() -> {
             mainFrame = new JFrame("Minesweeper");
             mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-            createMenuView();
-            createBoardView();
+            initialiseMenuView();
+            initialiseBoardView();
         });
     }
 
@@ -80,14 +80,14 @@ public class Controller {
         newGame();
     }
 
-    private void createMenuView() {
+    private void initialiseMenuView() {
         JPanel menuPanel = new JPanel();
         mainFrame.add(menuPanel, BorderLayout.NORTH);
         menuView = new MenuView(this, menuPanel);
-        menuView.initMenu();
+        menuView.createAndShowGUI();
     }
 
-    private void createBoardView() {
+    private void initialiseBoardView() {
         gameConfiguration = GameConfiguration.fromDifficulty((GameConfiguration.Difficulty) Objects
                 .requireNonNull(menuView.getDifficultyComboBox().getSelectedItem()));
         menuView.getFlagCounterLabel().setText(String.valueOf(gameConfiguration.minesNumber()));
@@ -97,7 +97,7 @@ public class Controller {
         mainFrame.add(boardPanel, BorderLayout.CENTER);
         boardView = new BoardView(this, model, boardPanel, gameConfiguration.dimension());
         model.addListener(boardView, EventType.values());
-        boardView.initBoard();
+        boardView.createAndShowGUI();
         firstMove = true;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         mainFrame.pack();
@@ -114,7 +114,7 @@ public class Controller {
             menuView.getGameOutcomeDialog().dispose();
         }
         menuView.getStopwatchLabel().reset();
-        createBoardView();
+        initialiseBoardView();
     }
 
 }
