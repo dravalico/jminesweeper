@@ -1,8 +1,9 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
-group 'it.jminesweeper'
+group 'it.units.sdm.jminesweeper'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -15,4 +16,8 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+application {
+    mainClass = 'it.units.sdm.jminesweeper.JMinesweeper'
 }
