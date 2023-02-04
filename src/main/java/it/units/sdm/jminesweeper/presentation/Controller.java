@@ -19,6 +19,7 @@ public class Controller {
     private MenuView menuView;
     private BoardView boardView;
     private JFrame mainFrame;
+    private boolean firstMove;
 
     public Controller(MinesPlacer<Map<Point, Tile>, Point> minesPlacer) {
         this.minesPlacer = minesPlacer;
@@ -43,6 +44,10 @@ public class Controller {
     public void onLeftClick(Cell cell) {
         if (cell.getGameSymbol() == GameSymbol.FLAG) {
             return;
+        }
+        if (firstMove) {
+            menuView.getStopwatchLabel().start();
+            firstMove = false;
         }
         model.actionAt(cell.getPosition());
     }
@@ -80,6 +85,7 @@ public class Controller {
         boardView = new BoardView(this, model, boardPanel, gameConfiguration.dimension());
         model.addListener(boardView, EventType.values());
         boardView.initBoard();
+        firstMove = true;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         mainFrame.pack();
         int width = mainFrame.getWidth();
@@ -91,6 +97,7 @@ public class Controller {
 
     private void newGame() {
         mainFrame.remove(((BorderLayout) mainFrame.getContentPane().getLayout()).getLayoutComponent(BorderLayout.CENTER));
+        menuView.getStopwatchLabel().reset();
         createBoardView();
     }
 

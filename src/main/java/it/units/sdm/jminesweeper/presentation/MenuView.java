@@ -4,15 +4,21 @@ import it.units.sdm.jminesweeper.GameConfiguration;
 import it.units.sdm.jminesweeper.event.GameEvent;
 import it.units.sdm.jminesweeper.event.GameEventListener;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
 
 public class MenuView implements GameEventListener {
     private final Controller controller;
     private final JPanel menuPanel;
     private JComboBox<GameConfiguration.Difficulty> difficultyComboBox;
+    private StopwatchLabel stopwatchLabel;
     private static final String COLOR = "#547336";
     private static final String FONT = "Autumn";
 
@@ -27,6 +33,9 @@ public class MenuView implements GameEventListener {
         difficultyComboBox = new JComboBox<>(GameConfiguration.Difficulty.values());
         difficultyComboBox.setSelectedIndex(0);
         difficultyComboBox.addItemListener(e -> controller.onSelectedComboBox());
+
+        stopwatchLabel = new StopwatchLabel();
+        stopwatchLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
         JButton newGameButton = new JButton("New game");
         newGameButton.addMouseListener(new MouseAdapter() {
@@ -43,18 +52,36 @@ public class MenuView implements GameEventListener {
         constraints.anchor = GridBagConstraints.WEST;
         menuPanel.add(difficultyComboBox, constraints);
         constraints.anchor = GridBagConstraints.EAST;
+        constraints.insets = new Insets(15, 0, 15, 10);
+        menuPanel.add(stopwatchLabel, constraints);
+        constraints.anchor = GridBagConstraints.EAST;
         constraints.insets = new Insets(15, 0, 15, 0);
         menuPanel.add(newGameButton, constraints);
 
         setStyle();
+
+        try {
+            BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader()
+                    .getResource("icons" + File.separatorChar + "stopwatch.png")));
+            ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(52 / 2, 52 / 2, Image.SCALE_SMOOTH));
+            stopwatchLabel.setIcon(imageIcon);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            System.exit(1);
+        }
     }
 
     @Override
     public void onGameEvent(GameEvent event) {
+        stopwatchLabel.stop();
     }
 
     public JComboBox<GameConfiguration.Difficulty> getDifficultyComboBox() {
         return difficultyComboBox;
+    }
+
+    public StopwatchLabel getStopwatchLabel() {
+        return stopwatchLabel;
     }
 
     private void setStyle() {
@@ -67,6 +94,11 @@ public class MenuView implements GameEventListener {
                     component.setPreferredSize(new Dimension(150, 32));
                 }
                 component.setFont(new Font(FONT, Font.PLAIN, 16));
+            }
+            if (component instanceof JLabel) {
+                component.setForeground(Color.WHITE);
+                component.setPreferredSize(new Dimension(90, 25));
+                component.setFont(new Font(FONT, Font.PLAIN, 20));
             }
         }
     }
