@@ -13,28 +13,19 @@ import java.awt.event.MouseListener;
 import java.util.Arrays;
 
 public class BoardView implements GameEventListener {
-    private final BoardController boardController;
-    private JPanel boardPanel;
+    private final Controller controller;
+    private final JPanel boardPanel;
     private final GameManager model;
     private final Dimension boardDimension;
 
-    public BoardView(BoardController boardController, GameManager model, Dimension boardDimension) {
-        this.boardController = boardController;
+    public BoardView(Controller controller, GameManager model, JPanel boardPanel, Dimension boardDimension) {
+        this.controller = controller;
         this.model = model;
+        this.boardPanel = boardPanel;
         this.boardDimension = boardDimension;
-        try {
-            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            System.exit(1);
-        }
     }
 
     public void initBoard() {
-        JFrame boardFrame = new JFrame("Minesweeper");
-        boardFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        boardPanel = new JPanel(new GridLayout());
-        boardFrame.add(boardPanel, BorderLayout.CENTER);
         boardPanel.setLayout(new GridLayout(boardDimension.height, boardDimension.width));
         int cellSideLength = computeCellSideLength(boardDimension.height);
         for (int i = 0; i < boardDimension.height; i++) {
@@ -45,10 +36,10 @@ public class BoardView implements GameEventListener {
                     public void mouseReleased(MouseEvent mouseEvent) {
                         int buttonEvent = mouseEvent.getButton();
                         if (buttonEvent == MouseEvent.BUTTON1) {
-                            boardController.onLeftClick(cell);
+                            controller.onLeftClick(cell);
                         }
                         if (buttonEvent == MouseEvent.BUTTON3) {
-                            boardController.onRightClick(cell);
+                            controller.onRightClick(cell);
                         }
                     }
 
@@ -65,13 +56,6 @@ public class BoardView implements GameEventListener {
                 boardPanel.add(cell);
             }
         }
-        boardFrame.pack();
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = boardFrame.getWidth();
-        int height = boardFrame.getHeight();
-        boardFrame.setLocation((screenSize.width / 2) - (width / 2), (screenSize.height / 2) - (height / 2));
-        boardFrame.setResizable(false);
-        boardFrame.setVisible(true);
     }
 
     @Override
@@ -95,13 +79,13 @@ public class BoardView implements GameEventListener {
     private void refreshBoard() {
         Arrays.stream(boardPanel.getComponents())
                 .filter(Cell.class::isInstance)
+                .map(c -> (Cell) c)
+                .filter(c -> model.getSymbolAt(c.getPosition()) != GameSymbol.COVERED)
                 .forEach(c -> {
-                    GameSymbol gameSymbol = model.getSymbolAt(((Cell) c).getPosition());
-                    if (gameSymbol != GameSymbol.COVERED) {
-                        ((Cell) c).setGameSymbol(gameSymbol);
-                        removeAllMouseListener(((Cell) c));
-                    }
-                });
+                            c.setGameSymbol(model.getSymbolAt(c.getPosition()));
+                            removeAllMouseListener(c);
+                        }
+                );
     }
 
     private static void removeAllMouseListener(JButton jButton) {

@@ -1,12 +1,12 @@
 package it.units.sdm.jminesweeper;
 
 import it.units.sdm.jminesweeper.core.generation.GuassianMinesPlacer;
-import it.units.sdm.jminesweeper.presentation.BoardController;
+import it.units.sdm.jminesweeper.presentation.Controller;
 
 public class JMinesweeper {
 
     public static void main(String[] args) {
-        new BoardController(new GuassianMinesPlacer()).startGame();
+        new Controller(new GuassianMinesPlacer()).startGame();
     }
 
 }
