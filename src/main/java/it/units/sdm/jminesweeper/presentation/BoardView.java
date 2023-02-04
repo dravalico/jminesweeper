@@ -16,7 +16,7 @@ import java.util.List;
 
 public class BoardView implements GameEventListener {
     private final Controller controller;
-    private final JPanel boardPanel;
+    private final JPanel panel;
     private final GameManager model;
     private final Dimension boardDimension;
     private final List<Cell> cells;
@@ -24,33 +24,33 @@ public class BoardView implements GameEventListener {
     public BoardView(Controller controller, GameManager model, JPanel boardPanel, Dimension boardDimension) {
         this.controller = controller;
         this.model = model;
-        this.boardPanel = boardPanel;
+        panel = boardPanel;
         this.boardDimension = boardDimension;
         cells = new ArrayList<>();
     }
 
     public void initBoard() {
-        boardPanel.setLayout(new GridLayout(boardDimension.height, boardDimension.width));
-        int cellSideLength = computeCellSideLength(boardDimension.height);
+        panel.setLayout(new GridLayout(boardDimension.height, boardDimension.width));
+        int cellSideLength = computeCellSideLength();
         for (int i = 0; i < boardDimension.height; i++) {
             for (int j = 0; j < boardDimension.width; j++) {
                 Cell cell = new Cell(i, j, cellSideLength, model.getSymbolAt(new Point(i, j)));
                 cells.add(cell);
-                addMouseListeners(cell);
-                boardPanel.add(cell);
+                addMouseInteraction(cell);
+                panel.add(cell);
             }
         }
     }
 
     @Override
     public void onGameEvent(GameEvent event) {
-        refreshBoard();
+        updateView();
         switch (event.getEventType()) {
             case VICTORY -> {
-                clearBoard();
-                disableBoardView();
+                setupWinningView();
+                disableAllCells();
             }
-            case DEFEAT -> disableBoardView();
+            case DEFEAT -> disableAllCells();
         }
     }
 
@@ -58,13 +58,13 @@ public class BoardView implements GameEventListener {
         return cells;
     }
 
-    private int computeCellSideLength(int height) {
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = toolkit.getScreenSize();
-        return (int) (screenSize.height / (height + 8.0));
+    private int computeCellSideLength() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int shortestScreenSide = Math.min(screenSize.height, screenSize.width);
+        return (int) (shortestScreenSide / (boardDimension.height + 8.0));
     }
 
-    private void addMouseListeners(Cell cell) {
+    private void addMouseInteraction(Cell cell) {
         cell.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent mouseEvent) {
@@ -89,34 +89,34 @@ public class BoardView implements GameEventListener {
         });
     }
 
-    private void refreshBoard() {
-        Arrays.stream(boardPanel.getComponents())
+    private void updateView() {
+        Arrays.stream(panel.getComponents())
                 .filter(Cell.class::isInstance)
                 .map(c -> (Cell) c)
                 .filter(c -> model.getSymbolAt(c.getPosition()) != GameSymbol.COVERED)
                 .forEach(c -> {
                             c.setGameSymbol(model.getSymbolAt(c.getPosition()));
-                            removeAllMouseListener(c);
+                            removeAllMouseListeners(c);
                         }
                 );
     }
 
-    private static void removeAllMouseListener(JButton jButton) {
+    private static void removeAllMouseListeners(JButton jButton) {
         for (MouseListener mouseListener : jButton.getMouseListeners()) {
             jButton.removeMouseListener(mouseListener);
         }
     }
 
-    private void clearBoard() {
-        Arrays.stream(boardPanel.getComponents())
+    private void setupWinningView() {
+        Arrays.stream(panel.getComponents())
                 .filter(Cell.class::isInstance)
                 .forEach(c -> ((Cell) c).victoryStyle());
     }
 
-    private void disableBoardView() {
-        Arrays.stream(boardPanel.getComponents())
+    private void disableAllCells() {
+        Arrays.stream(panel.getComponents())
                 .filter(JButton.class::isInstance)
-                .forEach(c -> removeAllMouseListener((JButton) c));
+                .forEach(c -> removeAllMouseListeners((JButton) c));
     }
 
 }
