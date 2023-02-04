@@ -19,6 +19,7 @@ public class BoardView implements View {
     private final BoardManager model;
     private final Dimension boardDimension;
     private final List<Cell> cells;
+    private final SoundsPlayer soundsPlayer;
 
     public BoardView(Controller controller, BoardManager model, JPanel boardPanel, Dimension boardDimension) {
         this.controller = controller;
@@ -26,6 +27,7 @@ public class BoardView implements View {
         panel = boardPanel;
         this.boardDimension = boardDimension;
         cells = new ArrayList<>();
+        soundsPlayer = SoundsPlayer.getInstance();
     }
 
     @Override
@@ -50,7 +52,10 @@ public class BoardView implements View {
                 setupWinningView();
                 disableAllCells();
             }
-            case DEFEAT -> disableAllCells();
+            case DEFEAT -> {
+                soundsPlayer.playDefeat();
+                disableAllCells();
+            }
         }
     }
 
@@ -70,9 +75,16 @@ public class BoardView implements View {
             public void mouseReleased(MouseEvent mouseEvent) {
                 int buttonEvent = mouseEvent.getButton();
                 if (buttonEvent == MouseEvent.BUTTON1) {
+                    if (cell.getGameSymbol() != GameSymbol.FLAG) {
+                        soundsPlayer.playClick();
+                    }
                     controller.onLeftClick(cell);
                 }
                 if (buttonEvent == MouseEvent.BUTTON3) {
+                    switch (cell.getGameSymbol()) {
+                        case COVERED -> soundsPlayer.playPutFlag();
+                        case FLAG -> soundsPlayer.playRemoveFlag();
+                    }
                     controller.onRightClick(cell);
                 }
             }

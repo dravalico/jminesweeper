@@ -22,10 +22,12 @@ public class MenuView implements View {
     private JDialog gameOutcomeDialog;
     private static final String COLOR = "#547336";
     private static final String FONT = "Autumn";
+    private final SoundsPlayer soundsPlayer;
 
     public MenuView(Controller controller, JPanel menuPanel) {
         this.controller = controller;
         this.panel = menuPanel;
+        soundsPlayer = SoundsPlayer.getInstance();
     }
 
     @Override
@@ -43,6 +45,7 @@ public class MenuView implements View {
         newGameButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
+                soundsPlayer.playMenuClick();
                 controller.onNewGameClick();
             }
         });
