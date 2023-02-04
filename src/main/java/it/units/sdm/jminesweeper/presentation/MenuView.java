@@ -30,6 +30,7 @@ public class MenuView implements GameEventListener {
     }
 
     public void initMenu() {
+        menuPanel.setLayout(new GridBagLayout());
         menuPanel.setBackground(Color.decode(COLOR));
 
         difficultyComboBox = new JComboBox<>(GameConfiguration.Difficulty.values());

@@ -62,7 +62,7 @@ public class Cell extends JButton {
 
     public void setGameSymbol(GameSymbol gameSymbol) {
         this.gameSymbol = gameSymbol;
-        setIcon();
+        setSymbolImage();
     }
 
     public Point getPosition() {
@@ -70,15 +70,15 @@ public class Cell extends JButton {
     }
 
     public void setProperBackground() {
-        boolean light = (position.x + position.y) % 2 == 0;
+        boolean isLight = (position.x + position.y) % 2 == 0;
         if (gameSymbol == GameSymbol.COVERED || gameSymbol == GameSymbol.FLAG) {
-            if (light) {
+            if (isLight) {
                 setBackground(Color.decode("#ACCE5E"));
             } else {
                 setBackground(Color.decode("#B4D565"));
             }
         } else {
-            if (light) {
+            if (isLight) {
                 setBackground(Color.decode("#D2B99D"));
             } else {
                 setBackground(Color.decode("#E0C3A3"));
@@ -107,7 +107,7 @@ public class Cell extends JButton {
         }
     }
 
-    private void setIcon() {
+    private void setSymbolImage() {
         setProperBackground();
         if (gameSymbol == GameSymbol.COVERED || gameSymbol == GameSymbol.EMPTY) {
             setIcon(null);
