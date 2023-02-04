@@ -31,28 +31,7 @@ public class BoardView implements GameEventListener {
         for (int i = 0; i < boardDimension.height; i++) {
             for (int j = 0; j < boardDimension.width; j++) {
                 Cell cell = new Cell(i, j, cellSideLength, model.getSymbolAt(new Point(i, j)));
-                cell.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseReleased(MouseEvent mouseEvent) {
-                        int buttonEvent = mouseEvent.getButton();
-                        if (buttonEvent == MouseEvent.BUTTON1) {
-                            controller.onLeftClick(cell);
-                        }
-                        if (buttonEvent == MouseEvent.BUTTON3) {
-                            controller.onRightClick(cell);
-                        }
-                    }
-
-                    @Override
-                    public void mouseEntered(MouseEvent e) {
-                        cell.setBackground(Color.decode("#dcf5b0"));
-                    }
-
-                    @Override
-                    public void mouseExited(MouseEvent e) {
-                        cell.setProperBackground();
-                    }
-                });
+                addMouseListeners(cell);
                 boardPanel.add(cell);
             }
         }
@@ -74,6 +53,31 @@ public class BoardView implements GameEventListener {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
         return (int) (screenSize.height / (height + 8.0));
+    }
+
+    private void addMouseListeners(Cell cell) {
+        cell.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent mouseEvent) {
+                int buttonEvent = mouseEvent.getButton();
+                if (buttonEvent == MouseEvent.BUTTON1) {
+                    controller.onLeftClick(cell);
+                }
+                if (buttonEvent == MouseEvent.BUTTON3) {
+                    controller.onRightClick(cell);
+                }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                cell.setBackground(Color.decode("#dcf5b0"));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                cell.setProperBackground();
+            }
+        });
     }
 
     private void refreshBoard() {

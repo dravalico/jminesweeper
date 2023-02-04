@@ -6,14 +6,18 @@ import it.units.sdm.jminesweeper.event.GameEventListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class MenuView implements GameEventListener {
+    private final Controller controller;
     private final JPanel menuPanel;
     private JComboBox<GameConfiguration.Difficulty> difficultyComboBox;
     private static final String COLOR = "#547336";
     private static final String FONT = "Autumn";
 
-    public MenuView(JPanel menuPanel) {
+    public MenuView(Controller controller, JPanel menuPanel) {
+        this.controller = controller;
         this.menuPanel = menuPanel;
     }
 
@@ -22,8 +26,15 @@ public class MenuView implements GameEventListener {
 
         difficultyComboBox = new JComboBox<>(GameConfiguration.Difficulty.values());
         difficultyComboBox.setSelectedIndex(0);
+        difficultyComboBox.addItemListener(e -> controller.onSelectedComboBox());
 
         JButton newGameButton = new JButton("New game");
+        newGameButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                controller.onNewGameClick();
+            }
+        });
 
         GridBagConstraints constraints = new GridBagConstraints();
 

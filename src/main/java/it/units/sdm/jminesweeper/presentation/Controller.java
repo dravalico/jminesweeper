@@ -35,8 +35,8 @@ public class Controller {
     public void startGame() {
         SwingUtilities.invokeLater(() -> {
             mainFrame = new JFrame("Minesweeper");
-            createMenu();
-            createBoard();
+            createMenuView();
+            createBoardView();
         });
     }
 
@@ -54,15 +54,23 @@ public class Controller {
         }
     }
 
-    private void createMenu() {
+    public void onSelectedComboBox() {
+        newGame();
+    }
+
+    public void onNewGameClick() {
+        newGame();
+    }
+
+    private void createMenuView() {
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         JPanel menuPanel = new JPanel(new GridBagLayout());
         mainFrame.add(menuPanel, BorderLayout.NORTH);
-        menuView = new MenuView(menuPanel);
+        menuView = new MenuView(this, menuPanel);
         menuView.initMenu();
     }
 
-    private void createBoard() {
+    private void createBoardView() {
         gameConfiguration = GameConfiguration.fromDifficulty((GameConfiguration.Difficulty) Objects
                 .requireNonNull(menuView.getDifficultyComboBox().getSelectedItem()));
         model = new GameManager(gameConfiguration, minesPlacer);
@@ -79,6 +87,11 @@ public class Controller {
         mainFrame.setLocation((screenSize.width / 2) - (width / 2), (screenSize.height / 2) - (height / 2));
         mainFrame.setResizable(false);
         mainFrame.setVisible(true);
+    }
+
+    private void newGame() {
+        mainFrame.remove(((BorderLayout) mainFrame.getContentPane().getLayout()).getLayoutComponent(BorderLayout.CENTER));
+        createBoardView();
     }
 
 }
