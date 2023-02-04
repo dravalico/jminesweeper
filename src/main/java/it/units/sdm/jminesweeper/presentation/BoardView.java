@@ -1,7 +1,7 @@
 package it.units.sdm.jminesweeper.presentation;
 
 import it.units.sdm.jminesweeper.GameSymbol;
-import it.units.sdm.jminesweeper.core.GameManager;
+import it.units.sdm.jminesweeper.core.BoardManager;
 import it.units.sdm.jminesweeper.event.GameEvent;
 
 import javax.swing.*;
@@ -16,11 +16,11 @@ import java.util.List;
 public class BoardView implements View {
     private final Controller controller;
     private final JPanel panel;
-    private final GameManager model;
+    private final BoardManager model;
     private final Dimension boardDimension;
     private final List<Cell> cells;
 
-    public BoardView(Controller controller, GameManager model, JPanel boardPanel, Dimension boardDimension) {
+    public BoardView(Controller controller, BoardManager model, JPanel boardPanel, Dimension boardDimension) {
         this.controller = controller;
         this.model = model;
         panel = boardPanel;

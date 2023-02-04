@@ -2,7 +2,7 @@ package it.units.sdm.jminesweeper.test.logic.game;
 
 import it.units.sdm.jminesweeper.GameConfiguration;
 import it.units.sdm.jminesweeper.GameSymbol;
-import it.units.sdm.jminesweeper.core.GameManager;
+import it.units.sdm.jminesweeper.core.BoardManager;
 import it.units.sdm.jminesweeper.core.Tile;
 import it.units.sdm.jminesweeper.core.generation.GuassianMinesPlacer;
 import it.units.sdm.jminesweeper.core.generation.MinesPlacer;
@@ -34,19 +34,19 @@ class BoardActionTest {
     private static final String ROOT_FOLDER_NAME_FOR_BOARDS = "board_actions" + File.separatorChar;
     private static final String FILENAME_FOR_EXPECTED = File.separatorChar + "expected.csv";
     private static final String FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION = File.separatorChar + "actual_before_computation.csv";
-    private GameManager gameManager;
+    private BoardManager gameManager;
 
     @ParameterizedTest
     @CsvSource({"0,-1", "-1,0", "0,0", "1, 1", "2, 3", "100, -100", "20,4", "-5,2", "-4,13"})
     void givenAPointOutOfTheBoardThrowAnException(int xShift, int yShift) {
         Point point = new Point(HEIGHT + xShift, WIDTH + yShift);
-        gameManager = new GameManager(new GameConfiguration(BOARD_DIMENSION, 0), null);
+        gameManager = new BoardManager(new GameConfiguration(BOARD_DIMENSION, 0), null);
         assertThrows(IllegalArgumentException.class, () -> gameManager.actionAt(point));
     }
 
     @Test
     void givenFreshGameReturnBoardWithOnlyCoveredSymbol() {
-        gameManager = new GameManager(new GameConfiguration(BOARD_DIMENSION, 0), null);
+        gameManager = new BoardManager(new GameConfiguration(BOARD_DIMENSION, 0), null);
         Map<Point, GameSymbol> expectedBoard = new LinkedHashMap<>();
         for (int i = 0; i < HEIGHT; i++) {
             for (int j = 0; j < WIDTH; j++) {
@@ -59,7 +59,7 @@ class BoardActionTest {
     @ParameterizedTest
     @MethodSource("generatePointsRepresentingActionAt")
     void givenPointUncoverTile(Point pointToUncover) {
-        gameManager = new GameManager(new GameConfiguration(BOARD_DIMENSION, 0), new GuassianMinesPlacer());
+        gameManager = new BoardManager(new GameConfiguration(BOARD_DIMENSION, 0), new GuassianMinesPlacer());
         gameManager.actionAt(pointToUncover);
         assertNotEquals(GameSymbol.COVERED, gameManager.getBoardStatus().get(pointToUncover));
     }
@@ -73,7 +73,7 @@ class BoardActionTest {
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
-        gameManager = new GameManager(BEGINNER_CONFIGURATION, minesPlacer);
+        gameManager = new BoardManager(BEGINNER_CONFIGURATION, minesPlacer);
 
         gameManager.actionAt(new Point(3, 3));
 
@@ -97,7 +97,7 @@ class BoardActionTest {
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
-        gameManager = new GameManager(BEGINNER_CONFIGURATION, minesPlacer);
+        gameManager = new BoardManager(BEGINNER_CONFIGURATION, minesPlacer);
         TestListener testListener = new TestListener();
         gameManager.addListener(testListener, EventType.PROGRESS);
 
@@ -116,7 +116,7 @@ class BoardActionTest {
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
-        gameManager = new GameManager(BEGINNER_CONFIGURATION, minesPlacer);
+        gameManager = new BoardManager(BEGINNER_CONFIGURATION, minesPlacer);
 
         gameManager.actionAt(new Point(3, 3));
         gameManager.actionAt(new Point(x, y));
@@ -134,7 +134,7 @@ class BoardActionTest {
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
-        gameManager = new GameManager(BEGINNER_CONFIGURATION, minesPlacer);
+        gameManager = new BoardManager(BEGINNER_CONFIGURATION, minesPlacer);
         TestListener testListener = new TestListener();
         gameManager.addListener(testListener, EventType.DEFEAT);
 
@@ -152,7 +152,7 @@ class BoardActionTest {
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
-        gameManager = new GameManager(new GameConfiguration(boardDimension, 2), minesPlacer);
+        gameManager = new BoardManager(new GameConfiguration(boardDimension, 2), minesPlacer);
         TestListener testListener = new TestListener();
         gameManager.addListener(testListener, EventType.VICTORY);
 
@@ -172,7 +172,7 @@ class BoardActionTest {
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
-        gameManager = new GameManager(new GameConfiguration(boardDimension, 2), minesPlacer);
+        gameManager = new BoardManager(new GameConfiguration(boardDimension, 2), minesPlacer);
         TestListener testListener = new TestListener();
         gameManager.addListener(testListener, EventType.VICTORY);
 
@@ -195,7 +195,7 @@ class BoardActionTest {
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
-        gameManager = new GameManager(BEGINNER_CONFIGURATION, minesPlacer);
+        gameManager = new BoardManager(BEGINNER_CONFIGURATION, minesPlacer);
         TestListener testListener = new TestListener();
         gameManager.addListener(testListener, EventType.values());
 
@@ -216,7 +216,7 @@ class BoardActionTest {
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
-        gameManager = new GameManager(BEGINNER_CONFIGURATION, minesPlacer);
+        gameManager = new BoardManager(BEGINNER_CONFIGURATION, minesPlacer);
 
         gameManager.actionAt(new Point(3, 3));
 
@@ -228,7 +228,7 @@ class BoardActionTest {
     @CsvSource({"0,-1", "-1,0", "0,0", "1, 1", "2, 3", "100, -100", "20,4", "-5,2", "-4,13"})
     void whenRequestedPointOutsideBoardThrowAnException(int xShift, int yShift) {
         Point point = new Point(HEIGHT + xShift, WIDTH + yShift);
-        gameManager = new GameManager(new GameConfiguration(BOARD_DIMENSION, 0), null);
+        gameManager = new BoardManager(new GameConfiguration(BOARD_DIMENSION, 0), null);
         assertThrows(IllegalArgumentException.class, () -> gameManager.getSymbolAt(point));
     }
 
@@ -240,7 +240,7 @@ class BoardActionTest {
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
-        gameManager = new GameManager(BEGINNER_CONFIGURATION, minesPlacer);
+        gameManager = new BoardManager(BEGINNER_CONFIGURATION, minesPlacer);
 
         gameManager.actionAt(new Point(3, 3));
         gameManager.actionAt(new Point(x, y));

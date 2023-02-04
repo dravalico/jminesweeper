@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class GameManager extends AbstractBoard<Map<Point, Tile>> implements ActionHandler<Point> {
+public class BoardManager extends AbstractBoard<Map<Point, Tile>> implements ActionHandler<Point> {
     private final GameConfiguration gameConfiguration;
     private final BoardInitializer boardInitializer;
     private int uncoveredTiles;
     private final Map<EventType, List<GameEventListener>> listenersMap;
     private boolean isGameFinished;
 
-    public GameManager(GameConfiguration gameConfiguration, MinesPlacer<Map<Point, Tile>, Point> minesPlacer) {
+    public BoardManager(GameConfiguration gameConfiguration, MinesPlacer<Map<Point, Tile>, Point> minesPlacer) {
         super(new LinkedHashMap<>());
         this.gameConfiguration = gameConfiguration;
         boardInitializer = new BoardInitializer(gameConfiguration, minesPlacer);

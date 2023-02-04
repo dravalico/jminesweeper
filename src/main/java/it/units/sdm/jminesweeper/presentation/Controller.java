@@ -2,7 +2,7 @@ package it.units.sdm.jminesweeper.presentation;
 
 import it.units.sdm.jminesweeper.GameConfiguration;
 import it.units.sdm.jminesweeper.GameSymbol;
-import it.units.sdm.jminesweeper.core.GameManager;
+import it.units.sdm.jminesweeper.core.BoardManager;
 import it.units.sdm.jminesweeper.core.Tile;
 import it.units.sdm.jminesweeper.core.generation.MinesPlacer;
 import it.units.sdm.jminesweeper.event.EventType;
@@ -15,7 +15,7 @@ import java.util.Objects;
 public class Controller {
     private GameConfiguration gameConfiguration;
     private final MinesPlacer<Map<Point, Tile>, Point> minesPlacer;
-    private GameManager model;
+    private BoardManager model;
     private MenuView menuView;
     private BoardView boardView;
     private JFrame mainFrame;
@@ -89,7 +89,7 @@ public class Controller {
         gameConfiguration = GameConfiguration.fromDifficulty((GameConfiguration.Difficulty) Objects
                 .requireNonNull(menuView.getDifficultyComboBox().getSelectedItem()));
         menuView.getFlagCounterLabel().setText(String.valueOf(gameConfiguration.minesNumber()));
-        model = new GameManager(gameConfiguration, minesPlacer);
+        model = new BoardManager(gameConfiguration, minesPlacer);
         model.addListener(menuView, EventType.VICTORY, EventType.DEFEAT);
         JPanel boardPanel = new JPanel();
         mainFrame.add(boardPanel, BorderLayout.CENTER);
