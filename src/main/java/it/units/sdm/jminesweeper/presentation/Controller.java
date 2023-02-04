@@ -110,6 +110,9 @@ public class Controller {
 
     private void newGame() {
         mainFrame.remove(((BorderLayout) mainFrame.getContentPane().getLayout()).getLayoutComponent(BorderLayout.CENTER));
+        if (menuView.getGameOutcomeDialog() != null) {
+            menuView.getGameOutcomeDialog().dispose();
+        }
         menuView.getStopwatchLabel().reset();
         createBoardView();
     }

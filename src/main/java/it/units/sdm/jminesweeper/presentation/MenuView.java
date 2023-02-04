@@ -20,6 +20,7 @@ public class MenuView implements GameEventListener {
     private JComboBox<GameConfiguration.Difficulty> difficultyComboBox;
     private StopwatchLabel stopwatchLabel;
     private JLabel flagCounterLabel;
+    private JDialog gameOutcomeDialog;
     private static final String COLOR = "#547336";
     private static final String FONT = "Autumn";
 
@@ -83,6 +84,16 @@ public class MenuView implements GameEventListener {
     @Override
     public void onGameEvent(GameEvent event) {
         stopwatchLabel.stop();
+        String gameOutcome = "";
+        JLabel elapsedTimeLabel = new JLabel("--:--");
+        switch (event.getEventType()) {
+            case VICTORY -> {
+                gameOutcome = "You won!";
+                elapsedTimeLabel.setText(stopwatchLabel.getText());
+            }
+            case DEFEAT -> gameOutcome = "You lost!";
+        }
+        showGameOutcomeWindow(elapsedTimeLabel, gameOutcome);
     }
 
     public JComboBox<GameConfiguration.Difficulty> getDifficultyComboBox() {
@@ -95,6 +106,10 @@ public class MenuView implements GameEventListener {
 
     public JLabel getFlagCounterLabel() {
         return flagCounterLabel;
+    }
+
+    public JDialog getGameOutcomeDialog() {
+        return gameOutcomeDialog;
     }
 
     private void setStyle() {
@@ -114,6 +129,21 @@ public class MenuView implements GameEventListener {
                 component.setFont(new Font(FONT, Font.PLAIN, 20));
             }
         }
+    }
+
+    private void showGameOutcomeWindow(JLabel elapsedTimeLabel, String gameOutcome) {
+        UIManager.put("OptionPane.background", Color.decode(COLOR));
+        UIManager.put("Panel.background", Color.decode(COLOR));
+        elapsedTimeLabel.setFont(new Font(FONT, Font.BOLD, 20));
+        elapsedTimeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        elapsedTimeLabel.setForeground(Color.WHITE);
+        JOptionPane jOptionPane = new JOptionPane(elapsedTimeLabel, JOptionPane.PLAIN_MESSAGE,
+                JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+        jOptionPane.setOpaque(true);
+        jOptionPane.setBackground(Color.decode(COLOR));
+        gameOutcomeDialog = jOptionPane.createDialog(gameOutcome);
+        gameOutcomeDialog.setModal(false);
+        gameOutcomeDialog.setVisible(true);
     }
 
 }
