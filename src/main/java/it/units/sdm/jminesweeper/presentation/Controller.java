@@ -23,8 +23,6 @@ public class Controller {
 
     public Controller(MinesPlacer<Map<Point, Tile>, Point> minesPlacer) {
         this.minesPlacer = minesPlacer;
-        gameConfiguration = GameConfiguration.fromDifficulty(GameConfiguration.Difficulty.BEGINNER);
-        model = new GameManager(gameConfiguration, minesPlacer);
     }
 
     public void startGame() {
