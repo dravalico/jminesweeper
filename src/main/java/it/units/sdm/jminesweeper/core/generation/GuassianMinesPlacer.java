@@ -69,7 +69,12 @@ public class GuassianMinesPlacer implements MinesPlacer<Map<Point, Tile>, Point>
         Optional<Point> furthestPoint = mapBoard.keySet()
                 .stream()
                 .max(Comparator.comparingDouble(p -> p.distance(new Point(0, 0))));
-        return new Dimension(furthestPoint.get().x + 1, furthestPoint.get().y + 1);
+        if (furthestPoint.isPresent()) {
+            return new Dimension(furthestPoint.get().x + 1, furthestPoint.get().y + 1);
+        }
+        System.err.println("Exception in board dimension");
+        System.exit(1);
+        return null;
     }
 
     private static Point generateRandomPointWithin(Dimension dimensionLimit) {
