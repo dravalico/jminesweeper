@@ -19,7 +19,7 @@ public class Cell extends JButton {
     private static final String BASE_FILEPATH_FOR_ICONS = "icons";
     private static BufferedImage mineImage;
     private static BufferedImage flagImage;
-    private final Font font;
+    private final Font fontForNumbers;
 
     static {
         GAME_NUMBERS_STYLE = new EnumMap<>(GameSymbol.class);
@@ -56,7 +56,7 @@ public class Cell extends JButton {
         setBorder(BorderFactory.createEmptyBorder());
         setGameSymbol(gameSymbol);
         setFocusable(false);
-        font = new Font("Autumn", Font.BOLD, (int) (sideDimension / 2.15));
+        fontForNumbers = new Font("Autumn", Font.BOLD, (int) (sideDimension / 2.15));
     }
 
     public GameSymbol getGameSymbol() {
@@ -126,7 +126,7 @@ public class Cell extends JButton {
         setIcon(null);
         setText(GAME_NUMBERS_STYLE.get(gameSymbol).first());
         setForeground(GAME_NUMBERS_STYLE.get(gameSymbol).second());
-        setFont(font);
+        setFont(fontForNumbers);
     }
 
     private void reset() {
