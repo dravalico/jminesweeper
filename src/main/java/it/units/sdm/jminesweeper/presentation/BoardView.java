@@ -92,7 +92,7 @@ public class BoardView implements View {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                cell.setBackground(Color.decode("#dcf5b0"));
+                cell.setBackground(Color.decode(GameStyle.CELL_HOVER_COLOR.getValue()));
             }
 
             @Override

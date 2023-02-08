@@ -28,14 +28,14 @@ public class Cell extends JButton {
                         s != GameSymbol.EMPTY && s != GameSymbol.FLAG)
                 .forEach(s -> {
                     switch (s) {
-                        case ONE -> GAME_NUMBERS_STYLE.put(s, new Pair<>("1", new Color(41, 103, 136)));
-                        case TWO -> GAME_NUMBERS_STYLE.put(s, new Pair<>("2", new Color(109, 185, 74)));
-                        case THREE -> GAME_NUMBERS_STYLE.put(s, new Pair<>("3", new Color(235, 63, 37)));
-                        case FOUR -> GAME_NUMBERS_STYLE.put(s, new Pair<>("4", new Color(127, 29, 134)));
-                        case FIVE -> GAME_NUMBERS_STYLE.put(s, new Pair<>("5", new Color(212, 142, 30)));
-                        case SIX -> GAME_NUMBERS_STYLE.put(s, new Pair<>("6", new Color(74, 49, 77)));
-                        case SEVEN -> GAME_NUMBERS_STYLE.put(s, new Pair<>("7", new Color(123, 249, 250)));
-                        case EIGHT -> GAME_NUMBERS_STYLE.put(s, new Pair<>("8", new Color(191, 251, 91)));
+                        case ONE -> GAME_NUMBERS_STYLE.put(s, new Pair<>("1", Color.decode(GameStyle.SYMBOL_ONE_COLOR.getValue())));
+                        case TWO -> GAME_NUMBERS_STYLE.put(s, new Pair<>("2", Color.decode(GameStyle.SYMBOL_TWO_COLOR.getValue())));
+                        case THREE -> GAME_NUMBERS_STYLE.put(s, new Pair<>("3", Color.decode(GameStyle.SYMBOL_THREE_COLOR.getValue())));
+                        case FOUR -> GAME_NUMBERS_STYLE.put(s, new Pair<>("4", Color.decode(GameStyle.SYMBOL_FOUR_COLOR.getValue())));
+                        case FIVE -> GAME_NUMBERS_STYLE.put(s, new Pair<>("5", Color.decode(GameStyle.SYMBOL_FIVE_COLOR.getValue())));
+                        case SIX -> GAME_NUMBERS_STYLE.put(s, new Pair<>("6", Color.decode(GameStyle.SYMBOL_SIX_COLOR.getValue())));
+                        case SEVEN -> GAME_NUMBERS_STYLE.put(s, new Pair<>("7", Color.decode(GameStyle.SYMBOL_SEVEN_COLOR.getValue())));
+                        case EIGHT -> GAME_NUMBERS_STYLE.put(s, new Pair<>("8", Color.decode(GameStyle.SYMBOL_EIGHT_COLOR.getValue())));
                     }
                 });
         try {
@@ -56,7 +56,7 @@ public class Cell extends JButton {
         setBorder(BorderFactory.createEmptyBorder());
         setGameSymbol(gameSymbol);
         setFocusable(false);
-        fontForNumbers = new Font("Autumn", Font.BOLD, (int) (sideDimension / 2.15));
+        fontForNumbers = new Font(GameStyle.FONT.getValue(), Font.BOLD, (int) (sideDimension / 2.15));
     }
 
     public GameSymbol getGameSymbol() {
@@ -76,15 +76,15 @@ public class Cell extends JButton {
         boolean isLight = (position.x + position.y) % 2 == 0;
         if (gameSymbol == GameSymbol.COVERED || gameSymbol == GameSymbol.FLAG) {
             if (isLight) {
-                setBackground(Color.decode("#ACCE5E"));
+                setBackground(Color.decode(GameStyle.COVERED_CELL_LIGHT_BACKGROUND_COLOR.getValue()));
             } else {
-                setBackground(Color.decode("#B4D565"));
+                setBackground(Color.decode(GameStyle.COVERED_CELL_DARK_BACKGROUND_COLOR.getValue()));
             }
         } else {
             if (isLight) {
-                setBackground(Color.decode("#D2B99D"));
+                setBackground(Color.decode(GameStyle.UNCOVERED_CELL_LIGHT_BACKGROUND_COLOR.getValue()));
             } else {
-                setBackground(Color.decode("#E0C3A3"));
+                setBackground(Color.decode(GameStyle.UNCOVERED_CELL_DARK_BACKGROUND_COLOR.getValue()));
             }
         }
     }
@@ -106,7 +106,7 @@ public class Cell extends JButton {
             }
         } else {
             reset();
-            setBackground(Color.decode("#69BFF7"));
+            setBackground(Color.decode(GameStyle.VICTORY_FREE_CELL_BACKGROUND.getValue()));
         }
     }
 
