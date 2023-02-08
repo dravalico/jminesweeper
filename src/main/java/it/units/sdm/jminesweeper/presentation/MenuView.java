@@ -42,14 +42,25 @@ public class MenuView implements View {
         flagCounterLabel = new JLabel();
         flagCounterLabel.setHorizontalAlignment(SwingConstants.LEFT);
         JButton newGameButton = new JButton("New game");
+        newGameButton.setBorder(BorderFactory.createEmptyBorder());
         newGameButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 soundsPlayer.playMenuClick();
                 controller.onNewGameClick();
             }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                newGameButton.setBackground(Color.decode("#dfdfdf"));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                newGameButton.setBackground(Color.WHITE);
+            }
         });
-        GridBagConstraints constraints = new GridBagConstraints();
+        GridBagConstraints constraints = new GridBagConstraints(); // TODO extract method for constraints
         constraints.insets = new Insets(15, 0, 15, 0);
         constraints.weightx = 1.0;
         constraints.anchor = GridBagConstraints.WEST;
@@ -114,6 +125,7 @@ public class MenuView implements View {
         for (Component component : panel.getComponents()) {
             if (component instanceof JButton || component instanceof JComboBox<?>) {
                 component.setBackground(Color.WHITE);
+                component.setFocusable(false);
                 if (component instanceof JButton) {
                     component.setPreferredSize(new Dimension(115, 32));
                 } else {
@@ -126,7 +138,7 @@ public class MenuView implements View {
                 component.setPreferredSize(new Dimension(90, 25));
                 component.setFont(new Font(FONT, Font.PLAIN, 20));
             }
-        }
+        }// TODO stream
     }
 
     private void showGameOutcomeWindow(JLabel elapsedTimeLabel, String gameOutcome) {

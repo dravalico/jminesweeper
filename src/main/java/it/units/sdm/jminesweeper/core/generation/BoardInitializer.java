@@ -37,7 +37,7 @@ public class BoardInitializer {
                         .filter(e -> e.getKey().distance(k) <= Math.sqrt(2) && e.getValue().isMine())
                         .count()));
             }
-        });
+        }); // TODO improve stream
     }
 
 }
