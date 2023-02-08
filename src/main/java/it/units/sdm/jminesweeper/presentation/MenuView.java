@@ -10,7 +10,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class MenuView implements View {
@@ -19,8 +19,9 @@ public class MenuView implements View {
     private JComboBox<GameConfiguration.Difficulty> difficultyComboBox;
     private StopwatchLabel stopwatchLabel;
     private JLabel flagCounterLabel;
+    private JButton newGameButton;
     private JDialog gameOutcomeDialog;
-    private static final String COLOR = "#547336";
+    private static final String PANEL_BACKGROUND_COLOR = "#547336";
     private static final String FONT = "Autumn";
     private final SoundsPlayer soundsPlayer;
 
@@ -33,7 +34,7 @@ public class MenuView implements View {
     @Override
     public void createAndShowGUI() {
         panel.setLayout(new GridBagLayout());
-        panel.setBackground(Color.decode(COLOR));
+        panel.setBackground(Color.decode(PANEL_BACKGROUND_COLOR));
         difficultyComboBox = new JComboBox<>(GameConfiguration.Difficulty.values());
         difficultyComboBox.setSelectedIndex(0);
         difficultyComboBox.addItemListener(e -> controller.onSelectedComboBox());
@@ -41,7 +42,7 @@ public class MenuView implements View {
         stopwatchLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         flagCounterLabel = new JLabel();
         flagCounterLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        JButton newGameButton = new JButton("New game");
+        newGameButton = new JButton("New game");
         newGameButton.setBorder(BorderFactory.createEmptyBorder());
         newGameButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -60,34 +61,9 @@ public class MenuView implements View {
                 newGameButton.setBackground(Color.WHITE);
             }
         });
-        GridBagConstraints constraints = new GridBagConstraints(); // TODO extract method for constraints
-        constraints.insets = new Insets(15, 0, 15, 0);
-        constraints.weightx = 1.0;
-        constraints.anchor = GridBagConstraints.WEST;
-        panel.add(difficultyComboBox, constraints);
-        constraints.anchor = GridBagConstraints.EAST;
-        constraints.insets = new Insets(15, 0, 15, 10);
-        panel.add(stopwatchLabel, constraints);
-        constraints.anchor = GridBagConstraints.WEST;
-        constraints.insets = new Insets(15, 10, 15, 0);
-        panel.add(flagCounterLabel, constraints);
-        constraints.anchor = GridBagConstraints.EAST;
-        constraints.insets = new Insets(15, 0, 15, 0);
-        panel.add(newGameButton, constraints);
+        addConstraintsAndAddComponentToPanel();
         setComponentsStyle();
-        try {
-            BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader()
-                    .getResource("icons" + File.separatorChar + "flag.png")));
-            ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(52 / 2, 52 / 2, Image.SCALE_SMOOTH));
-            flagCounterLabel.setIcon(imageIcon);
-            image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader()
-                    .getResource("icons" + File.separatorChar + "stopwatch.png")));
-            imageIcon = new ImageIcon(image.getScaledInstance(52 / 2, 52 / 2, Image.SCALE_SMOOTH));
-            stopwatchLabel.setIcon(imageIcon);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            System.exit(1);
-        }
+        addIconsToStopwatchAndFlagCounter();
     }
 
     @Override
@@ -121,36 +97,67 @@ public class MenuView implements View {
         return gameOutcomeDialog;
     }
 
+    private void addConstraintsAndAddComponentToPanel() {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.insets = new Insets(15, 0, 15, 0);
+        constraints.weightx = 1.0;
+        constraints.anchor = GridBagConstraints.WEST;
+        panel.add(difficultyComboBox, constraints);
+        constraints.anchor = GridBagConstraints.EAST;
+        constraints.insets = new Insets(15, 0, 15, 10);
+        panel.add(stopwatchLabel, constraints);
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.insets = new Insets(15, 10, 15, 0);
+        panel.add(flagCounterLabel, constraints);
+        constraints.anchor = GridBagConstraints.EAST;
+        constraints.insets = new Insets(15, 0, 15, 0);
+        panel.add(newGameButton, constraints);
+    }
+
     private void setComponentsStyle() {
-        for (Component component : panel.getComponents()) {
-            if (component instanceof JButton || component instanceof JComboBox<?>) {
-                component.setBackground(Color.WHITE);
-                component.setFocusable(false);
-                if (component instanceof JButton) {
-                    component.setPreferredSize(new Dimension(115, 32));
-                } else {
-                    component.setPreferredSize(new Dimension(150, 32));
-                }
-                component.setFont(new Font(FONT, Font.PLAIN, 16));
-            }
-            if (component instanceof JLabel) {
-                component.setForeground(Color.WHITE);
-                component.setPreferredSize(new Dimension(90, 25));
-                component.setFont(new Font(FONT, Font.PLAIN, 20));
-            }
-        }// TODO stream
+        newGameButton.setPreferredSize(new Dimension(115, 32));
+        difficultyComboBox.setPreferredSize(new Dimension(150, 32));
+        Arrays.stream(panel.getComponents())
+                .filter(c -> c instanceof JButton || c instanceof JComboBox<?>)
+                .forEach(c -> {
+                    c.setFont(new Font(FONT, Font.PLAIN, 16));
+                    c.setBackground(Color.WHITE);
+                    c.setFocusable(false);
+                });
+        Arrays.stream(panel.getComponents())
+                .filter(JLabel.class::isInstance)
+                .forEach(c -> {
+                    c.setForeground(Color.WHITE);
+                    c.setPreferredSize(new Dimension(90, 25));
+                    c.setFont(new Font(FONT, Font.PLAIN, 20));
+                });
+    }
+
+    private void addIconsToStopwatchAndFlagCounter() {
+        try {
+            BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader()
+                    .getResource("icons" + File.separatorChar + "flag.png")));
+            ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(52 / 2, 52 / 2, Image.SCALE_SMOOTH));
+            flagCounterLabel.setIcon(imageIcon);
+            image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader()
+                    .getResource("icons" + File.separatorChar + "stopwatch.png")));
+            imageIcon = new ImageIcon(image.getScaledInstance(52 / 2, 52 / 2, Image.SCALE_SMOOTH));
+            stopwatchLabel.setIcon(imageIcon);
+        } catch (Exception e) {
+            System.out.println("Menu icons not loaded");
+        }
     }
 
     private void showGameOutcomeWindow(JLabel elapsedTimeLabel, String gameOutcome) {
-        UIManager.put("OptionPane.background", Color.decode(COLOR));
-        UIManager.put("Panel.background", Color.decode(COLOR));
+        UIManager.put("OptionPane.background", Color.decode(PANEL_BACKGROUND_COLOR));
+        UIManager.put("Panel.background", Color.decode(PANEL_BACKGROUND_COLOR));
         elapsedTimeLabel.setFont(new Font(FONT, Font.BOLD, 20));
         elapsedTimeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         elapsedTimeLabel.setForeground(Color.WHITE);
         JOptionPane jOptionPane = new JOptionPane(elapsedTimeLabel, JOptionPane.PLAIN_MESSAGE,
                 JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
         jOptionPane.setOpaque(true);
-        jOptionPane.setBackground(Color.decode(COLOR));
+        jOptionPane.setBackground(Color.decode(PANEL_BACKGROUND_COLOR));
         gameOutcomeDialog = jOptionPane.createDialog(gameOutcome);
         gameOutcomeDialog.setModal(false);
         gameOutcomeDialog.setVisible(true);
