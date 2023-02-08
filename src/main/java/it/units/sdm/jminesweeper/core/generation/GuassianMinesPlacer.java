@@ -1,6 +1,7 @@
 package it.units.sdm.jminesweeper.core.generation;
 
 import it.units.sdm.jminesweeper.GameSymbol;
+import it.units.sdm.jminesweeper.Pair;
 import it.units.sdm.jminesweeper.core.Tile;
 
 import java.awt.*;
@@ -27,9 +28,6 @@ public class GuassianMinesPlacer implements MinesPlacer<Map<Point, Tile>, Point>
                 return HORIZONTAL;
             }
         }
-    }
-
-    private record Pair<F, S>(F first, S second) {
     }
 
     @Override
@@ -59,8 +57,8 @@ public class GuassianMinesPlacer implements MinesPlacer<Map<Point, Tile>, Point>
         while (mapBoard.get(minePosition).isMine() || isInNeighborhood(minePosition, firstClickPosition)) {
             standardDeviation = standardDeviation * 2;
             Pair<Integer, Integer> shifts = computeRandomShifts(standardDeviation, dimension);
-            minePosition.x = shiftCoordinateFromStartingPoint(shifts.first, startingPoint.x, dimension.width);
-            minePosition.y = shiftCoordinateFromStartingPoint(shifts.second, startingPoint.y, dimension.height);
+            minePosition.x = shiftCoordinateFromStartingPoint(shifts.first(), startingPoint.x, dimension.width);
+            minePosition.y = shiftCoordinateFromStartingPoint(shifts.second(), startingPoint.y, dimension.height);
         }
         return minePosition;
     }

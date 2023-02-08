@@ -1,6 +1,7 @@
 package it.units.sdm.jminesweeper.presentation;
 
 import it.units.sdm.jminesweeper.GameSymbol;
+import it.units.sdm.jminesweeper.Pair;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -14,37 +15,38 @@ public class Cell extends JButton {
     private final Point position;
     private final int sideDimension;
     private GameSymbol gameSymbol;
-    private static final Map<GameSymbol, BufferedImage> IMAGE_MAP;
+    private static final Map<GameSymbol, Pair<String, Color>> GAME_NUMBERS_STYLE;
+    private static final String BASE_FILEPATH_FOR_ICONS = "icons";
+    private static BufferedImage mineImage;
+    private static BufferedImage flagImage;
+    private final Font font;
 
     static {
-        IMAGE_MAP = new EnumMap<>(GameSymbol.class);
+        GAME_NUMBERS_STYLE = new EnumMap<>(GameSymbol.class);
         Arrays.stream(GameSymbol.values())
+                .filter(s -> s != GameSymbol.COVERED && s != GameSymbol.MINE &&
+                        s != GameSymbol.EMPTY && s != GameSymbol.FLAG)
                 .forEach(s -> {
-                    StringBuilder filename = new StringBuilder("icons" + File.separatorChar);
-                    if (s == GameSymbol.COVERED || s == GameSymbol.EMPTY) {
-                        return;
-                    }
                     switch (s) {
-                        case MINE -> filename.append("mine.png");
-                        case FLAG -> filename.append("flag.png");
-                        case ONE -> filename.append("one.png");
-                        case TWO -> filename.append("two.png");
-                        case THREE -> filename.append("three.png");
-                        case FOUR -> filename.append("four.png");
-                        case FIVE -> filename.append("five.png");
-                        case SIX -> filename.append("six.png");
-                        case SEVEN -> filename.append("seven.png");
-                        case EIGHT -> filename.append("eight.png");
-                        default -> throw new IllegalStateException("Unexpected value");
-                    }
-                    try {
-                        IMAGE_MAP.put(s, ImageIO.read(Objects.requireNonNull(Cell.class.getClassLoader()
-                                .getResource(String.valueOf(filename)))));
-                    } catch (IOException e) {
-                        System.err.println(e.getMessage());
-                        System.exit(1);
+                        case ONE -> GAME_NUMBERS_STYLE.put(s, new Pair<>("1", new Color(41, 103, 136)));
+                        case TWO -> GAME_NUMBERS_STYLE.put(s, new Pair<>("2", new Color(109, 185, 74)));
+                        case THREE -> GAME_NUMBERS_STYLE.put(s, new Pair<>("3", new Color(235, 63, 37)));
+                        case FOUR -> GAME_NUMBERS_STYLE.put(s, new Pair<>("4", new Color(127, 29, 134)));
+                        case FIVE -> GAME_NUMBERS_STYLE.put(s, new Pair<>("5", new Color(212, 142, 30)));
+                        case SIX -> GAME_NUMBERS_STYLE.put(s, new Pair<>("6", new Color(74, 49, 77)));
+                        case SEVEN -> GAME_NUMBERS_STYLE.put(s, new Pair<>("7", new Color(123, 249, 250)));
+                        case EIGHT -> GAME_NUMBERS_STYLE.put(s, new Pair<>("8", new Color(191, 251, 91)));
                     }
                 });
+        try {
+            mineImage = ImageIO.read(Objects.requireNonNull(Cell.class.getClassLoader()
+                    .getResource(BASE_FILEPATH_FOR_ICONS + File.separatorChar + "mine.png")));
+            flagImage = ImageIO.read(Objects.requireNonNull(Cell.class.getClassLoader()
+                    .getResource(BASE_FILEPATH_FOR_ICONS + File.separatorChar + "flag.png")));
+        } catch (IOException | IllegalArgumentException | NullPointerException e) {
+            System.err.println("Images not found");
+            System.exit(1);
+        }
     }
 
     public Cell(int i, int j, int sideDimension, GameSymbol gameSymbol) {
@@ -53,8 +55,9 @@ public class Cell extends JButton {
         this.sideDimension = sideDimension;
         setBorder(BorderFactory.createEmptyBorder());
         setGameSymbol(gameSymbol);
+        setFocusable(false);
+        font = new Font("Autumn", Font.BOLD, (int) (sideDimension / 2.15));
     }
-
 
     public GameSymbol getGameSymbol() {
         return gameSymbol;
@@ -88,7 +91,7 @@ public class Cell extends JButton {
 
     public void victoryStyle() {
         if (gameSymbol == GameSymbol.COVERED || gameSymbol == GameSymbol.FLAG) {
-            StringBuilder filename = new StringBuilder("icons" + File.separatorChar + "flower_");
+            StringBuilder filename = new StringBuilder(BASE_FILEPATH_FOR_ICONS + File.separatorChar + "flower_");
             int whatFlower = new Random().nextInt(3);
             filename.append(whatFlower).append(".png");
             try {
@@ -97,12 +100,12 @@ public class Cell extends JButton {
                 ImageIcon imageIcon = new ImageIcon(image
                         .getScaledInstance(sideDimension / 2, sideDimension / 2, Image.SCALE_SMOOTH));
                 setIcon(imageIcon);
-            } catch (IOException e) {
-                System.err.println(e.getMessage());
-                System.exit(1);
+            } catch (IOException | NullPointerException e) {
+                System.err.println("Cannot load victory icons");
+                reset();
             }
         } else {
-            setIcon(null);
+            reset();
             setBackground(Color.decode("#69BFF7"));
         }
     }
@@ -110,12 +113,25 @@ public class Cell extends JButton {
     private void setSymbolImage() {
         setProperBackground();
         if (gameSymbol == GameSymbol.COVERED || gameSymbol == GameSymbol.EMPTY) {
-            setIcon(null);
+            reset();
             return;
         }
-        ImageIcon imageIcon = new ImageIcon(IMAGE_MAP.get(gameSymbol)
-                .getScaledInstance(sideDimension / 2, sideDimension / 2, Image.SCALE_SMOOTH));
-        setIcon(imageIcon);
+        if (gameSymbol == GameSymbol.MINE || gameSymbol == GameSymbol.FLAG) {
+            BufferedImage image = gameSymbol == GameSymbol.MINE ? mineImage : flagImage;
+            ImageIcon imageIcon = new ImageIcon(
+                    image.getScaledInstance(sideDimension / 2, sideDimension / 2, Image.SCALE_SMOOTH));
+            setIcon(imageIcon);
+            return;
+        }
+        setIcon(null);
+        setText(GAME_NUMBERS_STYLE.get(gameSymbol).first());
+        setForeground(GAME_NUMBERS_STYLE.get(gameSymbol).second());
+        setFont(font);
+    }
+
+    private void reset() {
+        setIcon(null);
+        setText("");
     }
 
 }
