@@ -49,6 +49,7 @@ public class BoardView implements View {
         updateView();
         switch (event.getEventType()) {
             case VICTORY -> {
+                soundsPlayer.playVictory();
                 setupWinningView();
                 disableAllCells();
             }

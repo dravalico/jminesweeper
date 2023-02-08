@@ -13,10 +13,11 @@ public class SoundsPlayer {
     private static final String CLICK_SOUND3 = "click3.wav";
     private static final String PUT_FLAG_SOUND = "put_flag.wav";
     private static final String REMOVE_FLAG_SOUND = "remove_flag.wav";
+    private static final String VICTORY_SOUND = "victory.wav";
     private static final String DEFEAT_SOUND = "defeat.wav";
     private static final String MENU_CLICK_SOUND = "menu_click.wav";
     private static final List<String> SOUNDS = List.of(CLICK_SOUND1, CLICK_SOUND2, CLICK_SOUND3, PUT_FLAG_SOUND,
-            REMOVE_FLAG_SOUND, DEFEAT_SOUND, MENU_CLICK_SOUND);
+            REMOVE_FLAG_SOUND, VICTORY_SOUND, DEFEAT_SOUND, MENU_CLICK_SOUND);
     private static final List<String> RANDOM_CLICK_SOUNDS = new ArrayList<>(List.of(CLICK_SOUND1, CLICK_SOUND2, CLICK_SOUND3));
     private static final Map<String, Clip> SOUNDS_MAP = new HashMap<>();
     private static final SoundsPlayer INSTANCE = new SoundsPlayer();
@@ -60,6 +61,11 @@ public class SoundsPlayer {
             SOUNDS_MAP.get(REMOVE_FLAG_SOUND).setFramePosition(0);
             new Thread(() -> SOUNDS_MAP.get(REMOVE_FLAG_SOUND).start()).start();
         }
+    }
+
+    public void playVictory() {
+        SOUNDS_MAP.get(VICTORY_SOUND).setFramePosition(0);
+        new Thread(() -> SOUNDS_MAP.get(VICTORY_SOUND).start()).start();
     }
 
     public void playDefeat() {
