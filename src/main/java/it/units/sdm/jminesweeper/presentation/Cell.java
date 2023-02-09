@@ -28,14 +28,22 @@ public class Cell extends JButton {
                         s != GameSymbol.EMPTY && s != GameSymbol.FLAG)
                 .forEach(s -> {
                     switch (s) {
-                        case ONE -> GAME_NUMBERS_STYLE.put(s, new Pair<>("1", Color.decode(GameStyle.SYMBOL_ONE_COLOR.getValue())));
-                        case TWO -> GAME_NUMBERS_STYLE.put(s, new Pair<>("2", Color.decode(GameStyle.SYMBOL_TWO_COLOR.getValue())));
-                        case THREE -> GAME_NUMBERS_STYLE.put(s, new Pair<>("3", Color.decode(GameStyle.SYMBOL_THREE_COLOR.getValue())));
-                        case FOUR -> GAME_NUMBERS_STYLE.put(s, new Pair<>("4", Color.decode(GameStyle.SYMBOL_FOUR_COLOR.getValue())));
-                        case FIVE -> GAME_NUMBERS_STYLE.put(s, new Pair<>("5", Color.decode(GameStyle.SYMBOL_FIVE_COLOR.getValue())));
-                        case SIX -> GAME_NUMBERS_STYLE.put(s, new Pair<>("6", Color.decode(GameStyle.SYMBOL_SIX_COLOR.getValue())));
-                        case SEVEN -> GAME_NUMBERS_STYLE.put(s, new Pair<>("7", Color.decode(GameStyle.SYMBOL_SEVEN_COLOR.getValue())));
-                        case EIGHT -> GAME_NUMBERS_STYLE.put(s, new Pair<>("8", Color.decode(GameStyle.SYMBOL_EIGHT_COLOR.getValue())));
+                        case ONE -> GAME_NUMBERS_STYLE.put(s,
+                                new Pair<>("1", Color.decode(GameStyle.SYMBOL_ONE_COLOR.getValue())));
+                        case TWO -> GAME_NUMBERS_STYLE.put(s,
+                                new Pair<>("2", Color.decode(GameStyle.SYMBOL_TWO_COLOR.getValue())));
+                        case THREE -> GAME_NUMBERS_STYLE.put(s,
+                                new Pair<>("3", Color.decode(GameStyle.SYMBOL_THREE_COLOR.getValue())));
+                        case FOUR -> GAME_NUMBERS_STYLE.put(s,
+                                new Pair<>("4", Color.decode(GameStyle.SYMBOL_FOUR_COLOR.getValue())));
+                        case FIVE -> GAME_NUMBERS_STYLE.put(s,
+                                new Pair<>("5", Color.decode(GameStyle.SYMBOL_FIVE_COLOR.getValue())));
+                        case SIX -> GAME_NUMBERS_STYLE.put(s,
+                                new Pair<>("6", Color.decode(GameStyle.SYMBOL_SIX_COLOR.getValue())));
+                        case SEVEN -> GAME_NUMBERS_STYLE.put(s,
+                                new Pair<>("7", Color.decode(GameStyle.SYMBOL_SEVEN_COLOR.getValue())));
+                        case EIGHT -> GAME_NUMBERS_STYLE.put(s,
+                                new Pair<>("8", Color.decode(GameStyle.SYMBOL_EIGHT_COLOR.getValue())));
                     }
                 });
         try {

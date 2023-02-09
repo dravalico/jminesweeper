@@ -46,16 +46,21 @@ public class BoardView implements View {
 
     @Override
     public void onGameEvent(GameEvent event) {
-        updateView();
         switch (event.getEventType()) {
+            case PROGRESS -> {
+                soundsPlayer.playClick();
+                updateView();
+            }
             case VICTORY -> {
                 soundsPlayer.playVictory();
-                setupWinningView();
                 disableAllCells();
+                updateView();
+                setupWinningView();
             }
             case DEFEAT -> {
                 soundsPlayer.playDefeat();
                 disableAllCells();
+                updateView();
             }
         }
     }
@@ -76,9 +81,6 @@ public class BoardView implements View {
             public void mouseReleased(MouseEvent mouseEvent) {
                 int buttonEvent = mouseEvent.getButton();
                 if (buttonEvent == MouseEvent.BUTTON1) {
-                    if (cell.getGameSymbol() != GameSymbol.FLAG) {
-                        soundsPlayer.playClick();
-                    }
                     controller.onLeftClick(cell);
                 }
                 if (buttonEvent == MouseEvent.BUTTON3) {
@@ -106,7 +108,7 @@ public class BoardView implements View {
         Arrays.stream(panel.getComponents())
                 .filter(Cell.class::isInstance)
                 .map(c -> (Cell) c)
-                .filter(c -> model.getSymbolAt(c.getPosition()) != GameSymbol.COVERED)
+                .filter(c -> model.getSymbolAt(c.getPosition()) != GameSymbol.COVERED) // TODO opt
                 .forEach(c -> {
                             c.setGameSymbol(model.getSymbolAt(c.getPosition()));
                             removeAllMouseListeners(c);

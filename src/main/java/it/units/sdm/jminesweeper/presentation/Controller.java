@@ -48,12 +48,15 @@ public class Controller {
             menuView.getStopwatchLabel().start();
             firstMove = false;
         }
-        model.actionAt(cell.getPosition());
-        int flagNumber = (int) boardView.getCells()
-                .stream()
-                .filter(v -> v.getGameSymbol() == GameSymbol.FLAG)
-                .count();
-        menuView.getFlagCounterLabel().setText(String.valueOf(gameConfiguration.minesNumber() - flagNumber));
+        new Thread(() -> {
+            model.actionAt(cell.getPosition());
+            int flagNumber = (int) boardView.getCells()
+                    .stream()
+                    .filter(v -> v.getGameSymbol() == GameSymbol.FLAG)
+                    .count();
+            SwingUtilities.invokeLater(() -> menuView.getFlagCounterLabel()
+                    .setText(String.valueOf(gameConfiguration.minesNumber() - flagNumber)));
+        }).start();
     }
 
     public void onRightClick(Cell cell) {

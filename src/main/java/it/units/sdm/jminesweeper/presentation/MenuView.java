@@ -5,6 +5,7 @@ import it.units.sdm.jminesweeper.event.GameEvent;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -38,10 +39,10 @@ public class MenuView implements View {
         difficultyComboBox = new JComboBox<>(GameConfiguration.Difficulty.values());
         difficultyComboBox.setSelectedIndex(0);
         difficultyComboBox.addItemListener(e -> controller.onSelectedComboBox());
+        removeBorderOfDifficultyComboBox();
         stopwatchLabel = new StopwatchLabel();
         stopwatchLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         flagCounterLabel = new JLabel();
-        System.out.println(flagCounterLabel.getFont());
         flagCounterLabel.setHorizontalAlignment(SwingConstants.LEFT);
         newGameButton = new JButton("New game");
         newGameButton.setBorder(BorderFactory.createEmptyBorder());
@@ -62,7 +63,7 @@ public class MenuView implements View {
                 newGameButton.setBackground(Color.decode(GameStyle.MENU_COMPONENT_BACKGROUND_COLOR.getValue()));
             }
         });
-        addConstraintsAndAddComponentToPanel();
+        addConstraintsToMenuBarAndAddComponentToPanel();
         setComponentsStyle();
         addIconsToStopwatchAndFlagCounter();
     }
@@ -98,7 +99,18 @@ public class MenuView implements View {
         return gameOutcomeDialog;
     }
 
-    private void addConstraintsAndAddComponentToPanel() {
+    private void removeBorderOfDifficultyComboBox() {
+        for (int i = 0; i < difficultyComboBox.getComponentCount(); i++) {
+            if (difficultyComboBox.getComponent(i) instanceof JComponent jComponent) {
+                jComponent.setBorder(new EmptyBorder(0, 0, 0, 0));
+            }
+            if (difficultyComboBox.getComponent(i) instanceof AbstractButton abstractButton) {
+                abstractButton.setBorderPainted(false);
+            }
+        }
+    }
+
+    private void addConstraintsToMenuBarAndAddComponentToPanel() {
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.insets = new Insets(15, 0, 15, 0);
         constraints.weightx = 1.0;
@@ -145,7 +157,7 @@ public class MenuView implements View {
             imageIcon = new ImageIcon(image.getScaledInstance(52 / 2, 52 / 2, Image.SCALE_SMOOTH));
             stopwatchLabel.setIcon(imageIcon);
         } catch (Exception e) {
-            System.out.println("Menu icons not loaded");
+            System.err.println("Menu icons not loaded");
         }
     }
 
