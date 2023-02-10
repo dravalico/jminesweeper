@@ -1,7 +1,7 @@
 package it.units.sdm.jminesweeper.core;
 
 import it.units.sdm.jminesweeper.GameConfiguration;
-import it.units.sdm.jminesweeper.core.generation.BoardInitializer;
+import it.units.sdm.jminesweeper.core.generation.BoardInitialiser;
 import it.units.sdm.jminesweeper.core.generation.MinesPlacer;
 import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.event.*;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class BoardManager extends AbstractBoard<Map<Point, Tile>> implements ActionHandler<Point> {
     private final GameConfiguration gameConfiguration;
-    private final BoardInitializer boardInitializer;
+    private final BoardInitialiser boardInitializer;
     private int uncoveredTiles;
     private final Map<EventType, List<GameEventListener>> listenersMap;
     private boolean isGameFinished;
@@ -21,7 +21,7 @@ public class BoardManager extends AbstractBoard<Map<Point, Tile>> implements Act
     public BoardManager(GameConfiguration gameConfiguration, MinesPlacer<Map<Point, Tile>, Point> minesPlacer) {
         super(new LinkedHashMap<>());
         this.gameConfiguration = gameConfiguration;
-        boardInitializer = new BoardInitializer(gameConfiguration, minesPlacer);
+        boardInitializer = new BoardInitialiser(gameConfiguration, minesPlacer);
         boardInitializer.fillBoard(board);
         uncoveredTiles = 0;
         listenersMap = new EnumMap<>(EventType.class);

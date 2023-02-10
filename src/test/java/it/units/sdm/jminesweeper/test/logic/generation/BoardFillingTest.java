@@ -2,7 +2,7 @@ package it.units.sdm.jminesweeper.test.logic.generation;
 
 import it.units.sdm.jminesweeper.GameConfiguration;
 import it.units.sdm.jminesweeper.core.Tile;
-import it.units.sdm.jminesweeper.core.generation.BoardInitializer;
+import it.units.sdm.jminesweeper.core.generation.BoardInitialiser;
 import it.units.sdm.jminesweeper.core.generation.GuassianMinesPlacer;
 import it.units.sdm.jminesweeper.GameSymbol;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,7 +20,7 @@ class BoardFillingTest {
     @CsvSource({"9,9", "16,16", "30,16", "32,60"})
     void givenBoardSizeGenerateBoardWithEmptyTileAndCorrectDimension(int width, int height) {
         Dimension boardDimension = new Dimension(width, height);
-        BoardInitializer boardInitializer = new BoardInitializer(new GameConfiguration(boardDimension, 0),
+        BoardInitialiser boardInitializer = new BoardInitialiser(new GameConfiguration(boardDimension, 0),
                 new GuassianMinesPlacer());
         Map<Point, Tile> expectedBoard = new LinkedHashMap<>();
         for (int i = 0; i < boardDimension.height; i++) {

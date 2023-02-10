@@ -7,11 +7,11 @@ import it.units.sdm.jminesweeper.core.Tile;
 import java.awt.*;
 import java.util.Map;
 
-public class BoardInitializer {
+public class BoardInitialiser {
     private final GameConfiguration gameConfiguration;
     private final MinesPlacer<Map<Point, Tile>, Point> minesPlacer;
 
-    public BoardInitializer(GameConfiguration gameConfiguration, MinesPlacer<Map<Point, Tile>, Point> minesPlacer) {
+    public BoardInitialiser(GameConfiguration gameConfiguration, MinesPlacer<Map<Point, Tile>, Point> minesPlacer) {
         this.gameConfiguration = gameConfiguration;
         this.minesPlacer = minesPlacer;
     }
@@ -37,7 +37,7 @@ public class BoardInitializer {
                         .filter(e -> e.getKey().distance(k) <= Math.sqrt(2) && e.getValue().isMine())
                         .count()));
             }
-        }); // TODO improve stream
+        });
     }
 
 }
