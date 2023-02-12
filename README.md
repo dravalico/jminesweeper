@@ -72,7 +72,7 @@ Run the following command
 
 ## Authors and acknowledgment
 
-Project carried out by D. Ravalico and G. Cimador.
+Project carried out by Cimador G. and Ravalico D. adopting pair programming technique.
 
 ## License
 

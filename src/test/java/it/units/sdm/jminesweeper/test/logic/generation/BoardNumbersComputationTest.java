@@ -6,6 +6,7 @@ import it.units.sdm.jminesweeper.core.generation.BoardInitialiser;
 import it.units.sdm.jminesweeper.core.generation.MinesPlacer;
 import it.units.sdm.jminesweeper.GameSymbol;
 import it.units.sdm.jminesweeper.test.CSVParserUtil;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -23,8 +24,14 @@ class BoardNumbersComputationTest {
     private static final String FILENAME_FOR_EXPECTED = File.separatorChar + "expected.csv";
     private static final String FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION = File.separatorChar + "actual_before_computation.csv";
     private Map<Point, Tile> expectedMapBoard;
+    private Map<Point, Tile> actualBoard;
     private BoardInitialiser boardInitializer;
     private Dimension dimension;
+
+    @BeforeEach
+    void initActualMap() {
+        actualBoard = new LinkedHashMap<>();
+    }
 
     @Test
     void placeAOneIn2x1BoardWithOneMine() {
@@ -35,7 +42,6 @@ class BoardNumbersComputationTest {
         boardInitializer = new BoardInitialiser(new GameConfiguration(dimension, 1),
                 (board, minesNumber, firstClick) -> board.replace(new Point(0, 1), new Tile(GameSymbol.MINE))
         );
-        Map<Point, Tile> actualBoard = new LinkedHashMap<>();
 
         boardInitializer.fillBoard(actualBoard);
         boardInitializer.putMinesAndNumbers(actualBoard, new Point(0, 0));
@@ -51,7 +57,6 @@ class BoardNumbersComputationTest {
         boardInitializer = new BoardInitialiser(new GameConfiguration(dimension, 0),
                 (board, minesNumber, firstClick) -> {
                 });
-        Map<Point, Tile> actualBoard = new LinkedHashMap<>();
 
         boardInitializer.fillBoard(actualBoard);
         boardInitializer.putMinesAndNumbers(actualBoard, new Point(0, 0));
@@ -70,7 +75,6 @@ class BoardNumbersComputationTest {
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
         boardInitializer = new BoardInitialiser(new GameConfiguration(dimension, 1), minesPlacer);
-        Map<Point, Tile> actualBoard = new LinkedHashMap<>();
 
         boardInitializer.fillBoard(actualBoard);
         boardInitializer.putMinesAndNumbers(actualBoard, new Point(0, 0));
@@ -93,7 +97,6 @@ class BoardNumbersComputationTest {
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath)).
                         forEach(board::replace);
         boardInitializer = new BoardInitialiser(new GameConfiguration(dimension, 1), minesPlacer);
-        Map<Point, Tile> actualBoard = new LinkedHashMap<>();
 
         boardInitializer.fillBoard(actualBoard);
         boardInitializer.putMinesAndNumbers(actualBoard, new Point(0, 0));
@@ -113,7 +116,6 @@ class BoardNumbersComputationTest {
                 Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
         boardInitializer = new BoardInitialiser(new GameConfiguration(dimension, 1), minesPlacer);
-        Map<Point, Tile> actualBoard = new LinkedHashMap<>();
 
         boardInitializer.fillBoard(actualBoard);
         boardInitializer.putMinesAndNumbers(actualBoard, new Point(0, 0));

@@ -33,7 +33,7 @@ class MinesPlacementTest {
 
     @ParameterizedTest
     @CsvSource({"9,9", "16,16", "30,16"})
-    void placeAMineOnTheBoard(int width, int height) {
+    void placeAMineOnTheBoardOfDimension(int width, int height) {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 board.put(new Point(i, j), new Tile(GameSymbol.EMPTY));

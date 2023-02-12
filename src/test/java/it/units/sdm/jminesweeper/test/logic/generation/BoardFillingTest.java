@@ -18,7 +18,7 @@ class BoardFillingTest {
 
     @ParameterizedTest
     @CsvSource({"9,9", "16,16", "30,16", "32,60"})
-    void givenBoardSizeGenerateBoardWithEmptyTileAndCorrectDimension(int width, int height) {
+    void givenBoardSizeGenerateBoardWithOnlyEmptySymbolAndCorrectDimension(int width, int height) {
         Dimension boardDimension = new Dimension(width, height);
         BoardInitialiser boardInitializer = new BoardInitialiser(new GameConfiguration(boardDimension, 0),
                 new GuassianMinesPlacer());

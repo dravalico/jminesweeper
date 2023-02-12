@@ -1,7 +1,7 @@
 package it.units.sdm.jminesweeper.test;
 
-import it.units.sdm.jminesweeper.core.Tile;
 import it.units.sdm.jminesweeper.GameSymbol;
+import it.units.sdm.jminesweeper.core.Tile;
 
 import java.awt.*;
 import java.io.File;
@@ -14,8 +14,8 @@ import java.util.Scanner;
 public class CSVParserUtil {
 
     public static Map<Point, Tile> csvParseTiles(String resourceName) {
-        ClassLoader classLoader = CSVParserUtil.class.getClassLoader();
-        File file = new File(Objects.requireNonNull(classLoader.getResource(resourceName)).getFile());
+        File file = new File(Objects.requireNonNull(CSVParserUtil.class.getClassLoader()
+                .getResource(resourceName)).getFile());
         String absolutePath = file.getAbsolutePath();
         try (Scanner scanner = new Scanner(new File(absolutePath))) {
             Map<Point, Tile> mapBoard = new LinkedHashMap<>();
@@ -47,8 +47,8 @@ public class CSVParserUtil {
     }
 
     public static Map<Point, GameSymbol> csvParseGameSymbols(String resourceName) {
-        ClassLoader classLoader = CSVParserUtil.class.getClassLoader();
-        File file = new File(Objects.requireNonNull(classLoader.getResource(resourceName)).getFile());
+        File file = new File(Objects.requireNonNull(CSVParserUtil.class.getClassLoader()
+                .getResource(resourceName)).getFile());
         String absolutePath = file.getAbsolutePath();
         try (Scanner scanner = new Scanner(new File(absolutePath))) {
             Map<Point, GameSymbol> mapBoard = new LinkedHashMap<>();
