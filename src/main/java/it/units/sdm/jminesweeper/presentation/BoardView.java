@@ -12,6 +12,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class BoardView implements View {
     private final Controller controller;
@@ -105,12 +106,14 @@ public class BoardView implements View {
     }
 
     private void updateView() {
+        Map<Point, GameSymbol> actualBoard = model.getBoardStatus();
         Arrays.stream(panel.getComponents())
                 .filter(Cell.class::isInstance)
                 .map(c -> (Cell) c)
-                .filter(c -> model.getSymbolAt(c.getPosition()) != GameSymbol.COVERED) // TODO opt
+                .filter(c -> (actualBoard.get(c.getPosition()) != GameSymbol.COVERED) &&
+                        (c.getGameSymbol() != actualBoard.get(c.getPosition())))
                 .forEach(c -> {
-                            c.setGameSymbol(model.getSymbolAt(c.getPosition()));
+                            c.setGameSymbol(actualBoard.get(c.getPosition()));
                             removeAllMouseListeners(c);
                         }
                 );
