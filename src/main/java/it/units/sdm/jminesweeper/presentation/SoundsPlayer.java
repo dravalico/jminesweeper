@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.*;
 
 public class SoundsPlayer {
-    private static final String BASE_FILEPATH = "sounds" + File.separatorChar;
+    private static final String BASE_FILEPATH = "sounds/";
     private static final String CLICK_SOUND1 = "click1.wav";
     private static final String CLICK_SOUND2 = "click2.wav";
     private static final String CLICK_SOUND3 = "click3.wav";

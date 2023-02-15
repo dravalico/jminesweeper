@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 public class CSVParserUtil {
 
-    public static Map<Point, Tile> csvParseTiles(String resourceName) {
+    public static Map<Point, Tile> ParseTiles(String resourceName) {
         File file = new File(Objects.requireNonNull(CSVParserUtil.class.getClassLoader()
                 .getResource(resourceName)).getFile());
         String absolutePath = file.getAbsolutePath();
@@ -46,7 +46,7 @@ public class CSVParserUtil {
         return null;
     }
 
-    public static Map<Point, GameSymbol> csvParseGameSymbols(String resourceName) {
+    public static Map<Point, GameSymbol> ParseGameSymbols(String resourceName) {
         File file = new File(Objects.requireNonNull(CSVParserUtil.class.getClassLoader()
                 .getResource(resourceName)).getFile());
         String absolutePath = file.getAbsolutePath();
