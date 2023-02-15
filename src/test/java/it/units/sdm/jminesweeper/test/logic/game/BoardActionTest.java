@@ -16,7 +16,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.awt.*;
-import java.io.File;
 import java.util.List;
 import java.util.*;
 import java.util.stream.Stream;
@@ -26,9 +25,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class BoardActionTest {
     private static final Dimension BOARD_DIMENSION = new Dimension(30, 16);
     private static final GameConfiguration BEGINNER_CONFIGURATION = GameConfiguration.fromDifficulty(GameConfiguration.Difficulty.BEGINNER);
-    private static final String ROOT_FOLDER_NAME_FOR_BOARDS = "board_actions" + File.separatorChar;
-    private static final String FILENAME_FOR_EXPECTED = File.separatorChar + "expected.csv";
-    private static final String FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION = File.separatorChar + "actual_before_computation.csv";
+    private static final String ROOT_FOLDER_NAME_FOR_BOARDS = "board_actions/";
+    private static final String FILENAME_FOR_EXPECTED = "/expected.csv";
+    private static final String FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION = "/actual_before_computation.csv";
     private BoardManager boardManager;
 
     @ParameterizedTest
@@ -61,12 +60,12 @@ class BoardActionTest {
 
     @Test
     void onFirstClickUncoverSpotsCorrectlyWithRespectToPredefinedBoard() {
-        Map<Point, GameSymbol> expectedMapBoard = CSVParserUtil.csvParseGameSymbols(ROOT_FOLDER_NAME_FOR_BOARDS
+        Map<Point, GameSymbol> expectedMapBoard = CSVParserUtil.ParseGameSymbols(ROOT_FOLDER_NAME_FOR_BOARDS
                 + "first_click_outcome1" + FILENAME_FOR_EXPECTED);
         String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_BOARDS + "first_click_outcome1"
                 + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
-                Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
+                Objects.requireNonNull(CSVParserUtil.ParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
         boardManager = new BoardManager(BEGINNER_CONFIGURATION, minesPlacer);
 
@@ -90,7 +89,7 @@ class BoardActionTest {
         String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_BOARDS + "first_click_outcome1"
                 + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
-                Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
+                Objects.requireNonNull(CSVParserUtil.ParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
         boardManager = new BoardManager(BEGINNER_CONFIGURATION, minesPlacer);
         TestListener testListener = new TestListener();
@@ -104,12 +103,12 @@ class BoardActionTest {
     @ParameterizedTest
     @CsvSource({"0,0,1", "8,5,2", "0,8,3", "5,1,1", "2,8,2", "7,5,3"})
     void onClickOnNumberUncoverOnlyTileInClickPosition(int x, int y, int tileValue) {
-        Map<Point, GameSymbol> expectedMapBoard = CSVParserUtil.csvParseGameSymbols(ROOT_FOLDER_NAME_FOR_BOARDS
+        Map<Point, GameSymbol> expectedMapBoard = CSVParserUtil.ParseGameSymbols(ROOT_FOLDER_NAME_FOR_BOARDS
                 + "first_click_outcome1" + FILENAME_FOR_EXPECTED);
         String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_BOARDS + "first_click_outcome1"
                 + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
-                Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
+                Objects.requireNonNull(CSVParserUtil.ParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
         boardManager = new BoardManager(BEGINNER_CONFIGURATION, minesPlacer);
 
@@ -127,7 +126,7 @@ class BoardActionTest {
         String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_BOARDS + "first_click_outcome1"
                 + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
-                Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
+                Objects.requireNonNull(CSVParserUtil.ParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
         boardManager = new BoardManager(BEGINNER_CONFIGURATION, minesPlacer);
         TestListener testListener = new TestListener();
@@ -145,7 +144,7 @@ class BoardActionTest {
         String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_BOARDS + "victory_example1"
                 + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
-                Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
+                Objects.requireNonNull(CSVParserUtil.ParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
         boardManager = new BoardManager(new GameConfiguration(boardDimension, 2), minesPlacer);
         TestListener testListener = new TestListener();
@@ -165,7 +164,7 @@ class BoardActionTest {
         String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_BOARDS + "victory_example1"
                 + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
-                Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
+                Objects.requireNonNull(CSVParserUtil.ParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
         boardManager = new BoardManager(new GameConfiguration(boardDimension, 2), minesPlacer);
         TestListener testListener = new TestListener();
@@ -188,7 +187,7 @@ class BoardActionTest {
         String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_BOARDS + "first_click_outcome1"
                 + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
-                Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
+                Objects.requireNonNull(CSVParserUtil.ParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
         boardManager = new BoardManager(BEGINNER_CONFIGURATION, minesPlacer);
         TestListener testListener = new TestListener();
@@ -204,12 +203,12 @@ class BoardActionTest {
     @ParameterizedTest
     @MethodSource
     void givenPointIn9x9BoardReturnGameSymbolAtThatPoint(Point point) {
-        Map<Point, GameSymbol> expectedMapBoard = CSVParserUtil.csvParseGameSymbols(ROOT_FOLDER_NAME_FOR_BOARDS
+        Map<Point, GameSymbol> expectedMapBoard = CSVParserUtil.ParseGameSymbols(ROOT_FOLDER_NAME_FOR_BOARDS
                 + "first_click_outcome1" + FILENAME_FOR_EXPECTED);
         String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_BOARDS + "first_click_outcome1"
                 + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
-                Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
+                Objects.requireNonNull(CSVParserUtil.ParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
         boardManager = new BoardManager(BEGINNER_CONFIGURATION, minesPlacer);
 
@@ -233,7 +232,7 @@ class BoardActionTest {
         String actualBeforeComputationPath = ROOT_FOLDER_NAME_FOR_BOARDS + "first_click_outcome1"
                 + FILENAME_FOR_ACTUAL_BEFORE_COMPUTATION;
         MinesPlacer<Map<Point, Tile>, Point> minesPlacer = (board, minesNumber, firstClick) ->
-                Objects.requireNonNull(CSVParserUtil.csvParseTiles(actualBeforeComputationPath))
+                Objects.requireNonNull(CSVParserUtil.ParseTiles(actualBeforeComputationPath))
                         .forEach(board::replace);
         boardManager = new BoardManager(BEGINNER_CONFIGURATION, minesPlacer);
 

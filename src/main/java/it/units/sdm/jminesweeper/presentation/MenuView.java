@@ -10,7 +10,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -149,11 +148,11 @@ public class MenuView implements View {
     private void addIconsToStopwatchAndFlagCounter() {
         try {
             BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader()
-                    .getResource("icons" + File.separatorChar + "flag.png")));
+                    .getResource("icons/flag.png")));
             ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(52 / 2, 52 / 2, Image.SCALE_SMOOTH));
             flagCounterLabel.setIcon(imageIcon);
             image = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader()
-                    .getResource("icons" + File.separatorChar + "stopwatch.png")));
+                    .getResource("icons/stopwatch.png")));
             imageIcon = new ImageIcon(image.getScaledInstance(52 / 2, 52 / 2, Image.SCALE_SMOOTH));
             stopwatchLabel.setIcon(imageIcon);
         } catch (Exception e) {

@@ -7,7 +7,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -48,9 +47,9 @@ public class Cell extends JButton {
                 });
         try {
             mineImage = ImageIO.read(Objects.requireNonNull(Cell.class.getClassLoader()
-                    .getResource(BASE_FILEPATH_FOR_ICONS + File.separatorChar + "mine.png")));
+                    .getResource(BASE_FILEPATH_FOR_ICONS + "/mine.png")));
             flagImage = ImageIO.read(Objects.requireNonNull(Cell.class.getClassLoader()
-                    .getResource(BASE_FILEPATH_FOR_ICONS + File.separatorChar + "flag.png")));
+                    .getResource(BASE_FILEPATH_FOR_ICONS + "/flag.png")));
         } catch (IOException | IllegalArgumentException | NullPointerException e) {
             System.err.println("Images not found");
             System.exit(1);
@@ -99,7 +98,7 @@ public class Cell extends JButton {
 
     public void victoryStyle() {
         if (gameSymbol == GameSymbol.COVERED || gameSymbol == GameSymbol.FLAG) {
-            StringBuilder filename = new StringBuilder(BASE_FILEPATH_FOR_ICONS + File.separatorChar + "flower_");
+            StringBuilder filename = new StringBuilder(BASE_FILEPATH_FOR_ICONS + "/flower_");
             int whatFlower = new Random().nextInt(3);
             filename.append(whatFlower).append(".png");
             try {
